@@ -20,7 +20,7 @@
   flex: 1;
 }
 
-.images{
+.grid_view{
   border: 2px solid blue;
   flex: 7;
 }
@@ -54,4 +54,24 @@
 }
 .list_item>.list_item_icon{
   margin-top: 10px;
+}
+
+
+
+.grid_view {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+
+.game_card {
+  margin: 1rem;
+  width: 100px; /* or whatever size you want */
+  height: 100px;
+}
+
+
+.game_card_poster{
+  width: 105px;
+  height: 150px;
 }
