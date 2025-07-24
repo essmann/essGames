@@ -1,0 +1,57 @@
+:root {
+  --color-dark: #202020;
+  --color-dark-hex: #202020; /* if you want a separate variable for hex */
+}
+
+
+
+
+.container{
+  display: flex;
+  flex-direction: row;
+  background: var(--color-dark);
+  width: 100vw;
+  height: 100vh;;
+}
+
+.sidebar{
+  border: 2px solid green;
+  padding: 0.25rem;
+  flex: 1;
+}
+
+.images{
+  border: 2px solid blue;
+  flex: 7;
+}
+
+
+*:focus {
+  outline: none !important;
+}
+
+
+.searchBar *{
+  
+}
+
+.sidebar * {
+}
+
+.list_item{
+  display: flex;
+  padding: 0.1rem;
+  align-items: center;
+  text-wrap: nowrap;
+  
+}
+.list_item:hover{
+  background: #2D2D2D !important;
+  cursor: pointer;
+}
+.list_item>.list_item_title{
+  margin-left: 1.5rem;
+}
+.list_item>.list_item_icon{
+  margin-top: 10px;
+}
