@@ -65,6 +65,7 @@
 }
 
 .game_card {
+  position: relative;
   margin: 1rem;
   width: 100px; /* or whatever size you want */
   height: 100px;
@@ -74,4 +75,30 @@
 .game_card_poster{
   width: 105px;
   height: 150px;
+}
+
+.game_card_poster:hover{
+  filter: brightness(30%) !important; /* Lower % = darker */
+  cursor: pointer !important;
+
+}
+.game_card_title{
+  visibility: hidden;
+}
+.game_card.selected>.game_card_title{
+  visibility: visible;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  max-width: 90%;
+  z-index: 10000;
+  font-weight: bold;
+}
+
+* {
+  font-family: 'courier new'
 }
