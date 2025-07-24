@@ -1,0 +1,23 @@
+{
+  "name": "ess_games",
+  "version": "1.0.0",
+  "description": "a desktop application that stores your video game data",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/essmann/essGames.git"
+  },
+  "author": "essmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/essmann/essGames/issues"
+  },
+  "homepage": "https://github.com/essmann/essGames#readme",
+  "devDependencies": {
+    "electron": "^37.2.4"
+  }
+}
