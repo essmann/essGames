@@ -13,12 +13,13 @@
   flex-direction: row;
   background: var(--color-dark);
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
 
 .sidebar{
   padding: 0.25rem;
   flex: 1;
+  height: 100vh;
 }
 
 .grid_view{
@@ -66,6 +67,8 @@
   flex-wrap: wrap;
   padding: 1rem;
   background: #2D2D2D;
+  gap: 0px;
+  align-content: flex-start;
 }
 
 .game_card {
@@ -73,6 +76,7 @@
   margin: 1rem;
   width: 100px; /* or whatever size you want */
   height: 100px;
+  margin-bottom: 4rem;
   
 }
 
