@@ -4,7 +4,7 @@ import Sidebar from './components/ButtonUsage';
 import GameCard from './components/GameCard';
 import AddGameCard from './components/AddGameCard';
 import AddGameMenu from './components/AddGameMenu';
-
+import GameGrid from './components/GameGrid';
 function App() {
   const [selectedListItemIndex, setSelectedListItemIndex] = useState(0);
   const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
@@ -25,20 +25,13 @@ function App() {
           switch (selectedListItemIndex) {
             case 0:
               return (
-                <div className="grid_view">
-                  <AddGameCard setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed} />
-                  {games.map((game) => (
-                    <GameCard 
-                      key={game.id}
-                      game={game} // assuming you're passing game details to the GameCard component
-                    />
-                  ))}
-                </div>
-              );
+               <GameGrid games={games} setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed} />
+            // setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}  
+            );
               case 1:
                 return (
                    <>
-                    <div>
+                    <div className='main_component'>
                       123
                     </div>
                    </>
