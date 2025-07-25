@@ -5,17 +5,7 @@ const sqlite3 = require('sqlite3').verbose();
 let win;
 
 
-const createWindow = () => {
-  win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-    }
-  })
 
-  win.loadURL('http://localhost:5173/')
-}
 
 const openFile = async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog(win, {
@@ -65,6 +55,35 @@ ipcMain.handle('get-games', async () => {
     throw err;
   }
 });
+
+ipcMain.handle('add-game', async (event, game) => {
+  const { id, title, posterURL, rating, review } = game;
+
+  return new Promise((resolve, reject) => {
+    const query = `INSERT INTO games (id, title, posterURL, rating, review) VALUES (?, ?, ?, ?, ?)`;
+    db.run(query, [id, title, posterURL, rating, review], function(err) {
+      if (err) {
+        console.error('Failed to add game:', err);
+        reject(err);
+      } else {
+        resolve({ success: true, id: this.lastID });
+      }
+    });
+  });
+});
+
+
+const createWindow = () => {
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+    }
+  })
+
+  win.loadURL('http://localhost:5173/')
+}
 
 app.whenReady().then(createWindow)
 
