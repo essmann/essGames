@@ -20,7 +20,7 @@ export default function CustomizedRating() {
     <Box sx={{ '& > legend': { mt: 2 } }}>
   <Rating 
     name="customized-10" 
-    defaultValue={2} 
+    defaultValue={0} 
     max={5} 
     size="small" 
     precision={0.5} 
