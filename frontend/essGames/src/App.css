@@ -1,3 +1,4 @@
+
 :root {
   --color-dark: #202020;
   --color-dark-hex: #202020; /* if you want a separate variable for hex */
@@ -12,7 +13,7 @@
   flex-direction: row;
   background: var(--color-dark);
   width: 100vw;
-  height: 100vh;;
+  height: 100vh;
 }
 
 .sidebar{
@@ -67,12 +68,14 @@
   margin: 1rem;
   width: 100px; /* or whatever size you want */
   height: 100px;
+  
 }
 
 
 .game_card_poster{
   width: 105px;
   height: 150px;
+  border-radius: 2px;
 }
 
 .game_card_poster:hover{
@@ -114,7 +117,7 @@
   margin: 1rem;
   width: 100px; /* or whatever size you want */
   height: 100px;
-  border: 2px solid white;
+  background: var(--color-dark);
    width: 105px;
   height: 150px;
   display: flex;
@@ -135,22 +138,67 @@
   transform: translate(-50%, -50%);
   padding: 1rem;
   min-width: 200px;
+  max-width: 450px;
   background: var(--color-dark);
+  z-index: 2;
 }
+
 
 .game_add_menu_poster{
   background: var(--color-hover);
   border-radius: 12px;
   display: flex;
   margin-top: 1rem;
-  min-height: 150px;
-  min-width: 150px;  
-  max-width: 300px;
-  width: 150px;
-  height: 250px;
+  width: 105px !important;
+  height: 150px !important;
+   width: auto;
   /* or a fixed width */
-  overflow: hidden;
   align-items: center;
   justify-content: center;
   
+}
+.game_add_menu_title_input{
+  display: flex;
+  align-items: center ;
+  justify-content: center;
+}
+
+.game_add_menu_rating{
+  display: flex;
+  margin-left: 1rem;
+  align-items: center;
+}
+
+#star_container_add{
+  margin-top: 1.5rem;
+  margin-left: 1rem;
+}
+
+.game_add_menu_title_input>input{
+  margin-top: 1rem;
+  margin-left: 1rem;
+  border: none;
+  text-align: center;
+}
+.game_add_menu_title_input, .game_add_menu_title_label{
+
+  font-family:'Courier New', Courier, monospace
+}
+
+.add_info{
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+.game_add_menu_title_input>input{
+  max-width: 80%;
+}
+* {
+  font-family: 'courier new'
+}
+
+
+.menuActive>.grid_view, .menuActive>.sidebar{
+    filter: brightness(30%) !important; /* Lower % = darker */
+    filter: blur(2px) !important;
+
 }

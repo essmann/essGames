@@ -7,7 +7,7 @@ import AddGameCard from './components/AddGameCard';
 import AddGameMenu from './components/AddGameMenu';
 function App() {
   const [selectedListItemIndex, setSelectedListItemIndex] = useState(0);
-  const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(true);
+  const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
   
   const games = [
     { id: 1, title: "Dead Space", poster: "https://m.media-amazon.com/images/M/MV5BOGM4OTBhZjktYzAxZC00OTdlLWI2ZTEtZTliNjQ1NDg5OTJiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
@@ -16,7 +16,7 @@ function App() {
   ]
   return (
     <>
-      <div className="container">
+      <div className={`container ${addGameMenuIsDisplayed ? 'menuActive': ''}`}>
           <Sidebar selectedListItemIndex={selectedListItemIndex} setSelectedListItemIndex={setSelectedListItemIndex}/>
 
           <div className="grid_view">
@@ -28,9 +28,8 @@ function App() {
                   />
                 ))}
               </div>
-
+             
             {addGameMenuIsDisplayed && <AddGameMenu setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}/>}
-
       </div>
     </>
   )
