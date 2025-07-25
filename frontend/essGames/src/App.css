@@ -183,7 +183,6 @@
   margin-top: 1rem;
   margin-left: 1rem;
   border: none;
-  text-align: center;
 }
 .game_add_menu_title_input, .game_add_menu_title_label{
 
@@ -206,4 +205,9 @@
     filter: brightness(30%) !important; /* Lower % = darker */
     filter: blur(2px) !important;
 
+}
+
+.game_add_menu_submit_btn{
+  margin-left: 1rem;
+  margin-top: 1rem;
 }

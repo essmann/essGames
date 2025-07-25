@@ -1,14 +1,14 @@
 import { useState } from "react";
 import CustomizedRating from "./CustomizedRating";
 function GameCard({ game }) {
-  const { poster, title } = game;
+  const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);
   const [gameClicked, setGameClicked] = useState(false);
   const [rating, setRating] = useState(game.rating || 0);
   return (
     <div className={`game_card ${isHovered ? 'selected' : ''}`}>
       <img
-        src={poster}
+        src={posterURL}
         alt={`${title} poster`}
         className="game_card_poster"
         onMouseEnter={() => setIsHovered(true)}
