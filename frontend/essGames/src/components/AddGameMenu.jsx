@@ -9,7 +9,7 @@ import generateGuidInteger from "../database/generateGuidInteger";
 import handleAddGame from "../database/handleAddGame";
 const handleFileOpen = async (setFilePath) => {
   try {
-    const dataUrl = await window.api.openImageFile() // Get Data URL from main process
+    const dataUrl = await window.api.openImageFile(); // Get Data URL from main process
     if (dataUrl) {
       setFilePath(dataUrl); // Set the Data URL as the src for the image
       console.log(dataUrl); // Log the Data URL for debugging
@@ -26,7 +26,6 @@ const handleFileOpen = async (setFilePath) => {
 //   console.log(games);
 // });
 
-
 function AddGameMenu({ setAddGameMenuIsDisplayed, setGames }) {
   const [filePath, setFilePath] = useState("");
   const [rating, setRating] = useState(0);
@@ -34,18 +33,25 @@ function AddGameMenu({ setAddGameMenuIsDisplayed, setGames }) {
   const titleRef = useRef(null);
 
   const addGame = () => {
-                if(!validateInput){return;}
-                const title = titleRef.current.value;
-                const id = generateGuidInteger();
-                const game = {id: id, posterURL: filePath, rating: rating, review: "", title: title}
-                handleAddGame(game).then(()=>{
-                  setGames(prevGames => [...prevGames, game]);
-                })
-
-  }
+    if (!validateInput) {
+      return;
+    }
+    const title = titleRef.current.value;
+    const id = generateGuidInteger();
+    const game = {
+      id: id,
+      posterURL: filePath,
+      rating: rating,
+      review: "",
+      title: title,
+    };
+    handleAddGame(game).then(() => {
+      setGames((prevGames) => [...prevGames, game]);
+    });
+  };
   const validateInput = () => {
     return title !== null && id !== null && filePath !== null;
-  }
+  };
   return (
     <ClickAwayListener onClickAway={() => setAddGameMenuIsDisplayed(false)}>
       <div className="game_add_menu">
@@ -58,62 +64,69 @@ function AddGameMenu({ setAddGameMenuIsDisplayed, setGames }) {
               style={{ maxWidth: "100%", maxHeight: "100%" }}
             />
             <div>
-              
               <div className="game_add_menu_title_input add_info">
-                <div className="game_add_menu_title_label add_info">Game Title:</div>
-                <input type="text" ref={titleRef}/>
+                <div className="game_add_menu_title_label add_info">
+                  Game Title:
+                </div>
+                <input type="text" ref={titleRef} />
               </div>
               <div className="game_add_menu_rating">
-                <div className="game_add_menu_rating_label add_info">Your Rating:</div>
+                <div className="game_add_menu_rating_label add_info">
+                  Your Rating:
+                </div>
                 <div id="star_container_add">
-                    <CustomizedRating onRating={(value)=>setRating(value)}/>
+                  <CustomizedRating onRating={(value) => setRating(value)} />
                 </div>
               </div>
-               <button className="game_add_menu_submit_btn" onClick={()=>{
-                addGame();
-            }}>
-               Submit </button>
-              
+              <button
+                className="game_add_menu_submit_btn"
+                onClick={() => {
+                  addGame();
+                }}
+              >
+                Submit{" "}
+              </button>
             </div>
-            
-            
           </>
         ) : (
           <>
-          <div className="game_add_menu_poster image_empty">
-            <Box sx={{ "& > :not(style)": { m: 1 } }}>
-              <Fab
-                size="small"
-                color="primary"
-                aria-label="add"
-                onClick={() => handleFileOpen(setFilePath)}
-              >
-                <AddIcon />
-              </Fab>
-            </Box>
-            
-          </div>
-          <div>
-              
+            <div className="game_add_menu_poster image_empty">
+              <Box sx={{ "& > :not(style)": { m: 1 } }}>
+                <Fab
+                  size="small"
+                  color="primary"
+                  aria-label="add"
+                  onClick={() => handleFileOpen(setFilePath)}
+                >
+                  <AddIcon />
+                </Fab>
+              </Box>
+            </div>
+            <div>
               <div className="game_add_menu_title_input add_info">
-                <div className="game_add_menu_title_label add_info">Game Title:</div>
-                <input type="text" ref={titleRef}/>
+                <div className="game_add_menu_title_label add_info">
+                  Game Title:
+                </div>
+                <input type="text" ref={titleRef} />
               </div>
               <div className="game_add_menu_rating">
-                <div className="game_add_menu_rating_label add_info">Your Rating:</div>
+                <div className="game_add_menu_rating_label add_info">
+                  Your Rating:
+                </div>
                 <div id="star_container_add">
-                   <CustomizedRating onRating={(value)=>setRating(value)}/>
+                  <CustomizedRating onRating={(value) => setRating(value)} />
                 </div>
               </div>
-            <button className="game_add_menu_submit_btn" onClick={()=>{
-              addGame();
-            }}>
-               Submit </button>
+              <button
+                className="game_add_menu_submit_btn"
+                onClick={() => {
+                  addGame();
+                }}
+              >
+                Submit{" "}
+              </button>
             </div>
-            
           </>
-          
-          
         )}
       </div>
     </ClickAwayListener>
