@@ -4,11 +4,12 @@ import Sidebar from './components/ButtonUsage';
 import GameCard from './components/GameCard';
 import AddGameCard from './components/AddGameCard';
 import AddGameMenu from './components/AddGameMenu';
+import { GlobalProvider } from './Context/globalContext';
 
 function App() {
   const [selectedListItemIndex, setSelectedListItemIndex] = useState(0);
   const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
-
+  const [selectedGame, setSelectedGame] = useState(null);
   const games = [
     { id: 1, title: "Dead Space", poster: "https://m.media-amazon.com/images/M/MV5BOGM4OTBhZjktYzAxZC00OTdlLWI2ZTEtZTliNjQ1NDg5OTJiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
     { id: 2, title: "Minecraft", poster: "https://i.pinimg.com/474x/81/61/32/816132e3f5cf75f6ddd44b5f6536cdac.jpg" },
@@ -16,7 +17,8 @@ function App() {
   ];
 
   return (
-    <>
+    
+    <GlobalProvider>
       <div className={`container ${addGameMenuIsDisplayed ? 'menuActive' : ''}`}>
         <Sidebar selectedListItemIndex={selectedListItemIndex} setSelectedListItemIndex={setSelectedListItemIndex} />
 
@@ -30,7 +32,8 @@ function App() {
                   {games.map((game) => (
                     <GameCard 
                       key={game.id}
-                      game={game} // assuming you're passing game details to the GameCard component
+                      game={game}
+                      
                     />
                   ))}
                 </div>
@@ -51,7 +54,8 @@ function App() {
 
         {addGameMenuIsDisplayed && <AddGameMenu setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed} />}
       </div>
-    </>
+      </GlobalProvider>
+    
   );
 }
 
