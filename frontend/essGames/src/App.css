@@ -142,7 +142,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 1rem;
-  min-width: 200px;
+  min-width: 450px;
   max-width: 450px;
   background: var(--color-dark);
   z-index: 2;
