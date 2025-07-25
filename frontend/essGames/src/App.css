@@ -25,6 +25,11 @@
   flex: 7;
 }
 
+.main_component{
+  flex: 7;
+  background: var(--color-hover);
+  padding: 1rem;
+}
 
 *:focus {
   outline: none !important;
