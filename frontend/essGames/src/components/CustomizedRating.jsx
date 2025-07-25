@@ -18,8 +18,21 @@ const StyledRating = styled(Rating)({
 export default function CustomizedRating() {
   return (
     <Box sx={{ '& > legend': { mt: 2 } }}>
-      
-      <Rating name="customized-10" defaultValue={2} max={5} size='small' precision={0.5} />
-    </Box>
+  <Rating 
+    name="customized-10" 
+    defaultValue={2} 
+    max={5} 
+    size="small" 
+    precision={0.5} 
+    sx={{
+      '.MuiRating-iconFilled': {
+        color: 'white', // Change to your desired color
+      },
+      '.MuiRating-iconEmpty': {
+        color: 'gray', // Color for empty icons
+      }
+    }} 
+  />
+</Box>
   );
 }
