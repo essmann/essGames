@@ -1,10 +1,31 @@
 import { useState } from "react";
 import CustomizedRating from "./CustomizedRating";
-function GameCard({ game }) {
+import handleUpdateGame from "../database/handleUpdateGame";
+
+function GameCard({ game, setGames }) {
   const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);
-  const [gameClicked, setGameClicked] = useState(false);
   const [rating, setRating] = useState(game.rating || 0);
+
+  const handleRatingChange = async (value) => {
+    console.log("rating changed:", value);
+
+    // 1️⃣ Update local rating
+    setRating(value);
+
+    // 2️⃣ Update state
+    setGames(prevGames =>
+      prevGames.map(g =>
+        g.id === game.id ? { ...g, rating: value } : g
+      )
+    );
+
+    // 3️⃣ Update DB with updated game
+    const updatedGame = { ...game, rating: value };
+    await handleUpdateGame(updatedGame);
+    console.log("Updated game in DB:", updatedGame);
+  };
+
   return (
     <div className={`game_card ${isHovered ? 'selected' : ''}`}>
       <img
@@ -15,7 +36,10 @@ function GameCard({ game }) {
         onMouseLeave={() => setIsHovered(false)}
       />
       <div className="game_card_title">{title}</div>
-      <CustomizedRating onRating={(value)=>setRating(value)} rating={rating}/>
+      <CustomizedRating
+        onRating={handleRatingChange}
+        rating={rating}
+      />
     </div>
   );
 }

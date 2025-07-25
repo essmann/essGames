@@ -8,6 +8,7 @@ import GameGrid from "./components/GameGrid";
 import GameMenu from "./components/GameMenu";
 import handleGetGames from "./database/handleGetGames";
 import { useEffect } from "react";
+import handleDeleteGame from "./database/handleDeleteGame";
 function App() {
   const [selectedListItemIndex, setSelectedListItemIndex] = useState(0);
   const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
@@ -43,6 +44,11 @@ function App() {
 
   return (
     <>
+    <button onClick={async ()=>{
+      await handleDeleteGame(3).then(()=>{console.log("deleted")});
+    }}>Delete game 3</button>
+    <button onClick={async () => {
+    }}>Update game 8</button>
       <div
         className={`container ${addGameMenuIsDisplayed ? "menuActive" : ""}`}
       >
@@ -59,6 +65,7 @@ function App() {
                 <GameGrid
                   games={games}
                   setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}
+                  setGames={setGames}
                 />
               );
             case 1:
