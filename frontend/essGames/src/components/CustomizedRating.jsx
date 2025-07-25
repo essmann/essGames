@@ -15,12 +15,12 @@ const StyledRating = styled(Rating)({
   },
 });
 
-export default function CustomizedRating() {
+export default function CustomizedRating({onRating, rating}) {
   return (
     <Box sx={{ '& > legend': { mt: 2 } }}>
   <Rating 
     name="customized-10" 
-    defaultValue={0} 
+    defaultValue={rating} 
     max={5} 
     size="small" 
     precision={0.5} 
@@ -31,7 +31,9 @@ export default function CustomizedRating() {
       '.MuiRating-iconEmpty': {
         color: 'gray', // Color for empty icons
       }
-    }} 
+    }
+  } 
+  onChange={(event, value)=>onRating(value)}
   />
 </Box>
   );

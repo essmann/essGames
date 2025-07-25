@@ -4,7 +4,7 @@ function GameCard({ game }) {
   const { poster, title } = game;
   const [isHovered, setIsHovered] = useState(false);
   const [gameClicked, setGameClicked] = useState(false);
-
+  const [rating, setRating] = useState(game.rating || 0);
   return (
     <div className={`game_card ${isHovered ? 'selected' : ''}`}>
       <img
@@ -15,7 +15,7 @@ function GameCard({ game }) {
         onMouseLeave={() => setIsHovered(false)}
       />
       <div className="game_card_title">{title}</div>
-      <CustomizedRating/>
+      <CustomizedRating onRating={(value)=>setRating(value)} rating={rating}/>
     </div>
   );
 }

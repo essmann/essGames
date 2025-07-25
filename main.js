@@ -1,8 +1,9 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const fs = require('fs')
 const path = require('path')
+const sqlite3 = require('sqlite3').verbose();
+let win;
 
-let win
 
 const createWindow = () => {
   win = new BrowserWindow({
@@ -39,10 +40,31 @@ const openFile = async () => {
   return dataUrl
 }
 
+const db = new sqlite3.Database('./sqlite/games.db', (err) => {
+  if (err) {
+    console.error('Error opening database:', err.message);
+  } else {
+    console.log('Connected to SQLite database.');
+  }
+});
+
+const util = require('util');
+const dbAll = util.promisify(db.all.bind(db));
 // IPC handler to expose openFile to renderer
 ipcMain.handle('open-image-file', async () => {
   return await openFile()
 })
+
+ipcMain.handle('get-games', async () => {
+  try {
+    const rows = await dbAll('SELECT * FROM games');
+    console.log('DB rows:', rows);  // <--- Add this
+    return rows;
+  } catch (err) {
+    console.error('DB error:', err);
+    throw err;
+  }
+});
 
 app.whenReady().then(createWindow)
 
