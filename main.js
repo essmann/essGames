@@ -72,6 +72,44 @@ ipcMain.handle('add-game', async (event, game) => {
   });
 });
 
+ipcMain.handle('update-game', async (event, game) => {
+  const { id, title, posterURL, rating, review } = game;
+
+  return new Promise((resolve, reject) => {
+    const query = `UPDATE games SET title = ?, posterURL = ?, rating = ?, review = ? WHERE id = ?`;
+    db.run(query, [title, posterURL, rating, review, id], function(err) {
+      if (err) {
+        console.error('Failed to update game:', err);
+        reject(err);
+      } else {
+        if (this.changes === 0) {
+          resolve({ success: false, message: "Game not found" });
+        } else {
+          resolve({ success: true, message: "Game updated successfully" });
+        }
+      }
+    });
+  });
+});
+
+ipcMain.handle('delete-game', async (event, id) => {
+  return new Promise((resolve, reject) => {
+    const query = `DELETE FROM games WHERE id = ?`;
+    db.run(query, [id], function(err) {
+      if (err) {
+        console.error('Failed to delete game:', err);
+        reject(err);
+      } else {
+        if (this.changes === 0) {
+          resolve({ success: false, message: "Game not found" });
+        } else {
+          resolve({ success: true, message: "Game deleted successfully" });
+        }
+      }
+    });
+  });
+});
+
 
 const createWindow = () => {
   win = new BrowserWindow({

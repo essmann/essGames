@@ -3,7 +3,7 @@ import { GlobalContext } from "../Context/globalContext";
 import AddGameCard from "./AddGameCard";
 import GameCard from "./GameCard";
 
-function GameGrid({ games, setAddGameMenuIsDisplayed }) {
+function GameGrid({ games, setAddGameMenuIsDisplayed, setGames }) {
 
   return ( 
     <div className="grid_view">
@@ -18,6 +18,8 @@ function GameGrid({ games, setAddGameMenuIsDisplayed }) {
         <GameCard 
             key={`${game.id}-${index}`}  // unique key by combining id and index
             game={game}
+            setGames = {setGames}
+
         />
         ))
 
