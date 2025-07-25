@@ -2,6 +2,7 @@ import { useState } from "react";
 import CustomizedRating from "./CustomizedRating";
 import handleUpdateGame from "../database/handleUpdateGame";
 
+
 function GameCard({ game, setGames }) {
   const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);
@@ -36,6 +37,18 @@ function GameCard({ game, setGames }) {
         onMouseLeave={() => setIsHovered(false)}
       />
       <div className="game_card_title">{title}</div>
+      <div className="game_card_buttons_bottom">
+        <div className="game_card_delete_button">
+                   
+      
+     
+    
+      
+    
+
+      
+        </div>
+      </div>
       <CustomizedRating
         onRating={handleRatingChange}
         rating={rating}

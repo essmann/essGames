@@ -84,6 +84,7 @@ function App() {
           <AddGameMenu setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed} setGames={setGames} />
         )}
         <GameMenu />
+        {/* <ContextMenu/> */}
       </div>
     </>
   );

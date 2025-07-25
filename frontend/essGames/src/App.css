@@ -95,6 +95,33 @@
 .game_card_title{
   visibility: hidden;
 }
+.game_card > .game_card_buttons_bottom{
+  /* Initially hidden */
+  /* visibility: hidden;
+  opacity: 0; */
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+
+  top: 140%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(255, 255, 255);
+  text-align: center;
+  max-width: 90%;
+  font-weight: bold;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  z-index: 10000;
+    user-select: none;       /* Prevent text selection */
+  pointer-events: none;    /* Disable mouse interactions */
+}
+.game_card > .game_card_buttons_bottom{
+  
+}
+
+.game_card_delete_button *{
+  margin-left: 3.5rem;
+}
 .game_card > .game_card_title {
   /* Initially hidden */
   visibility: hidden;
@@ -114,7 +141,7 @@
 }
 
 /* When selected, show with fade-in */
-.game_card.selected > .game_card_title {
+.game_card.selected > .game_card_title , .game_card.selected > .game_card_buttons_bottom{
   visibility: visible;
   opacity: 1;
 }
@@ -215,3 +242,7 @@
   margin-left: 1rem;
   margin-top: 1rem;
 }
+
+.game_card_delete_button{
+}
+
