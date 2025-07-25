@@ -38,7 +38,7 @@ function App() {
               case 1:
                 return (
                    <>
-                    <div className='main_component'>
+                    <div>
                       123
                     </div>
                    </>
