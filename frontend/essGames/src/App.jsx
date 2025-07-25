@@ -22,11 +22,25 @@ const handleGetGames = async () => {
     console.error("Failed to get games:", error);
   }
 };
+// const addGame = async (game) => {
+//   try {
+//     const gameAdded = await window.api.addGame(game);
+//     return gameAdded;
+//   } catch (error){
+//     console.error("Failed to add game: ", error);
+//   }
+// }
+// // Usage example:
+// handleGetGames().then((games) => {
+//   console.log(games);
+// });
 
-// Usage example:
-handleGetGames().then((games) => {
-  console.log(games);
-});
+// Usage example with an actual game object
+// const newGame = { name: 'Cool Game', genre: 'Action', release_year: 2025 };
+// const x =  { id: 6, rating: 3.5, title: "Dead Space", posterURL: "https://m.media-amazon.com/images/M/MV5BOGM4OTBhZjktYzAxZC00OTdlLWI2ZTEtZTliNjQ1NDg5OTJiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", review:"" };
+// addGame(x).then((result) => {
+//   console.log('Added game:', result);
+// });
 
   return (
     <>

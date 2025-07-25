@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useState } from "react";
 import CustomizedRating from "./CustomizedRating";
-
+import { useRef } from "react";
 const handleFileOpen = async (setFilePath) => {
   try {
     const dataUrl = await window.api.openImageFile() // Get Data URL from main process
@@ -18,10 +18,24 @@ const handleFileOpen = async (setFilePath) => {
     console.error("Failed to open file:", error);
   }
 };
+const addGame = async (game) => {
+  try {
+    const gameAdded = await window.api.addGame(game);
+    return gameAdded;
+  } catch (error){
+    console.error("Failed to add game: ", error);
+  }
+}
+// Usage example:
+handleGetGames().then((games) => {
+  console.log(games);
+});
 
 function AddGameMenu({ setAddGameMenuIsDisplayed }) {
   const [filePath, setFilePath] = useState("");
-
+  const [rating, setRating] = useState(0);
+  const [title, setTitle] = useState("");
+  const titleRef = useRef(null);
   return (
     <ClickAwayListener onClickAway={() => setAddGameMenuIsDisplayed(false)}>
       <div className="game_add_menu">
@@ -37,12 +51,12 @@ function AddGameMenu({ setAddGameMenuIsDisplayed }) {
               
               <div className="game_add_menu_title_input add_info">
                 <div className="game_add_menu_title_label add_info">Game Title:</div>
-                <input type="text" />
+                <input type="text" ref={titleRef}/>
               </div>
               <div className="game_add_menu_rating">
                 <div className="game_add_menu_rating_label add_info">Your Rating:</div>
                 <div id="star_container_add">
-                    <CustomizedRating/>
+                    <CustomizedRating onRating={(value)=>setRating(value)}/>
                 </div>
               </div>
             </div>
