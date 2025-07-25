@@ -7,7 +7,7 @@ import CustomizedRating from "./CustomizedRating";
 
 const handleFileOpen = async (setFilePath) => {
   try {
-    const dataUrl = await window.electronAPI.openFile(); // Get Data URL from main process
+    const dataUrl = await window.api.openImageFile() // Get Data URL from main process
     if (dataUrl) {
       setFilePath(dataUrl); // Set the Data URL as the src for the image
       console.log(dataUrl); // Log the Data URL for debugging
