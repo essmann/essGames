@@ -3,6 +3,7 @@ import CustomizedRating from "./CustomizedRating";
 function GameCard({ game }) {
   const { poster, title } = game;
   const [isHovered, setIsHovered] = useState(false);
+  const [gameClicked, setGameClicked] = useState(false);
 
   return (
     <div className={`game_card ${isHovered ? 'selected' : ''}`}>
