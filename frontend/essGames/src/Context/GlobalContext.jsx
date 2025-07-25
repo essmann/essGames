@@ -10,14 +10,15 @@ export const GlobalProvider = ({ children }) => {
   // Example state in global context
   const [user, setUser] = useState(null);
   const [games, setGames] = useState([]);
-  
+  const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
+
   // Example function to update the user state
   const loginUser = (userData) => {
     setUser(userData);
   };
 
   return (
-    <GlobalContext.Provider value={{ user, loginUser, games, setGames }}>
+    <GlobalContext.Provider value={{ user, loginUser, games, setGames, addGameMenuIsDisplayed, setAddGameMenuIsDisplayed }}>
       {children}
     </GlobalContext.Provider>
   );
