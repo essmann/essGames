@@ -5,7 +5,7 @@ import GameMenu from "./GameMenu";
 import { useGlobalContext } from "../Context/useGlobalContext";
 
 function GameCard({game}) {
-    const {clickedGameId, setClickedGameId } = useGlobalContext();
+    const {clickedGameId, setClickedGameId, setGames } = useGlobalContext();
   
   const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);

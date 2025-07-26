@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import handleDeleteGame from "./database/handleDeleteGame";
 import { useGlobalContext } from "./Context/useGlobalContext";
 function App() {
+  const [loading, setLoading] = useState(true);
   const {
     setGames,
     addGameMenuIsDisplayed,
@@ -32,6 +33,7 @@ function App() {
     handleGetGames().then((_games) => {
       setGames(_games);
       console.log(_games); // ✅ This is the new value
+          setLoading(false); // ✅ Done loading
     });
   }, []);
 
@@ -44,11 +46,8 @@ function App() {
 
   return (
     <>
-    <button onClick={async ()=>{
-      await handleDeleteGame(3).then(()=>{console.log("deleted")});
-    }}>Delete game 3</button>
-    <button onClick={async () => {
-    }}>Update game 8</button>
+    {loading ?? <div className="loading">Loading..</div>}
+    
       <div
         className={`container ${addGameMenuIsDisplayed || clickedGameId!== null ? "menuActive" : ""}`}
       >
@@ -62,7 +61,9 @@ function App() {
           switch (selectedListItemIndex) {
             case 0:
               return (
+                
                 <GameGrid/>
+                
               );
             case 1:
               return (
