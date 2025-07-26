@@ -5,6 +5,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useState } from "react";
 import { createContext } from "react";
 import { useGlobalContext } from "../Context/useGlobalContext";
+import { useRef } from "react";
 const selectItem = () => {
   // You might want to add some logic here
 };
@@ -69,41 +70,44 @@ function ListParentItem({
   index,
   children,
 }) {
-  const { selectedListItemIndex, setSelectedListItemIndex } =
-    useGlobalContext();
-    const whenClicked = () => {
-    if (selectedListItemIndex == index) {
-      return;
-    }
-    setSelectedListItemIndex(index);
-  };
+  const { selectedListItemIndex, setSelectedListItemIndex } = useGlobalContext();
   const [isExpanded, setIsExpanded] = useState(false);
-  var selected = selectedListItemIndex == index;
+  const selected = selectedListItemIndex === index;
+
+  // Handles clicking the row
+  const handleRowClick = () => {
+    if (!isExpanded) {
+      setIsExpanded(true);
+      onExpand?.(index);
+    }
+    if (!selected) setSelectedListItemIndex(index);
+  };
+
+  // Handles clicking the collapse arrow only
+  const handleCollapseClick = (e) => {
+    e.stopPropagation(); // Prevent row click
+    const next = !isExpanded;
+    setIsExpanded(next);
+    next ? onExpand?.(index) : onCollapse?.(index);
+  };
 
   return (
-    <div
-      className="list_item_parent_container"
-      
-    >
+    <div className="list_item_parent_container">
       <div
         className={`list_item list_item_parent ${selected ? "selected" : ""}`}
-        onClick={(e) => {
-          console.log(e.target);
-          setIsExpanded((prev) => !prev);
-          whenClicked();
-        }}
+        onClick={handleRowClick}
         style={{
           background: selected ? "#2D2D2D" : "#202020",
           cursor: "pointer",
-        }} // blue if selected, else black
+        }}
       >
         <div className="list_item_icon">
           <Icon component={icon} />
         </div>
         <div className="list_item_title">{title}</div>
-        
-          <ArrowDropDownIcon />
-        
+        <div className="flex collapseBtn" onClick={handleCollapseClick}>
+          <ArrowDropDownIcon className={isExpanded ? "rotated" : ""} />
+        </div>
       </div>
       {isExpanded && children}
     </div>
