@@ -15,13 +15,18 @@ function Sidebar({ selectedListItemIndex, setSelectedListItemIndex }) {
       <div className="searchBar">
         {/* <ListItem title="My Games" icon={VideogameAssetIcon} index={0} /> */}
         <ListParentItem title="My Games" icon={VideogameAssetIcon} index={0}>
-            <ListItem isChild={true} title="My Reviews" icon={ChatIcon} index={1} />
+            <ListItem isChild={true} title="Reviews" icon={ChatIcon} index={1} />
+            <ListItem isChild={true} title="Lists" icon={ChatIcon} index={2} />
+            <ListItem isChild={true} title="Export" icon={ChatIcon} index={3} />
+
+
+
         </ListParentItem>
         
-        <ListParentItem title="Malene" icon={ChatIcon} index={2}>
-          <ListItem isChild={true} title="Child2" icon={ChatIcon} index={3} />
-          <ListItem isChild={true} title="Child3" icon={ChatIcon} index={4} />
-          <ListItem isChild={true} title="Child4" icon={ChatIcon} index={5} />
+        <ListParentItem title="Malene" icon={ChatIcon} index={4}>
+          <ListItem isChild={true} title="Child2" icon={ChatIcon} index={5} />
+          <ListItem isChild={true} title="Child3" icon={ChatIcon} index={6} />
+          <ListItem isChild={true} title="Child4" icon={ChatIcon} index={7} />
 
         </ListParentItem>
       </div>
@@ -82,7 +87,8 @@ function ListParentItem({
     >
       <div
         className={`list_item list_item_parent ${selected ? "selected" : ""}`}
-        onClick={() => {
+        onClick={(e) => {
+          console.log(e.target);
           setIsExpanded((prev) => !prev);
           whenClicked();
         }}
@@ -95,7 +101,9 @@ function ListParentItem({
           <Icon component={icon} />
         </div>
         <div className="list_item_title">{title}</div>
-        <ArrowDropDownIcon />
+        
+          <ArrowDropDownIcon />
+        
       </div>
       {isExpanded && children}
     </div>
