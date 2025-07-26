@@ -12,6 +12,9 @@ import handleDeleteGame from "./database/handleDeleteGame";
 import { useGlobalContext } from "./Context/useGlobalContext";
 import { Backdrop } from "@mui/material";
 import {CircularProgress} from "@mui/material";
+import HorizontalNonLinearStepper from "./components/HorizontalLinearStepper";
+import { useStyleContext } from "./Context/useStyleContext";
+import { StyleProvider } from "./Context/StyleContext";
 function App() {
   const [loading, setLoading] = useState(true);
   const {
@@ -22,6 +25,9 @@ function App() {
     setSelectedListItemIndex,
   } = useGlobalContext();
   
+  const GLOBAL_STYLES = {
+
+  }
   // const addGame = async (game) => {
   //   try {
   //     const gameAdded = await window.api.addGame(game);
@@ -47,7 +53,7 @@ function App() {
   // });
 
   return (
-    <>
+    <StyleProvider>
     {loading && 
     <Backdrop
         sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
@@ -91,7 +97,7 @@ function App() {
         )}
         <GameMenu />        {/* <ContextMenu/> */}
       </div>
-    </>
+    </StyleProvider>
   );
 }
 

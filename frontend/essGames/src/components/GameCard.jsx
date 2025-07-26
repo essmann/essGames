@@ -13,7 +13,7 @@ function GameCard({game}) {
 
   const handleRatingChange = async (value) => {
     console.log("rating changed:", value);
-
+      
     // 1️⃣ Update local rating
     setRating(value);
 
