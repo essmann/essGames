@@ -11,6 +11,7 @@ import { useGlobalContext } from "../Context/useGlobalContext";
 import DotsMobileStepper from "./HorizontalLinearStepper";
 import ControllableStates from "./ControllableStates";
 import FreeSolo from "./ControllableStates";
+import { useEffect } from "react";
 const handleFileOpen = async (setFilePath) => {
   try {
     const dataUrl = await window.api.openImageFile(); // Get Data URL from main process
@@ -35,7 +36,7 @@ function AddGameMenu() {
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const titleRef = useRef(null);
-  const { setGames, setAddGameMenuIsDisplayed } = useGlobalContext();
+  const { setGames, addGameMenuIsDisplayed, setAddGameMenuIsDisplayed } = useGlobalContext();
   // const [stepperStep, setStepperStep] = useState(0);
   const inputIsValid = () => {
     const currentTitle = titleRef.current?.value || "";
@@ -67,24 +68,103 @@ function AddGameMenu() {
 
   return (
     <ClickAwayListener onClickAway={() => setAddGameMenuIsDisplayed(false)}>
-      <InputBox/>
-      {/* <div className="game_add_menu">
-        
-      </div> */}
-    </ClickAwayListener>
+  <div>
+    {addGameMenuIsDisplayed && <InputBox />}
+  </div>
+</ClickAwayListener>
+
   );
 }
 
-function InputBox({options}){
+
+function InputBox({ options = [] }) {
+  const inputRef = useRef(null);
+  const suggestionRefs = useRef([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+
+  const suggestions = [
+    "Manual game configuration",
+    ...Array(20).fill("suggestion 1"),
+  ];
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    suggestionRefs.current[selectedIndex]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  }, [selectedIndex]);
+
+  const confirmSelection = () => {
+    const selected = suggestions[selectedIndex];
+    setInputValue(selected);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex((prev) => Math.min(prev + 1, suggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex((prev) => Math.max(prev - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      confirmSelection();
+    }
+  };
+
+  const handleSuggestionClick = (index) => {
+    setSelectedIndex(index);
+    confirmSelection();
+    inputRef?.current.focus();
+  };
+
+  const handleSuggestionHover = (index) => {
+    setSelectedIndex(index); // 👈 Hover selects
+  };
+
   return (
-      <div className="input_box">
-        <input type="text"/>
-        <div className="input_suggestions_container">
-          <div>suggestion 1</div>
-        </div>
+    <div className="input_box">
+      <input
+        type="text"
+        className="input_box_input"
+        placeholder="Search"
+        ref={inputRef}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+      />
+
+      <div className="input_suggestions_container">
+        {suggestions.map((text, index) => (
+          <div
+            key={index}
+            className={`suggestion ${index === selectedIndex ? "active" : ""}`}
+            ref={(el) => (suggestionRefs.current[index] = el)}
+            onClick={() => handleSuggestionClick(index)}
+            onMouseEnter={() => handleSuggestionHover(index)} // 👈 Hover support
+            style={{
+              cursor: "pointer",
+              padding: "4px 8px",
+              userSelect: "none",
+            }}
+          >
+            {text}
+          </div>
+        ))}
       </div>
-  )
+
+      
+
+      
+    </div>
+  );
 }
+
 function GamePoster({ filePath, setFilePath }) {
   return (
     <>

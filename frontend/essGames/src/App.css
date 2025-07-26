@@ -414,20 +414,50 @@ background-image: linear-gradient(315deg, #2d3436 0%, #181616 74%);
 
 .input_box{
    display: flex;
-  border-radius: 12px;
   position: absolute;
   width: 40%;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 1rem;
   flex-direction: column;
   background: var(--color-dark);
   z-index: 2;
+  border: none;
+  outline: none;
+  background: none;
+  
 }
 
 .input_suggestions_container{
   display: flex;
-  flex-direction: row;
-  border: 1px solid white;
+  top:100%;
+  position: absolute;
+  flex-direction: column;
+  background: inherit;
+  width: 100%;
+  max-height: 400px;
+
+  overflow-y:scroll;
+  
+}
+
+.suggestion{
+  border-top: 1px solid rgb(68, 66, 66);
+}
+
+.input_box_input{
+  border: none;
+  padding: 0.4rem;
+  border-radius: 4px;
+  font-size: medium;
+  
+}
+
+.suggestion.active{
+  background: var(--color-hover)
+}
+
+.input_box>h2{
+  font-weight: bold;
+  font-size: xx-large;
 }
