@@ -82,14 +82,15 @@ function InputBox({ options = [] }) {
   const suggestionRefs = useRef([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
-
-  const suggestions = [
-    "Manual game configuration",
-    ...Array(20).fill("suggestion 1"),
-  ];
-
+  const [suggestions, setSuggestions] = useState([]);
+  
   useEffect(() => {
     inputRef.current?.focus();
+    const _suggestions = [
+    "Manual game configuration",
+    ...Array(5).fill("suggestion 1"),
+  ];
+setSuggestions(_suggestions);
   }, []);
 
   useEffect(() => {
