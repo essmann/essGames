@@ -2,9 +2,15 @@ import { useContext } from 'react';
 import { GlobalContext } from "../Context/globalContext";
 import AddGameCard from "./AddGameCard";
 import GameCard from "./GameCard";
+import { useGlobalContext } from '../Context/useGlobalContext';
 
-function GameGrid({ games, setAddGameMenuIsDisplayed, setGames }) {
-
+function GameGrid() {
+  const {
+    games,
+    setGames,
+    setAddGameMenuIsDisplayed,
+    setClickedGameId,
+  } = useGlobalContext();
   return ( 
     <div className="grid_view">
       <AddGameCard setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}/> {/* AddGameCard can directly access the context */}
@@ -13,6 +19,7 @@ function GameGrid({ games, setAddGameMenuIsDisplayed, setGames }) {
           key={game.id}
           game={game}
           setGames = {setGames}
+          setClickedGameId={setClickedGameId}
         />
       )) 
           

@@ -237,6 +237,9 @@
     filter: blur(2px) !important;
 
 }
+.menuActive >.grid_view * {
+    pointer-events: none;
+}
 
 .game_add_menu_submit_btn{
   margin-left: 1rem;
@@ -246,3 +249,8 @@
 .game_card_delete_button{
 }
 
+.game_menu{
+  padding: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
