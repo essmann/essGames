@@ -8,6 +8,9 @@ import { useRef } from "react";
 import generateGuidInteger from "../database/generateGuidInteger";
 import handleAddGame from "../database/handleAddGame";
 import { useGlobalContext } from "../Context/useGlobalContext";
+import DotsMobileStepper from "./HorizontalLinearStepper";
+import ControllableStates from "./ControllableStates";
+import FreeSolo from "./ControllableStates";
 const handleFileOpen = async (setFilePath) => {
   try {
     const dataUrl = await window.api.openImageFile(); // Get Data URL from main process
@@ -32,115 +35,89 @@ function AddGameMenu() {
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const titleRef = useRef(null);
-  const {
-    setGames,
-    setAddGameMenuIsDisplayed,
-  } = useGlobalContext();
-  
+  const { setGames, setAddGameMenuIsDisplayed } = useGlobalContext();
+  // const [stepperStep, setStepperStep] = useState(0);
   const inputIsValid = () => {
-  const currentTitle = titleRef.current?.value || "";
-  return currentTitle.trim() !== "" && filePath && filePath !== "No file selected";
-};
-
-const addGame = () => {
-  if (!inputIsValid()) {
-    alert("Invalid input");
-    setAddGameMenuIsDisplayed(false);
-    return;
-  }
-  const title = titleRef.current.value.trim();
-  const id = generateGuidInteger();
-  const game = {
-    id: id,
-    posterURL: filePath,
-    rating: rating,
-    review: "",
-    title: title,
+    const currentTitle = titleRef.current?.value || "";
+    return (
+      currentTitle.trim() !== "" && filePath && filePath !== "No file selected"
+    );
   };
-  handleAddGame(game).then(() => {
-    setGames((prevGames) => [...prevGames, game]);
-  });
-  setAddGameMenuIsDisplayed(false);
-};
+
+  const addGame = () => {
+    if (!inputIsValid()) {
+      alert("Invalid input");
+      setAddGameMenuIsDisplayed(false);
+      return;
+    }
+    const title = titleRef.current.value.trim();
+    const id = generateGuidInteger();
+    const game = {
+      id: id,
+      posterURL: filePath,
+      rating: rating,
+      review: "",
+      title: title,
+    };
+    handleAddGame(game).then(() => {
+      setGames((prevGames) => [...prevGames, game]);
+    });
+    setAddGameMenuIsDisplayed(false);
+  };
 
   return (
     <ClickAwayListener onClickAway={() => setAddGameMenuIsDisplayed(false)}>
-      <div className="game_add_menu">
-        {filePath && filePath !== "No file selected" ? (
-          <>
-            <img
-              src={filePath}
-              className="game_add_menu_poster image_added"
-              alt="Selected"
-              style={{ maxWidth: "100%", maxHeight: "100%" }}
-            />
-            <div>
-              <div className="game_add_menu_title_input add_info">
-                <div className="game_add_menu_title_label add_info">
-                  Game Title:
-                </div>
-                <input type="text" ref={titleRef} />
-              </div>
-              <div className="game_add_menu_rating">
-                <div className="game_add_menu_rating_label add_info">
-                  Your Rating:
-                </div>
-                <div id="star_container_add">
-                  <CustomizedRating onRating={(value) => setRating(value)} />
-                </div>
-              </div>
-              <button
-                className="game_add_menu_submit_btn"
-                onClick={() => {
-                  addGame();
-                }}
-              >
-                Submit{" "}
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="game_add_menu_poster image_empty">
-              <Box sx={{ "& > :not(style)": { m: 1 } }}>
-                <Fab
-                  size="small"
-                  color="primary"
-                  aria-label="add"
-                  onClick={() => handleFileOpen(setFilePath)}
-                >
-                  <AddIcon />
-                </Fab>
-              </Box>
-            </div>
-            <div>
-              <div className="game_add_menu_title_input add_info">
-                <div className="game_add_menu_title_label add_info">
-                  Game Title:
-                </div>
-                <input type="text" ref={titleRef} />
-              </div>
-              <div className="game_add_menu_rating">
-                <div className="game_add_menu_rating_label add_info">
-                  Your Rating:
-                </div>
-                <div id="star_container_add">
-                  <CustomizedRating onRating={(value) => setRating(value)} />
-                </div>
-              </div>
-              <button
-                className="game_add_menu_submit_btn"
-                onClick={() => {
-                  addGame();
-                }}
-              >
-                Submit{" "}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
+      <InputBox/>
+      {/* <div className="game_add_menu">
+        
+      </div> */}
     </ClickAwayListener>
+  );
+}
+
+function InputBox({options}){
+  return (
+      <div className="input_box">
+        <input type="text"/>
+        <div className="input_suggestions_container">
+          <div>suggestion 1</div>
+        </div>
+      </div>
+  )
+}
+function GamePoster({ filePath, setFilePath }) {
+  return (
+    <>
+      {filePath && filePath !== "No file selected" ? (
+        <>
+          <div className="game_add_menu_title"></div>
+          <img
+            src={filePath}
+            className="game_add_menu_poster image_added"
+            alt="Selected"
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
+          />
+        </>
+      ) : (
+        <EmptyImageWithBox setFilePath={setFilePath} />
+      )}
+    </>
+  );
+}
+function EmptyImageWithBox({ setFilePath }) {
+  return (
+    <div className="game_add_menu_poster image_empty">
+      <Box sx={{ "& > :not(style)": { m: 1 } }}>
+        <Fab
+          size="small"
+          color="primary"
+          aria-label="add"
+          onClick={() => handleFileOpen(setFilePath)}
+        >
+          <AddIcon />
+        </Fab>
+      </Box>
+    </div>
   );
 }
 
