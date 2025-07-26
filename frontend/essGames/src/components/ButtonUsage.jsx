@@ -13,8 +13,11 @@ function Sidebar({ selectedListItemIndex, setSelectedListItemIndex }) {
   return (
     <div className="sidebar">
       <div className="searchBar">
-        <ListItem title="My Games" icon={VideogameAssetIcon} index={0} />
-        <ListItem title="My Reviews" icon={ChatIcon} index={1} />
+        {/* <ListItem title="My Games" icon={VideogameAssetIcon} index={0} /> */}
+        <ListParentItem title="My Games" icon={VideogameAssetIcon} index={0}>
+            <ListItem isChild={true} title="My Reviews" icon={ChatIcon} index={1} />
+        </ListParentItem>
+        
         <ListParentItem title="Malene" icon={ChatIcon} index={2}>
           <ListItem isChild={true} title="Child2" icon={ChatIcon} index={3} />
           <ListItem isChild={true} title="Child3" icon={ChatIcon} index={4} />
