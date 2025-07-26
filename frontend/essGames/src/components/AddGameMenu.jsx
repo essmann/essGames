@@ -7,6 +7,7 @@ import CustomizedRating from "./CustomizedRating";
 import { useRef } from "react";
 import generateGuidInteger from "../database/generateGuidInteger";
 import handleAddGame from "../database/handleAddGame";
+import { useGlobalContext } from "../Context/useGlobalContext";
 const handleFileOpen = async (setFilePath) => {
   try {
     const dataUrl = await window.api.openImageFile(); // Get Data URL from main process
@@ -26,32 +27,40 @@ const handleFileOpen = async (setFilePath) => {
 //   console.log(games);
 // });
 
-function AddGameMenu({ setAddGameMenuIsDisplayed, setGames }) {
+function AddGameMenu() {
   const [filePath, setFilePath] = useState("");
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const titleRef = useRef(null);
+  const {
+    setGames,
+    setAddGameMenuIsDisplayed,
+  } = useGlobalContext();
+  
+  const inputIsValid = () => {
+  const currentTitle = titleRef.current?.value || "";
+  return currentTitle.trim() !== "" && filePath && filePath !== "No file selected";
+};
 
-  const addGame = () => {
-    if (!validateInput) {
-      return;
-    }
-    const title = titleRef.current.value;
-    const id = generateGuidInteger();
-    const game = {
-      id: id,
-      posterURL: filePath,
-      rating: rating,
-      review: "",
-      title: title,
-    };
-    handleAddGame(game).then(() => {
-      setGames((prevGames) => [...prevGames, game]);
-    });
+const addGame = () => {
+  if (!inputIsValid()) {
+    alert("Invalid input");
+    return;
+  }
+  const title = titleRef.current.value.trim();
+  const id = generateGuidInteger();
+  const game = {
+    id: id,
+    posterURL: filePath,
+    rating: rating,
+    review: "",
+    title: title,
   };
-  const validateInput = () => {
-    return title !== null && id !== null && filePath !== null;
-  };
+  handleAddGame(game).then(() => {
+    setGames((prevGames) => [...prevGames, game]);
+  });
+};
+
   return (
     <ClickAwayListener onClickAway={() => setAddGameMenuIsDisplayed(false)}>
       <div className="game_add_menu">

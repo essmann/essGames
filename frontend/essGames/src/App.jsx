@@ -9,15 +9,15 @@ import GameMenu from "./components/GameMenu";
 import handleGetGames from "./database/handleGetGames";
 import { useEffect } from "react";
 import handleDeleteGame from "./database/handleDeleteGame";
+import { useGlobalContext } from "./Context/useGlobalContext";
 function App() {
-  const [selectedListItemIndex, setSelectedListItemIndex] = useState(0);
-  const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
-  // const [games, setGames] = useState([
-  //   { id: 1, rating: 3.5, title: "Dead Space", poster: "https://m.media-amazon.com/images/M/MV5BOGM4OTBhZjktYzAxZC00OTdlLWI2ZTEtZTliNjQ1NDg5OTJiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
-  //   { id: 2, rating: 4, title: "Minecraft", poster: "https://i.pinimg.com/474x/81/61/32/816132e3f5cf75f6ddd44b5f6536cdac.jpg" },
-  //   { id: 3, rating: 5, review: "this is my review", title: "World of Warcraft", poster: "https://upload.wikimedia.org/wikipedia/en/thumb/6/65/World_of_Warcraft.png/250px-World_of_Warcraft.png" }
-  // ])
-  const [games, setGames] = useState([]);
+  const {
+    setGames,
+    addGameMenuIsDisplayed,
+    clickedGameId,
+    selectedListItemIndex,
+    setSelectedListItemIndex,
+  } = useGlobalContext();
   
   // const addGame = async (game) => {
   //   try {
@@ -50,7 +50,7 @@ function App() {
     <button onClick={async () => {
     }}>Update game 8</button>
       <div
-        className={`container ${addGameMenuIsDisplayed ? "menuActive" : ""}`}
+        className={`container ${addGameMenuIsDisplayed || clickedGameId!== null ? "menuActive" : ""}`}
       >
         <Sidebar
           selectedListItemIndex={selectedListItemIndex}
@@ -62,11 +62,7 @@ function App() {
           switch (selectedListItemIndex) {
             case 0:
               return (
-                <GameGrid
-                  games={games}
-                  setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}
-                  setGames={setGames}
-                />
+                <GameGrid/>
               );
             case 1:
               return (
@@ -80,11 +76,11 @@ function App() {
           }
         })()}
 
+        
         {addGameMenuIsDisplayed && (
-          <AddGameMenu setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed} setGames={setGames} />
+          <AddGameMenu />
         )}
-        <GameMenu />
-        {/* <ContextMenu/> */}
+        <GameMenu />        {/* <ContextMenu/> */}
       </div>
     </>
   );

@@ -5,20 +5,24 @@ import React, { createContext, useState } from 'react';
 // Create the context
 export const GlobalContext = createContext();
 
-// Create a provider component
+// Provider component
 export const GlobalProvider = ({ children }) => {
-  // Example state in global context
-  const [user, setUser] = useState(null);
   const [games, setGames] = useState([]);
   const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
-
-  // Example function to update the user state
-  const loginUser = (userData) => {
-    setUser(userData);
-  };
+  const [clickedGameId, setClickedGameId] = useState(null);
+  const [selectedListItemIndex, setSelectedListItemIndex] = useState(0);
 
   return (
-    <GlobalContext.Provider value={{ user, loginUser, games, setGames, addGameMenuIsDisplayed, setAddGameMenuIsDisplayed }}>
+    <GlobalContext.Provider value={{
+      games,
+      setGames,
+      addGameMenuIsDisplayed,
+      setAddGameMenuIsDisplayed,
+      clickedGameId,
+      setClickedGameId,
+      selectedListItemIndex,
+      setSelectedListItemIndex,
+    }}>
       {children}
     </GlobalContext.Provider>
   );

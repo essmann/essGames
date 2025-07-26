@@ -1,18 +1,31 @@
-import { StrictMode } from 'react'; // StrictMode is optional but useful for development
-import { createRoot } from 'react-dom/client'; // Import createRoot for React 18+
-import './index.css'; // Import styles
-import App from './App.jsx'; // Import App component
-import { GlobalProvider } from './Context/globalContext'; // Import GlobalProvider
+import { StrictMode, Profiler } from 'react'; // Import Profiler
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
+import { GlobalProvider } from './Context/globalContext';
 
-// Create the root element for React 18
+// Your onRender callback:
+function onRender(
+  id,
+  phase,
+  actualDuration,
+  baseDuration,
+  startTime,
+  commitTime,
+  interactions
+) {
+  console.log({ id, phase, actualDuration, baseDuration, startTime, commitTime, interactions });
+}
+
 const rootElement = document.getElementById('root');
-const root = createRoot(rootElement); // Use createRoot for React 18
+const root = createRoot(rootElement);
 
-// Render your app with GlobalProvider
 root.render(
-  <StrictMode> {/* Wrap with StrictMode */}
-    <GlobalProvider> {/* Provide the context globally */}
-      <App /> {/* Your main app */}
+  <StrictMode>
+    <GlobalProvider>
+      <Profiler id="AppProfiler" onRender={onRender}>
+        <App />
+      </Profiler>
     </GlobalProvider>
   </StrictMode>
 );

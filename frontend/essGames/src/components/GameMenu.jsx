@@ -1,19 +1,21 @@
-
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { useGlobalContext } from "../Context/useGlobalContext";
+import { useEffect } from "react";
 
-import { useState } from "react";
-function GameMenu({ setAddGameMenuIsDisplayed }) {
-  const [gameMenuIsVisible, setGameMenuisVisible] = useState(true);
+function GameMenu() {
+  const { clickedGameId, setClickedGameId } = useGlobalContext();
+
+  useEffect(() => {
+    console.log(clickedGameId);
+  }, [clickedGameId]);
+
+  if (clickedGameId === null) return null;
+
   return (
-    <ClickAwayListener onClickAway={()=>setGameMenuisVisible(false)}>
-        {gameMenuIsVisible ?
-        <div className="game_add_menu game_menu">
-            test
-        </div>
-        : <></>
-        
-      }
-
+    <ClickAwayListener onClickAway={() => setClickedGameId(null)}>
+      <div className="game_add_menu game_menu">
+        Clicked game: {clickedGameId}
+      </div>
     </ClickAwayListener>
   );
 }

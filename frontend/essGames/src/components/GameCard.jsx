@@ -1,9 +1,12 @@
 import { useState } from "react";
 import CustomizedRating from "./CustomizedRating";
 import handleUpdateGame from "../database/handleUpdateGame";
+import GameMenu from "./GameMenu";
+import { useGlobalContext } from "../Context/useGlobalContext";
 
-
-function GameCard({ game, setGames }) {
+function GameCard({game}) {
+    const {clickedGameId, setClickedGameId } = useGlobalContext();
+  
   const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);
   const [rating, setRating] = useState(game.rating || 0);
@@ -28,13 +31,16 @@ function GameCard({ game, setGames }) {
   };
 
   return (
-    <div className={`game_card ${isHovered ? 'selected' : ''}`}>
-      <img
+<div id={game.id} className={`game_card ${isHovered ? 'selected' : ''}`}>      <img
         src={posterURL}
         alt={`${title} poster`}
         className="game_card_poster"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={()=>{
+          setClickedGameId(game.id);
+          console.log(clickedGameId);
+        }}
       />
       <div className="game_card_title">{title}</div>
       <div className="game_card_buttons_bottom">
