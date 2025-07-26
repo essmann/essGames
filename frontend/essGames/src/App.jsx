@@ -10,6 +10,8 @@ import handleGetGames from "./database/handleGetGames";
 import { useEffect } from "react";
 import handleDeleteGame from "./database/handleDeleteGame";
 import { useGlobalContext } from "./Context/useGlobalContext";
+import { Backdrop } from "@mui/material";
+import {CircularProgress} from "@mui/material";
 function App() {
   const [loading, setLoading] = useState(true);
   const {
@@ -46,7 +48,13 @@ function App() {
 
   return (
     <>
-    {loading ?? <div className="loading">Loading..</div>}
+    {loading && 
+    <Backdrop
+        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+        open={open}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>}
     
       <div
         className={`container ${addGameMenuIsDisplayed || clickedGameId!== null ? "menuActive" : ""}`}

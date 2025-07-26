@@ -4,7 +4,8 @@ const path = require('path')
 const sqlite3 = require('sqlite3').verbose();
 let win;
 
-const isDev = !app.isPackaged;
+// const isDev = !app.isPackaged;
+const isDev = true;
 const dbPath = isDev
   ? path.join(__dirname, 'sqlite', 'games.db')
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'games.db');
@@ -126,8 +127,8 @@ const createWindow = () => {
     }
   })
 
-  // win.loadURL('http://localhost:5173/')
-win.loadFile('./build/dist/index.html');
+  win.loadURL('http://localhost:5173/')
+// win.loadFile('./build/dist/index.html');
 }
 
 app.whenReady().then(createWindow)
