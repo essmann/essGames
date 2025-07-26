@@ -48,7 +48,7 @@ ipcMain.handle('open-image-file', async () => {
 ipcMain.handle('get-games', async () => {
   try {
     const rows = await dbAll('SELECT * FROM games');
-    console.log('DB rows:', rows);  // <--- Add this
+    console.log(`Fetched ${rows.length} rows from the games database`)
     return rows;
   } catch (err) {
     console.error('DB error:', err);
@@ -84,8 +84,10 @@ ipcMain.handle('update-game', async (event, game) => {
       } else {
         if (this.changes === 0) {
           resolve({ success: false, message: "Game not found" });
+          console.log(`Game with ID: ${id} not found.`)
         } else {
           resolve({ success: true, message: "Game updated successfully" });
+          console.log(`Game with title: ${title} updated successfully.`);
         }
       }
     });
