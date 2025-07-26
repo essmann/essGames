@@ -45,6 +45,7 @@ function AddGameMenu() {
 const addGame = () => {
   if (!inputIsValid()) {
     alert("Invalid input");
+    setAddGameMenuIsDisplayed(false);
     return;
   }
   const title = titleRef.current.value.trim();
@@ -59,6 +60,7 @@ const addGame = () => {
   handleAddGame(game).then(() => {
     setGames((prevGames) => [...prevGames, game]);
   });
+  setAddGameMenuIsDisplayed(false);
 };
 
   return (
