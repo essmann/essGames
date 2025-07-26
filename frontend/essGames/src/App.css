@@ -25,7 +25,6 @@ html, body {
 
 .sidebar{
   padding: 0.25rem;
-  flex: 1;
   height: 100vh;
 }
 
@@ -328,4 +327,15 @@ html, body {
 }
 .sort-bar>select>option:hover{
   background: var(--color-hover);
+}
+.sidebar{
+}
+.main_component{
+  display: flex;
+  flex: 6;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background: #2D2D2D;
+  gap: 0px;
+  align-content: flex-start;
 }
