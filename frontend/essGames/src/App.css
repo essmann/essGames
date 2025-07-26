@@ -353,8 +353,8 @@ background-image: linear-gradient(315deg, #2d3436 0%, #181616 74%);
   display: flex;
   flex-direction: column;
 }
-.list_item_parent_container >.list_item{
-  
+.list_item_parent_container >.list_item_child{
+  display: flex;
 }
 
 .list_item.selected{
@@ -373,3 +373,7 @@ background-image: linear-gradient(315deg, #2d3436 0%, #181616 74%);
 .list_item_child{
   margin-left: 1.5rem;
 }
+.list_item_child{
+  
+}
+
