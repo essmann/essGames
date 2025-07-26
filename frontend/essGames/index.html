@@ -9,26 +9,8 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <button class="btn">Open File</button>
-<p id="filePath"></p>
+    
 
-<script>
-  const btn = document.querySelector(".btn");
-  const filePathElement = document.getElementById('filePath');
 
-  btn.addEventListener('click', async () => {
-    try {
-      // Use the exposed function
-      const filePath = await window.electronAPI.openFile();
-      if (filePath) {
-        filePathElement.innerText = `Selected file: ${filePath}`;
-      } else {
-        filePathElement.innerText = 'No file selected';
-      }
-    } catch (error) {
-      console.error('Failed to open file:', error);
-    }
-  });
-</script>
   </body>
 </html>

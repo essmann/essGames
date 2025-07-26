@@ -121,6 +121,7 @@ const createWindow = () => {
   })
 
   win.loadURL('http://localhost:5173/')
+// win.loadFile(path.join(__dirname,  'frontend', 'essGames', 'dist', 'index.html'));
 }
 
 app.whenReady().then(createWindow)
