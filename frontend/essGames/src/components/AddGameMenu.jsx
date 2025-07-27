@@ -35,10 +35,23 @@ function AddGameMenu() {
   } = useGlobalContext();
 
   // Monitor debounced title and update internal title state
+
+  //Fetching game logic via filtering here
   useEffect(() => {
-    setTitle(debouncedInputValue);
+
+
     console.log("Debounced value: "+debouncedInputValue);
+
+    //take the debounced input value, do a database query or something and get filtered results from that query.
+    const filtered = inputOptions.filter(option =>
+    option.toLowerCase().includes(debouncedInputValue.toLowerCase())
+  );
+  setInputOptions(filtered);
+  console.log(filtered);
   }, [debouncedInputValue]);
+  useEffect(()=>{
+    setInputOptions(["dingus", "apple"])
+  },[])
 
   const inputIsValid = () => {
     const currentTitle = titleRef.current?.value || title;
