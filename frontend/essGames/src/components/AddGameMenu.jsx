@@ -2,22 +2,17 @@ import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
-import { useState } from "react";
-import CustomizedRating from "./CustomizedRating";
-import { useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import generateGuidInteger from "../database/generateGuidInteger";
 import handleAddGame from "../database/handleAddGame";
 import { useGlobalContext } from "../Context/useGlobalContext";
-import DotsMobileStepper from "./HorizontalLinearStepper";
-import ControllableStates from "./ControllableStates";
-import FreeSolo from "./ControllableStates";
-import { useEffect } from "react";
+
+// File picker
 const handleFileOpen = async (setFilePath) => {
   try {
-    const dataUrl = await window.api.openImageFile(); // Get Data URL from main process
+    const dataUrl = await window.api.openImageFile();
     if (dataUrl) {
-      setFilePath(dataUrl); // Set the Data URL as the src for the image
-      console.log(dataUrl); // Log the Data URL for debugging
+      setFilePath(dataUrl);
     } else {
       setFilePath("No file selected");
     }
@@ -26,23 +21,28 @@ const handleFileOpen = async (setFilePath) => {
   }
 };
 
-// Usage example:
-// handleGetGames().then((games) => {
-//   console.log(games);
-// });
-
 function AddGameMenu() {
   const [filePath, setFilePath] = useState("");
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const titleRef = useRef(null);
-  const { setGames, addGameMenuIsDisplayed, setAddGameMenuIsDisplayed } = useGlobalContext();
-  // const [stepperStep, setStepperStep] = useState(0);
+  const [debouncedInputValue, setDebouncedInputValue] = useState("");
+  const [inputOptions, setInputOptions] = useState([]);
+  const {
+    setGames,
+    addGameMenuIsDisplayed,
+    setAddGameMenuIsDisplayed,
+  } = useGlobalContext();
+
+  // Monitor debounced title and update internal title state
+  useEffect(() => {
+    setTitle(debouncedInputValue);
+    console.log("Debounced value: "+debouncedInputValue);
+  }, [debouncedInputValue]);
+
   const inputIsValid = () => {
-    const currentTitle = titleRef.current?.value || "";
-    return (
-      currentTitle.trim() !== "" && filePath && filePath !== "No file selected"
-    );
+    const currentTitle = titleRef.current?.value || title;
+    return currentTitle.trim() !== "" && filePath && filePath !== "No file selected";
   };
 
   const addGame = () => {
@@ -51,47 +51,52 @@ function AddGameMenu() {
       setAddGameMenuIsDisplayed(false);
       return;
     }
-    const title = titleRef.current.value.trim();
+
+    const finalTitle = titleRef.current?.value?.trim() || title.trim();
     const id = generateGuidInteger();
     const game = {
-      id: id,
+      id,
       posterURL: filePath,
-      rating: rating,
+      rating,
       review: "",
-      title: title,
+      title: finalTitle,
     };
+
     handleAddGame(game).then(() => {
-      setGames((prevGames) => [...prevGames, game]);
+      setGames((prev) => [...prev, game]);
     });
     setAddGameMenuIsDisplayed(false);
   };
 
+  if (!addGameMenuIsDisplayed) return null;
+
   return (
     <ClickAwayListener onClickAway={() => setAddGameMenuIsDisplayed(false)}>
-  <div>
-    {addGameMenuIsDisplayed && <InputBox />}
-  </div>
-</ClickAwayListener>
-
+      <div className="add_game_menu">
+        <InputBox inputHandler={setDebouncedInputValue} options={inputOptions}/>
+        <GamePoster filePath={filePath} setFilePath={setFilePath} />
+        <button onClick={addGame}>Add Game</button>
+      </div>
+    </ClickAwayListener>
   );
 }
 
-
-function InputBox({ options = [] }) {
+// ────────── InputBox Component ──────────
+function InputBox({ options = [], inputHandler }) {
   const inputRef = useRef(null);
   const suggestionRefs = useRef([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  
+
   useEffect(() => {
     inputRef.current?.focus();
-    const _suggestions = [
-    "Manual game configuration",
-    ...Array(5).fill("suggestion 1"),
-  ];
-setSuggestions(_suggestions);
   }, []);
+
+  // ------------- DEBOUNCING FUNCTION -------------//
+  useEffect(() => {
+    const timer = setTimeout(() => inputHandler(inputValue), 300);
+    return () => clearTimeout(timer);
+  }, [inputValue, inputHandler]);
 
   useEffect(() => {
     suggestionRefs.current[selectedIndex]?.scrollIntoView({
@@ -101,14 +106,15 @@ setSuggestions(_suggestions);
   }, [selectedIndex]);
 
   const confirmSelection = () => {
-    const selected = suggestions[selectedIndex];
-    setInputValue(selected);
+    if (options[selectedIndex]) {
+      setInputValue(options[selectedIndex]);
+    }
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex((prev) => Math.min(prev + 1, suggestions.length - 1));
+      setSelectedIndex((prev) => Math.min(prev + 1, options.length - 1));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setSelectedIndex((prev) => Math.max(prev - 1, 0));
@@ -116,16 +122,6 @@ setSuggestions(_suggestions);
       e.preventDefault();
       confirmSelection();
     }
-  };
-
-  const handleSuggestionClick = (index) => {
-    setSelectedIndex(index);
-    confirmSelection();
-    inputRef?.current.focus();
-  };
-
-  const handleSuggestionHover = (index) => {
-    setSelectedIndex(index); // 👈 Hover selects
   };
 
   return (
@@ -141,13 +137,17 @@ setSuggestions(_suggestions);
       />
 
       <div className="input_suggestions_container">
-        {suggestions.map((text, index) => (
+        {options.map((text, index) => (
           <div
             key={index}
-            className={`suggestion ${index === selectedIndex ? "active" : ""}`}
             ref={(el) => (suggestionRefs.current[index] = el)}
-            onClick={() => handleSuggestionClick(index)}
-            onMouseEnter={() => handleSuggestionHover(index)} // 👈 Hover support
+            className={`suggestion ${index === selectedIndex ? "active" : ""}`}
+            onClick={() => {
+              setSelectedIndex(index);
+              confirmSelection();
+              inputRef.current.focus();
+            }}
+            onMouseEnter={() => setSelectedIndex(index)}
             style={{
               cursor: "pointer",
               padding: "4px 8px",
@@ -158,33 +158,25 @@ setSuggestions(_suggestions);
           </div>
         ))}
       </div>
-
-      
-
-      
     </div>
   );
 }
 
+// ────────── GamePoster and EmptyImageBox ──────────
 function GamePoster({ filePath, setFilePath }) {
-  return (
-    <>
-      {filePath && filePath !== "No file selected" ? (
-        <>
-          <div className="game_add_menu_title"></div>
-          <img
-            src={filePath}
-            className="game_add_menu_poster image_added"
-            alt="Selected"
-            style={{ maxWidth: "100%", maxHeight: "100%" }}
-          />
-        </>
-      ) : (
-        <EmptyImageWithBox setFilePath={setFilePath} />
-      )}
-    </>
+  return filePath && filePath !== "No file selected" ? (
+    <div className="game_add_menu_poster image_added">
+      <img
+        src={filePath}
+        alt="Selected"
+        style={{ maxWidth: "100%", maxHeight: "100%" }}
+      />
+    </div>
+  ) : (
+    <EmptyImageWithBox setFilePath={setFilePath} />
   );
 }
+
 function EmptyImageWithBox({ setFilePath }) {
   return (
     <div className="game_add_menu_poster image_empty">
