@@ -30,6 +30,7 @@ function AddGameMenu() {
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
   const [inputOptions, setInputOptions] = useState([]);
   const [steamGames, setSteamgames] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
 
   
   const {
@@ -40,27 +41,30 @@ function AddGameMenu() {
 
 
 
-  // Monitor debounced title and update internal title state
-
-  //Fetching game logic via filtering here
+  
   useEffect(() => {
+  console.log(`Input value: ${debouncedInputValue}`);
 
+  if (typeof debouncedInputValue !== "string" || debouncedInputValue.trim() === "") {
+    setInputOptions([]);
+    return;
+  }
 
-    console.log("Debounced value: "+debouncedInputValue);
-
-    //take the debounced input value, do a database query or something and get filtered results from that query.
-    const filtered = inputOptions.filter(option =>
-    option.toLowerCase().includes(debouncedInputValue.toLowerCase())
+  const filtered = steamGames.filter(game =>
+    game.name.toLowerCase().includes(debouncedInputValue.toLowerCase())
   );
+
   setInputOptions(filtered);
   console.log(filtered);
-  }, [debouncedInputValue]);
+}, [debouncedInputValue]);
+
 
   useEffect(()=>{
     setInputOptions(["dingus", "apple"]);
     (async function(){
       const games = await handleGetSteamgames();
-      console.log("games" + games);
+      setSteamgames(games);
+      console.log(`Fetched ${games.length} from the steam file.`);
     })();
     
     
@@ -133,7 +137,7 @@ function InputBox({ options = [], inputHandler }) {
 
   const confirmSelection = () => {
     if (options[selectedIndex]) {
-      setInputValue(options[selectedIndex]);
+      setInputValue(options[selectedIndex].name);
     }
   };
 
@@ -163,7 +167,7 @@ function InputBox({ options = [], inputHandler }) {
       />
 
       <div className="input_suggestions_container">
-        {options.map((text, index) => (
+        {options.map((game, index) => (
           <div
             key={index}
             ref={(el) => (suggestionRefs.current[index] = el)}
@@ -180,7 +184,7 @@ function InputBox({ options = [], inputHandler }) {
               userSelect: "none",
             }}
           >
-            {text}
+            {game.name}
           </div>
         ))}
       </div>
