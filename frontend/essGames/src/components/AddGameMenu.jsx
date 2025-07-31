@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import generateGuidInteger from "../database/generateGuidInteger";
 import handleAddGame from "../database/handleAddGame";
 import { useGlobalContext } from "../Context/useGlobalContext";
+import handleGetSteamgames from "../database/handleGetSteamGames";
 
 // File picker
 const handleFileOpen = async (setFilePath) => {
@@ -28,11 +29,16 @@ function AddGameMenu() {
   const titleRef = useRef(null);
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
   const [inputOptions, setInputOptions] = useState([]);
+  const [steamGames, setSteamgames] = useState([]);
+
+  
   const {
     setGames,
     addGameMenuIsDisplayed,
     setAddGameMenuIsDisplayed,
   } = useGlobalContext();
+
+
 
   // Monitor debounced title and update internal title state
 
@@ -49,8 +55,15 @@ function AddGameMenu() {
   setInputOptions(filtered);
   console.log(filtered);
   }, [debouncedInputValue]);
+
   useEffect(()=>{
-    setInputOptions(["dingus", "apple"])
+    setInputOptions(["dingus", "apple"]);
+    (async function(){
+      const games = await handleGetSteamgames();
+      console.log("games" + games);
+    })();
+    
+    
   },[])
 
   const inputIsValid = () => {

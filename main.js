@@ -42,7 +42,16 @@ const db = new sqlite3.Database(dbPath, (err) => {
     console.log('Connected to SQLite database.');
   }
 });
-
+async function loadSteamGames(filePath) {
+  try {
+    const data = await fs.promises.readFile(filePath);
+    games = JSON.parse(data);
+    console.log("Data loaded");
+    return games;
+  } catch (err) {
+    console.error("Error loading data:", err);
+  }
+}
 const util = require('util');
 const dbAll = util.promisify(db.all.bind(db));
 // IPC handler to expose openFile to renderer
@@ -117,6 +126,12 @@ ipcMain.handle('delete-game', async (event, id) => {
   });
 });
 
+ipcMain.handle('load-steam-games', async () => {
+  const filePath = "./steam_games.json";
+  const games = await loadSteamGames(filePath);
+  console.log("Fetching games from steam file...");
+  return games;
+})
 
 const createWindow = () => {
   win = new BrowserWindow({
