@@ -127,9 +127,9 @@ ipcMain.handle('delete-game', async (event, id) => {
 });
 
 ipcMain.handle('load-steam-games', async () => {
-  const filePath = "./steam_games.json";
+  const filePath = "./steam.csv";
   const games = await loadSteamGames(filePath);
-  console.log("Fetching games from steam file...");
+  console.log("Fetching games from steam.csv...");
   return games;
 })
 

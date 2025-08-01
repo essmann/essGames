@@ -47,6 +47,7 @@ function AddGameMenu() {
 
   if (typeof debouncedInputValue !== "string" || debouncedInputValue.trim() === "") {
     setInputOptions([]);
+    console.log("Empty, will just return.");
     return;
   }
 
@@ -60,7 +61,6 @@ function AddGameMenu() {
 
 
   useEffect(()=>{
-    setInputOptions(["dingus", "apple"]);
     (async function(){
       const games = await handleGetSteamgames();
       setSteamgames(games);
@@ -103,7 +103,7 @@ function AddGameMenu() {
   return (
     <ClickAwayListener onClickAway={() => setAddGameMenuIsDisplayed(false)}>
       <div className="add_game_menu">
-        <InputBox inputHandler={setDebouncedInputValue} options={inputOptions}/>
+        <InputBox inputHandler={setDebouncedInputValue} options={inputOptions} setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}/>
         <GamePoster filePath={filePath} setFilePath={setFilePath} />
         <button onClick={addGame}>Add Game</button>
       </div>
@@ -112,7 +112,7 @@ function AddGameMenu() {
 }
 
 // ────────── InputBox Component ──────────
-function InputBox({ options = [], inputHandler }) {
+function InputBox({ options = [], inputHandler, setAddGameMenuIsDisplayed }) {
   const inputRef = useRef(null);
   const suggestionRefs = useRef([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -151,6 +151,10 @@ function InputBox({ options = [], inputHandler }) {
     } else if (e.key === "Enter") {
       e.preventDefault();
       confirmSelection();
+    }
+    else if (e.key === "Escape"){
+
+      setAddGameMenuIsDisplayed(false);
     }
   };
 
