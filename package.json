@@ -23,23 +23,24 @@
     "electron-builder": "^26.0.12"
   },
   "dependencies": {
+    "convert-csv-to-json": "^3.5.0",
+    "csv-parser": "^3.2.0",
     "sqlite3": "^5.1.7"
   },
   "build": {
     "appId": "com.essmann03.essgames",
     "productName": "essGames",
     "files": [
-  "build/dist/**/*",
-  "main.js",
-  "package.json",
-  "node_modules/**/*",
-  "sqlite/games.db",
-  "preload.js"
-],
-"asarUnpack": [
-  "sqlite/games.db"
-],
-
+      "build/dist/**/*",
+      "main.js",
+      "package.json",
+      "node_modules/**/*",
+      "sqlite/games.db",
+      "preload.js"
+    ],
+    "asarUnpack": [
+      "sqlite/games.db"
+    ],
     "directories": {
       "buildResources": "assets"
     },

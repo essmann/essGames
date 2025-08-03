@@ -2,6 +2,8 @@ const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const sqlite3 = require('sqlite3').verbose();
+let csvToJson = require('convert-csv-to-json');
+const csv = require('csv-parser');
 let win;
 
 // const isDev = !app.isPackaged;
@@ -10,6 +12,9 @@ const dbPath = isDev
   ? path.join(__dirname, 'sqlite', 'games.db')
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'games.db');
 
+const gameCatalogDbPath = isDev
+  ? path.join(__dirname, 'sqlite', 'allGames.db')
+  : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'allGames.db');
 
 
 const openFile = async () => {
@@ -34,26 +39,44 @@ const openFile = async () => {
 
   return dataUrl
 }
+function readCsv(filePath) {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', reject);
+  });
+}
 
-const db = new sqlite3.Database(dbPath, (err) => {
+const userDb = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
   } else {
     console.log('Connected to SQLite database.');
   }
 });
+const gameCatalogDb = new sqlite3.Database(gameCatalogDbPath, (err) => {
+  if (err) {
+    console.error('Error opening database:', err.message);
+  } else {
+    console.log('Connected to SQLite catalog database.');
+  }
+});
 async function loadSteamGames(filePath) {
+  
   try {
-    const data = await fs.promises.readFile(filePath);
-    games = JSON.parse(data);
+    const data = await readCsv(filePath);
     console.log("Data loaded");
-    return games;
+    return data;
   } catch (err) {
     console.error("Error loading data:", err);
   }
 }
 const util = require('util');
-const dbAll = util.promisify(db.all.bind(db));
+const userDbAll = util.promisify(userDb.all.bind(userDb));
+const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
 // IPC handler to expose openFile to renderer
 ipcMain.handle('open-image-file', async () => {
   return await openFile()
@@ -61,7 +84,7 @@ ipcMain.handle('open-image-file', async () => {
 
 ipcMain.handle('get-games', async () => {
   try {
-    const rows = await dbAll('SELECT * FROM games');
+    const rows = await userDbAll('SELECT * FROM games');
     console.log(`Fetched ${rows.length} rows from the games database`)
     return rows;
   } catch (err) {
@@ -75,7 +98,7 @@ ipcMain.handle('add-game', async (event, game) => {
 
   return new Promise((resolve, reject) => {
     const query = `INSERT INTO games (id, title, posterURL, rating, review) VALUES (?, ?, ?, ?, ?)`;
-    db.run(query, [id, title, posterURL, rating, review], function(err) {
+    userDb.run(query, [id, title, posterURL, rating, review], function(err) {
       if (err) {
         console.error('Failed to add game:', err);
         reject(err);
@@ -91,7 +114,7 @@ ipcMain.handle('update-game', async (event, game) => {
 
   return new Promise((resolve, reject) => {
     const query = `UPDATE games SET title = ?, posterURL = ?, rating = ?, review = ? WHERE id = ?`;
-    db.run(query, [title, posterURL, rating, review, id], function(err) {
+    userDb.run(query, [title, posterURL, rating, review, id], function(err) {
       if (err) {
         console.error('Failed to update game:', err);
         reject(err);
@@ -111,7 +134,7 @@ ipcMain.handle('update-game', async (event, game) => {
 ipcMain.handle('delete-game', async (event, id) => {
   return new Promise((resolve, reject) => {
     const query = `DELETE FROM games WHERE id = ?`;
-    db.run(query, [id], function(err) {
+    userDb.run(query, [id], function(err) {
       if (err) {
         console.error('Failed to delete game:', err);
         reject(err);
@@ -126,13 +149,19 @@ ipcMain.handle('delete-game', async (event, id) => {
   });
 });
 
-ipcMain.handle('load-steam-games', async () => {
-  const filePath = "./steam.csv";
-  const games = await loadSteamGames(filePath);
-  console.log("Fetching games from steam.csv...");
-  return games;
-})
-
+ipcMain.handle('search-all-games', async (event, prefix) => {
+  try {
+    // Query games starting with prefix (case-insensitive)
+    const sql = `SELECT * FROM games WHERE name LIKE ? LIMIT 100`;
+    const rows = await gameCatalogDbAll(sql, [`${prefix}%`]);
+    debugger;
+    console.log(`Found ${rows.length} games starting with '${prefix}'`);
+    return rows;
+  } catch (err) {
+    console.error('DB search error:', err);
+    throw err;
+  }
+});
 const createWindow = () => {
   win = new BrowserWindow({
     width: 800,
@@ -146,7 +175,26 @@ const createWindow = () => {
 // win.loadFile('./build/dist/index.html');
 }
 
-app.whenReady().then(createWindow)
+
+const test = async (prefix) =>{
+  try {
+    // Query games starting with prefix (case-insensitive)
+    const sql = `SELECT * FROM games WHERE name LIKE ? LIMIT 100`;
+    const rows = await gameCatalogDbAll(sql, [`${prefix}%`]);
+    debugger;
+    console.log(`Found ${rows.length} games starting with '${prefix}'`);
+    return rows;
+  } catch (err) {
+    console.error('DB search error:', err);
+    throw err;
+  }
+} 
+app.whenReady().then(createWindow);
+
+test("animal").then((games)=>{
+  console.log("Games found:", games);
+});
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()

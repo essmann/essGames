@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import generateGuidInteger from "../database/generateGuidInteger";
 import handleAddGame from "../database/handleAddGame";
 import { useGlobalContext } from "../Context/useGlobalContext";
-import handleGetSteamgames from "../database/handleGetSteamGames";
+import  { handleSearchGameCatalog } from "../database/handleGetSteamGames";
 
 // File picker
 const handleFileOpen = async (setFilePath) => {
@@ -29,7 +29,6 @@ function AddGameMenu() {
   const titleRef = useRef(null);
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
   const [inputOptions, setInputOptions] = useState([]);
-  const [steamGames, setSteamgames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
 
   
@@ -39,36 +38,41 @@ function AddGameMenu() {
     setAddGameMenuIsDisplayed,
   } = useGlobalContext();
 
+  const closeGameMenu = () => {
+    if(selectedGame){
+      setSelectedGame(null);
+    }
+    setAddGameMenuIsDisplayed(false);
+  }
 
 
   
   useEffect(() => {
-  console.log(`Input value: ${debouncedInputValue}`);
-
   if (typeof debouncedInputValue !== "string" || debouncedInputValue.trim() === "") {
     setInputOptions([]);
     console.log("Empty, will just return.");
     return;
   }
 
-  const filtered = steamGames.filter(game =>
-    game.name.toLowerCase().includes(debouncedInputValue.toLowerCase())
-  );
+  const fetchGames = async (prefix) => {
+    const games = await handleSearchGameCatalog(prefix);
+    console.log("games fetchgames: " + games);
+    return games;
+  };
 
-  setInputOptions(filtered);
-  console.log(filtered);
+  fetchGames(debouncedInputValue).then((games) => {
+    if (games && Array.isArray(games)) {
+      setInputOptions(games);
+      console.log(`Displaying ${games.length} games from the catalog`);
+    } else {
+      setInputOptions([]);
+      console.log("No games returned or result invalid");
+    }
+  });
 }, [debouncedInputValue]);
 
 
-  useEffect(()=>{
-    (async function(){
-      const games = await handleGetSteamgames();
-      setSteamgames(games);
-      console.log(`Fetched ${games.length} from the steam file.`);
-    })();
-    
-    
-  },[])
+
 
   const inputIsValid = () => {
     const currentTitle = titleRef.current?.value || title;
@@ -101,9 +105,9 @@ function AddGameMenu() {
   if (!addGameMenuIsDisplayed) return null;
 
   return (
-    <ClickAwayListener onClickAway={() => setAddGameMenuIsDisplayed(false)}>
+    <ClickAwayListener onClickAway={() => closeGameMenu()}>
       <div className="add_game_menu">
-        <InputBox inputHandler={setDebouncedInputValue} options={inputOptions} setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}/>
+        <InputBox inputHandler={setDebouncedInputValue} options={inputOptions} closeGameMenu={closeGameMenu} setSelectedGame={setSelectedGame}/>
         <GamePoster filePath={filePath} setFilePath={setFilePath} />
         <button onClick={addGame}>Add Game</button>
       </div>
@@ -112,9 +116,10 @@ function AddGameMenu() {
 }
 
 // ────────── InputBox Component ──────────
-function InputBox({ options = [], inputHandler, setAddGameMenuIsDisplayed }) {
+function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }) {
   const inputRef = useRef(null);
   const suggestionRefs = useRef([]);
+  
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
 
@@ -137,7 +142,13 @@ function InputBox({ options = [], inputHandler, setAddGameMenuIsDisplayed }) {
 
   const confirmSelection = () => {
     if (options[selectedIndex]) {
-      setInputValue(options[selectedIndex].name);
+      let game = options[selectedIndex];
+      setInputValue(game.name);
+      
+      setSelectedGame(game);
+      
+
+      
     }
   };
 
@@ -151,15 +162,17 @@ function InputBox({ options = [], inputHandler, setAddGameMenuIsDisplayed }) {
     } else if (e.key === "Enter") {
       e.preventDefault();
       confirmSelection();
+      
     }
     else if (e.key === "Escape"){
 
-      setAddGameMenuIsDisplayed(false);
+      closeGameMenu();
     }
   };
 
   return (
     <div className="input_box">
+      <div className="input_manual">Manual add</div>
       <input
         type="text"
         className="input_box_input"
