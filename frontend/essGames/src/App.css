@@ -496,3 +496,48 @@ background-image: linear-gradient(315deg, #2d3436 0%, #181616 74%);
   width: 100px;
   border-radius: 4px;
 }
+
+
+.add_game_menu_title{
+  font-size: x-large;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+#game_poster_add{
+  background: var(--color-hover);
+}
+.release{
+
+}
+
+
+#release_date_span{
+  font-weight: bold;
+  margin-right: 1rem;
+}
+#developed_by_right{
+  font-weight: bold;
+}
+.detailed_description{
+  margin-top: 1rem;
+}
+.input_box{
+  display: flex;
+  flex-direction: row;
+}
+.input_box >input{
+  flex: 1;
+}
+.input_manual{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  border-radius: 4px;
+  background: inherit;
+}
+.input_manual:hover{
+  background: var(--color-hover);
+  cursor: pointer;
+}

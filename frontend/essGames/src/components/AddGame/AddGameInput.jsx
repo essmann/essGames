@@ -7,7 +7,8 @@ import generateGuidInteger from "../../database/generateGuidInteger";
 import handleAddGame from "../../database/handleAddGame";
 import { useGlobalContext } from "../../Context/useGlobalContext";
 import  { handleSearchGameCatalog } from "../../database/handleGetSteamGames";
-
+import FloatingActionButtonSize from "../FloatingActionButtonSize";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 // File picker
 const handleFileOpen = async (setFilePath) => {
   try {
@@ -148,7 +149,9 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
 
   return (
     <div className="input_box">
-      <div className="input_manual">Manual add</div>
+      <div className="input_manual" onClick={()=>console.log("Manual input clicked")}>
+          <AddCircleOutlineIcon/>
+      </div>
       <input
         type="text"
         className="input_box_input"
