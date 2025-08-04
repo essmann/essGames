@@ -24,9 +24,6 @@ const handleFileOpen = async (setFilePath) => {
 
 function AddGameInput() {
   const [filePath, setFilePath] = useState("");
-  const [rating, setRating] = useState(0);
-  const [title, setTitle] = useState("");
-  const titleRef = useRef(null);
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
   const [inputOptions, setInputOptions] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
@@ -76,33 +73,9 @@ function AddGameInput() {
 
 
 
-  const inputIsValid = () => {
-    const currentTitle = titleRef.current?.value || title;
-    return currentTitle.trim() !== "" && filePath && filePath !== "No file selected";
-  };
+ 
 
-  const addGame = () => {
-    if (!inputIsValid()) {
-      alert("Invalid input");
-      setAddGameMenuIsDisplayed(false);
-      return;
-    }
-
-    const finalTitle = titleRef.current?.value?.trim() || title.trim();
-    const id = generateGuidInteger();
-    const game = {
-      id,
-      posterURL: filePath,
-      rating,
-      review: "",
-      title: finalTitle,
-    };
-
-    handleAddGame(game).then(() => {
-      setGames((prev) => [...prev, game]);
-    });
-    setAddGameMenuIsDisplayed(false);
-  };
+ 
 
   if (!addGameMenuIsDisplayed) return null;
 
@@ -110,8 +83,6 @@ function AddGameInput() {
     <ClickAwayListener onClickAway={() => closeGameMenu()}>
       <div className="add_game_menu">
         <InputBox inputHandler={setDebouncedInputValue} options={inputOptions} closeGameMenu={closeGameMenu} setSelectedGame={setSelectedGame}/>
-        <GamePoster filePath={filePath} setFilePath={setFilePath} />
-        <button onClick={addGame}>Add Game</button>
       </div>
     </ClickAwayListener>
   );
@@ -214,36 +185,6 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
   );
 }
 
-// ────────── GamePoster and EmptyImageBox ──────────
-function GamePoster({ filePath, setFilePath }) {
-  return filePath && filePath !== "No file selected" ? (
-    <div className="game_add_menu_poster image_added">
-      <img
-        src={filePath}
-        alt="Selected"
-        style={{ maxWidth: "100%", maxHeight: "100%" }}
-      />
-    </div>
-  ) : (
-    <EmptyImageWithBox setFilePath={setFilePath} />
-  );
-}
 
-function EmptyImageWithBox({ setFilePath }) {
-  return (
-    <div className="game_add_menu_poster image_empty">
-      <Box sx={{ "& > :not(style)": { m: 1 } }}>
-        <Fab
-          size="small"
-          color="primary"
-          aria-label="add"
-          onClick={() => handleFileOpen(setFilePath)}
-        >
-          <AddIcon />
-        </Fab>
-      </Box>
-    </div>
-  );
-}
 
 export default AddGameInput;

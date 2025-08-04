@@ -10,11 +10,12 @@ import { useEffect } from "react";
 import handleDeleteGame from "./database/handleDeleteGame";
 import { useGlobalContext } from "./Context/useGlobalContext";
 import { Backdrop } from "@mui/material";
-import {CircularProgress} from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import HorizontalNonLinearStepper from "./components/HorizontalLinearStepper";
 import { useStyleContext } from "./Context/useStyleContext";
 import { StyleProvider } from "./Context/StyleContext";
 import AddGameInput from "./components/AddGame/AddGameInput";
+import AddGameMenu from "./components/AddGame/AddGameMenu";
 function App() {
   const [loading, setLoading] = useState(true);
   const {
@@ -24,10 +25,8 @@ function App() {
     selectedListItemIndex,
     setSelectedListItemIndex,
   } = useGlobalContext();
-  
-  const GLOBAL_STYLES = {
 
-  }
+  const GLOBAL_STYLES = {};
   // const addGame = async (game) => {
   //   try {
   //     const gameAdded = await window.api.addGame(game);
@@ -41,7 +40,7 @@ function App() {
     handleGetGames().then((_games) => {
       setGames(_games);
       console.log(_games); // ✅ This is the new value
-          setLoading(false); // ✅ Done loading
+      setLoading(false); // ✅ Done loading
     });
   }, []);
 
@@ -54,31 +53,29 @@ function App() {
 
   return (
     <StyleProvider>
-    {loading && 
-    <Backdrop
-        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-        open={open}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>}
-    
+      {loading && (
+        <Backdrop
+          sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+          open={open}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
+
       <div
-        className={`container ${addGameMenuIsDisplayed || clickedGameId!== null ? "menuActive" : ""}`}
+        className={`container ${
+          addGameMenuIsDisplayed || clickedGameId !== null ? "menuActive" : ""
+        }`}
       >
         <Sidebar
           selectedListItemIndex={selectedListItemIndex}
           setSelectedListItemIndex={setSelectedListItemIndex}
         />
-
         {/* Use a function to return content based on selectedListItemIndex */}
         {(() => {
           switch (selectedListItemIndex) {
             case 0:
-              return (
-                
-                <GameGrid/>
-                
-              );
+              return <GameGrid />;
             case 1:
               return (
                 <>
@@ -91,11 +88,9 @@ function App() {
           }
         })()}
 
-        
-        {addGameMenuIsDisplayed && (
-          <AddGameInput/>
-        )}
-        <GameMenu />        {/* <ContextMenu/> */}
+      
+        <AddGameMenu />
+        <GameMenu /> 
       </div>
     </StyleProvider>
   );
