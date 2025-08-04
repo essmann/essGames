@@ -30,21 +30,21 @@ function AddGameMenu({game}) {
             <AddGameInput selectedGame={selectedGame} setSelectedGame={setSelectedGame}/> 
             <ClickAwayListener onClickAway={() => setSelectedGame(null)}>
                 <div>
-                    {selectedGame && 
+                    {selectedGame && selectedGame !== 'custom' && 
                         <div className="add_game_menu">
                             <div> 
                                 <EmptyGamePoster/>
                             </div>
                             <div> 
-                                <div className="add_game_menu_title"> {selectedGame.name}</div>
+                                <div className="add_game_menu_title"> {selectedGame?.name}</div>
                                 <div className="add_game_menu_release add_game_menu_developer">
                                     <span className="release">
-                                        <span>Released on </span> <span id="release_date_span">{selectedGame.release_date}</span>
+                                        <span>Released on </span> <span id="release_date_span">{selectedGame?.release_date}</span>
                                         </span>    
-                                    <div className="developers">Developed by: <span id="developed_by_right">{parseDevelopers(selectedGame.developers)}</span></div>
+                                    <div className="developers">Developed by: <span id="developed_by_right">{parseDevelopers(selectedGame?.developers)}</span></div>
                                  </div>
                                  <div className="detailed_description">
-                                    {truncateText(selectedGame.detailed_description, 35)}
+                                    {truncateText(selectedGame?.detailed_description, 35) || "No description available."}
 
                                      </div>
                             </div>
