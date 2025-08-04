@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { GlobalContext } from "../Context/globalContext";
-import AddGameCard from "./AddGameCard";
+import AddGameCard from "./AddGame/AddGameCard";
 import GameCard from "./GameCard";
 import { useGlobalContext } from '../Context/useGlobalContext';
 import SortGamesHeader from './SortGamesHeader';

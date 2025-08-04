@@ -1,4 +1,4 @@
-import FloatingActionButtonSize from "./FloatingActionButtonSize";
+import FloatingActionButtonSize from "../FloatingActionButtonSize";
 
 function AddGameCard({setAddGameMenuIsDisplayed}) {
  

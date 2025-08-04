@@ -3,10 +3,10 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useState, useRef, useEffect } from "react";
-import generateGuidInteger from "../database/generateGuidInteger";
-import handleAddGame from "../database/handleAddGame";
-import { useGlobalContext } from "../Context/useGlobalContext";
-import  { handleSearchGameCatalog } from "../database/handleGetSteamGames";
+import generateGuidInteger from "../../database/generateGuidInteger";
+import handleAddGame from "../../database/handleAddGame";
+import { useGlobalContext } from "../../Context/useGlobalContext";
+import  { handleSearchGameCatalog } from "../../database/handleGetSteamGames";
 
 // File picker
 const handleFileOpen = async (setFilePath) => {

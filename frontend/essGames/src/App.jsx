@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Sidebar from "./components/ButtonUsage";
 import GameCard from "./components/GameCard";
-import AddGameCard from "./components/AddGameCard";
+import AddGameCard from "./components/AddGame/AddGameCard";
 import GameGrid from "./components/GameGrid";
 import GameMenu from "./components/GameMenu";
 import handleGetGames from "./database/handleGetGames";
@@ -14,7 +14,7 @@ import {CircularProgress} from "@mui/material";
 import HorizontalNonLinearStepper from "./components/HorizontalLinearStepper";
 import { useStyleContext } from "./Context/useStyleContext";
 import { StyleProvider } from "./Context/StyleContext";
-import AddGameInput from "./components/AddGameInput";
+import AddGameInput from "./components/AddGame/AddGameInput";
 function App() {
   const [loading, setLoading] = useState(true);
   const {
