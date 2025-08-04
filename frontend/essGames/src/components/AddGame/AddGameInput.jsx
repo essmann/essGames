@@ -173,8 +173,10 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
             id={game.AppID}
             ref={(el) => (suggestionRefs.current[index] = el)}
             className={`suggestion ${index === selectedIndex ? "active" : ""}`}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setSelectedIndex(index);
+              console.log("Clicked game: " + game.name);
               confirmSelection();
               inputRef.current.focus();
             }}
