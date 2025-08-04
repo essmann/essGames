@@ -22,7 +22,7 @@ const handleFileOpen = async (setFilePath) => {
   }
 };
 
-function AddGameMenu() {
+function AddGameInput() {
   const [filePath, setFilePath] = useState("");
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
@@ -246,4 +246,4 @@ function EmptyImageWithBox({ setFilePath }) {
   );
 }
 
-export default AddGameMenu;
+export default AddGameInput;

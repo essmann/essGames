@@ -3,7 +3,6 @@ import "./App.css";
 import Sidebar from "./components/ButtonUsage";
 import GameCard from "./components/GameCard";
 import AddGameCard from "./components/AddGameCard";
-import AddGameMenu from "./components/AddGameMenu";
 import GameGrid from "./components/GameGrid";
 import GameMenu from "./components/GameMenu";
 import handleGetGames from "./database/handleGetGames";
@@ -15,6 +14,7 @@ import {CircularProgress} from "@mui/material";
 import HorizontalNonLinearStepper from "./components/HorizontalLinearStepper";
 import { useStyleContext } from "./Context/useStyleContext";
 import { StyleProvider } from "./Context/StyleContext";
+import AddGameInput from "./components/AddGameInput";
 function App() {
   const [loading, setLoading] = useState(true);
   const {
@@ -93,7 +93,7 @@ function App() {
 
         
         {addGameMenuIsDisplayed && (
-          <AddGameMenu />
+          <AddGameInput/>
         )}
         <GameMenu />        {/* <ContextMenu/> */}
       </div>
