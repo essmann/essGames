@@ -36,10 +36,12 @@
       "package.json",
       "node_modules/**/*",
       "sqlite/games.db",
+      "sqlite/allGames.db",
       "preload.js"
     ],
     "asarUnpack": [
-      "sqlite/games.db"
+      "sqlite/games.db",
+      "sqlite/allGames.db"
     ],
     "directories": {
       "buildResources": "assets"

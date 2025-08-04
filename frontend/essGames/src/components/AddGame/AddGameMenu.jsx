@@ -3,10 +3,10 @@ import { useState } from "react";
 import { ClickAwayListener } from "@mui/material";
 import FloatingActionButtonSize from "../FloatingActionButtonSize";
 import { useEffect } from "react";
-
-function AddGameMenu({game}) {
+import { useGlobalContext } from "../../Context/useGlobalContext";
+function AddGameMenu() {
     const [selectedGame, setSelectedGame] = useState(null);
-    
+    const { setAddGameMenuIsDisplayed } = useGlobalContext();
     // Fix the parseDevelopers function to properly format and return the developers
     const parseDevelopers = (developers) => {
         if (!developers || developers.length === 0) return "Unknown Developer";  // Add fallback for no developers
@@ -26,13 +26,19 @@ function AddGameMenu({game}) {
         return truncatedText.join(" ") + "...";
     }
     useEffect(()=>{
-        console.log("AddGameMenu : " + game);
-    },[])
+        if(selectedGame){
+            setAddGameMenuIsDisplayed(true);
+        }
+    },[selectedGame]);
 
+    const handleCloseMenu = () => {
+        setSelectedGame(null);
+        setAddGameMenuIsDisplayed(false);
+    }
     return (  
         <>
             <SearchGame setSelectedGame={setSelectedGame}/> 
-            <ClickAwayListener onClickAway={() => setSelectedGame(null)}>
+            <ClickAwayListener onClickAway={handleCloseMenu}>
                 <div>
                     {selectedGame && selectedGame !== 'custom' && 
                         <div className="add_game_menu">

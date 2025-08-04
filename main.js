@@ -6,8 +6,8 @@ let csvToJson = require('convert-csv-to-json');
 const csv = require('csv-parser');
 let win;
 
-// const isDev = !app.isPackaged;
-const isDev = true;
+ const isDev = !app.isPackaged;
+// const isDev = true;
 const dbPath = isDev
   ? path.join(__dirname, 'sqlite', 'games.db')
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'games.db');
@@ -171,8 +171,13 @@ const createWindow = () => {
     }
   })
 
-  win.loadURL('http://localhost:5173/')
-// win.loadFile('./build/dist/index.html');
+ if(isDev){
+     win.loadURL('http://localhost:5173/')
+
+ }
+ else{
+  win.loadFile('./build/dist/index.html');
+ }
 }
 
 

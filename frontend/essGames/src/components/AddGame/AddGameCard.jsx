@@ -1,12 +1,13 @@
 import FloatingActionButtonSize from "../FloatingActionButtonSize";
+import { useGlobalContext } from "../../Context/useGlobalContext";
 
-function AddGameCard({setAddGameMenuIsDisplayed}) {
- 
+function AddGameCard() {
+  const { setSearchDisplayed } = useGlobalContext();
+
   return (
     <div className="game_card_add">
-      <FloatingActionButtonSize onClick={()=>{setAddGameMenuIsDisplayed(true)}}/>
+      <FloatingActionButtonSize onClick={() => setSearchDisplayed(true)} />
       <div className="game_card_title"></div>
-    
     </div>
   );
 }

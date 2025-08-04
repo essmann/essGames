@@ -1,5 +1,5 @@
 import ClickAwayListener from "@mui/material/ClickAwayListener";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useGlobalContext } from "../../Context/useGlobalContext";
 import { handleSearchGameCatalog } from "../../database/handleGetSteamGames";
 import InputBox from "./InputBox";
@@ -9,13 +9,13 @@ function SearchGame({ setSelectedGame }) {
   const [inputOptions, setInputOptions] = useState([]);
 
   const {
-    addGameMenuIsDisplayed,
+    searchDisplayed,
+    setSearchDisplayed,
     setAddGameMenuIsDisplayed,
   } = useGlobalContext();
 
   const closeGameMenu = () => {
-   
-    setAddGameMenuIsDisplayed(false);
+    setSearchDisplayed(false);
     setInputOptions([]);
   };
 
@@ -47,7 +47,7 @@ function SearchGame({ setSelectedGame }) {
     });
   }, [debouncedInputValue]);
 
-  if (!addGameMenuIsDisplayed) return null;
+  if (!searchDisplayed) return null;
 
   return (
     <ClickAwayListener onClickAway={() => closeGameMenu()}>
