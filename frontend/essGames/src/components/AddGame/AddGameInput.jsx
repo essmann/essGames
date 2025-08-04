@@ -149,7 +149,11 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
 
   return (
     <div className="input_box">
-      <div className="input_manual" onClick={()=>console.log("test")}>
+      <div className="input_manual" onClick={(e)=>{
+        e.stopPropagation();
+        setSelectedGame({name: "test", developers: "test2", release_date: "test_2003"});
+        closeGameMenu();
+      }}>
           <AddCircleOutlineIcon/>
       </div>
       <input

@@ -2,10 +2,11 @@ import AddGameInput from "./AddGameInput";
 import { useState } from "react";
 import { ClickAwayListener } from "@mui/material";
 import FloatingActionButtonSize from "../FloatingActionButtonSize";
+import { useEffect } from "react";
 
 function AddGameMenu({game}) {
     const [selectedGame, setSelectedGame] = useState(null);
-
+    
     // Fix the parseDevelopers function to properly format and return the developers
     const parseDevelopers = (developers) => {
         if (!developers || developers.length === 0) return "Unknown Developer";  // Add fallback for no developers
@@ -24,6 +25,9 @@ function AddGameMenu({game}) {
         })
         return truncatedText.join(" ") + "...";
     }
+    useEffect(()=>{
+        console.log("AddGameMenu : " + game);
+    },[])
 
     return (  
         <>
