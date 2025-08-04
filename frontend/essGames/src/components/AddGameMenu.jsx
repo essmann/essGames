@@ -39,9 +39,9 @@ function AddGameMenu() {
   } = useGlobalContext();
 
   const closeGameMenu = () => {
-    if(selectedGame){
-      setSelectedGame(null);
-    }
+    // if(selectedGame){
+    //   setSelectedGame(null);
+    // }
     setAddGameMenuIsDisplayed(false);
   }
 
@@ -67,7 +67,9 @@ function AddGameMenu() {
     } else {
       setInputOptions([]);
       console.log("No games returned or result invalid");
+      
     }
+    console.log("Input options set:" + games);
   });
 }, [debouncedInputValue]);
 
@@ -146,6 +148,8 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
       setInputValue(game.name);
       
       setSelectedGame(game);
+      console.log("Selected game:"+ JSON.stringify(game));
+      closeGameMenu();
       
 
       
@@ -187,6 +191,7 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
         {options.map((game, index) => (
           <div
             key={index}
+            id={game.AppID}
             ref={(el) => (suggestionRefs.current[index] = el)}
             className={`suggestion ${index === selectedIndex ? "active" : ""}`}
             onClick={() => {
