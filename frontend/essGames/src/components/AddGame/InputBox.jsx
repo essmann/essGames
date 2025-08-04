@@ -1,96 +1,8 @@
-import Box from "@mui/material/Box";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import { useState, useRef, useEffect } from "react";
-import generateGuidInteger from "../../database/generateGuidInteger";
-import handleAddGame from "../../database/handleAddGame";
-import { useGlobalContext } from "../../Context/useGlobalContext";
-import  { handleSearchGameCatalog } from "../../database/handleGetSteamGames";
-import FloatingActionButtonSize from "../FloatingActionButtonSize";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-// File picker
-const handleFileOpen = async (setFilePath) => {
-  try {
-    const dataUrl = await window.api.openImageFile();
-    if (dataUrl) {
-      setFilePath(dataUrl);
-    } else {
-      setFilePath("No file selected");
-    }
-  } catch (error) {
-    console.error("Failed to open file:", error);
-  }
-};
-
-function AddGameInput({selectedGame, setSelectedGame}) {
-  const [filePath, setFilePath] = useState("");
-  const [debouncedInputValue, setDebouncedInputValue] = useState("");
-  const [inputOptions, setInputOptions] = useState([]);
-  
-
-  
-  const {
-    setGames,
-    addGameMenuIsDisplayed,
-    setAddGameMenuIsDisplayed,
-  } = useGlobalContext();
-
-  const closeGameMenu = () => {
-    // if(selectedGame){
-    //   setSelectedGame(null);
-    // }
-    setAddGameMenuIsDisplayed(false);
-    setInputOptions([]);
-  }
-
-
-  
-  useEffect(() => {
-  if (typeof debouncedInputValue !== "string" || debouncedInputValue.trim() === "") {
-    setInputOptions([]);
-    console.log("Empty, will just return.");
-    return;
-  }
-
-  const fetchGames = async (prefix) => {
-    const games = await handleSearchGameCatalog(prefix);
-    console.log("games fetchgames: " + games);
-    return games;
-  };
-
-  fetchGames(debouncedInputValue).then((games) => {
-    if (games && Array.isArray(games)) {
-      setInputOptions(games);
-      console.log(`Displaying ${games.length} games from the catalog`);
-    } else {
-      setInputOptions([]);
-      console.log("No games returned or result invalid");
-      
-    }
-    console.log("Input options set:" + games);
-  });
-}, [debouncedInputValue]);
-
-
-
-
- 
-
- 
-
-  if (!addGameMenuIsDisplayed) return null;
-
-  return (
-    <ClickAwayListener onClickAway={() => closeGameMenu()}>
-      <div className="add_game_input_container">
-        <InputBox inputHandler={setDebouncedInputValue} options={inputOptions} closeGameMenu={closeGameMenu} setSelectedGame={setSelectedGame}/>
-      </div>
-    </ClickAwayListener>
-  );
-}
-
 // ────────── InputBox Component ──────────
+import { useRef } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }) {
   const inputRef = useRef(null);
   const suggestionRefs = useRef([]);
@@ -195,6 +107,4 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
   );
 }
 
-
-
-export default AddGameInput;
+export default InputBox;

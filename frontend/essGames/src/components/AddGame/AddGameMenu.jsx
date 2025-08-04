@@ -1,4 +1,4 @@
-import AddGameInput from "./AddGameInput";
+import SearchGame from "./SearchGame";
 import { useState } from "react";
 import { ClickAwayListener } from "@mui/material";
 import FloatingActionButtonSize from "../FloatingActionButtonSize";
@@ -31,7 +31,7 @@ function AddGameMenu({game}) {
 
     return (  
         <>
-            <AddGameInput selectedGame={selectedGame} setSelectedGame={setSelectedGame}/> 
+            <SearchGame setSelectedGame={setSelectedGame}/> 
             <ClickAwayListener onClickAway={() => setSelectedGame(null)}>
                 <div>
                     {selectedGame && selectedGame !== 'custom' && 

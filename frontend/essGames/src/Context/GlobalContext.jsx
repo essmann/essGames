@@ -11,6 +11,7 @@ export const GlobalProvider = ({ children }) => {
   const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
   const [clickedGameId, setClickedGameId] = useState(null);
   const [selectedListItemIndex, setSelectedListItemIndex] = useState(0);
+  const [menuIsDisplayed, setMenuIsDisplayed] = useState(false);
 
   return (
     <GlobalContext.Provider value={{
@@ -22,6 +23,8 @@ export const GlobalProvider = ({ children }) => {
       setClickedGameId,
       selectedListItemIndex,
       setSelectedListItemIndex,
+      menuIsDisplayed,
+      setMenuIsDisplayed
     }}>
       {children}
     </GlobalContext.Provider>

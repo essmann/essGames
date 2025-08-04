@@ -14,7 +14,7 @@ import { CircularProgress } from "@mui/material";
 import HorizontalNonLinearStepper from "./components/HorizontalLinearStepper";
 import { useStyleContext } from "./Context/useStyleContext";
 import { StyleProvider } from "./Context/StyleContext";
-import AddGameInput from "./components/AddGame/AddGameInput";
+import AddGameInput from "./components/AddGame/SearchGame";
 import AddGameMenu from "./components/AddGame/AddGameMenu";
 function App() {
   const [loading, setLoading] = useState(true);
@@ -24,6 +24,7 @@ function App() {
     clickedGameId,
     selectedListItemIndex,
     setSelectedListItemIndex,
+    menuIsDisplayed
   } = useGlobalContext();
 
   const GLOBAL_STYLES = {};
@@ -64,7 +65,7 @@ function App() {
 
       <div
         className={`container ${
-          addGameMenuIsDisplayed || clickedGameId !== null ? "menuActive" : ""
+          menuIsDisplayed || clickedGameId !== null ? "menuActive" : ""
         }`}
       >
         <Sidebar
