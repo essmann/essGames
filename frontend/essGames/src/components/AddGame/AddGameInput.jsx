@@ -22,11 +22,11 @@ const handleFileOpen = async (setFilePath) => {
   }
 };
 
-function AddGameInput() {
+function AddGameInput({selectedGame, setSelectedGame}) {
   const [filePath, setFilePath] = useState("");
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
   const [inputOptions, setInputOptions] = useState([]);
-  const [selectedGame, setSelectedGame] = useState(null);
+  
 
   
   const {
@@ -40,6 +40,7 @@ function AddGameInput() {
     //   setSelectedGame(null);
     // }
     setAddGameMenuIsDisplayed(false);
+    setInputOptions([]);
   }
 
 
@@ -81,7 +82,7 @@ function AddGameInput() {
 
   return (
     <ClickAwayListener onClickAway={() => closeGameMenu()}>
-      <div className="add_game_menu">
+      <div className="add_game_input_container">
         <InputBox inputHandler={setDebouncedInputValue} options={inputOptions} closeGameMenu={closeGameMenu} setSelectedGame={setSelectedGame}/>
       </div>
     </ClickAwayListener>

@@ -185,6 +185,21 @@ html, body {
   background: var(--color-dark);
   z-index: 2;
 }
+.add_game_menu{
+  display: flex;
+  border-radius: 12px;
+  position: absolute;
+  width: 40%;
+  height: 50%;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  min-width: 450px;
+  max-width: 450px;
+  background: var(--color-dark);
+  z-index: 2;
+}
 
 
 .game_add_menu_poster{
