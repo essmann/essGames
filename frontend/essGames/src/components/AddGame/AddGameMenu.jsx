@@ -90,7 +90,15 @@ function AddGameMenu() {
                     <CustomizedRating/>
                   </div>
                 ) : (
-                  <EmptyGamePoster onClick={handleOpenFile} />
+                  <>
+                  <div className="flex flex-col items-center justify-center game_poster_container">
+                    <EmptyGamePoster onClick={handleOpenFile} />
+                    <CustomizedRating/>
+                  </div>
+
+
+                  </>
+                  
                 )}
                 <div className="game_details_container">
                   <div className="add_game_menu_title">{selectedGame.name}</div>
@@ -126,12 +134,15 @@ function AddGameMenu() {
   );
 }
 
-function EmptyGamePoster({ onClick }) {
+function EmptyGamePoster({ onClick, children }) {
   return (
+    <>
     <div className="game_card_add" id="game_poster_add" onClick={onClick}>
       <FloatingActionButtonSize />
       <div className="game_card_title"></div>
+      
     </div>
+    </>
   );
 }
 
