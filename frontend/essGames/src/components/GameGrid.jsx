@@ -4,6 +4,7 @@ import AddGameCard from "./AddGame/AddGameCard";
 import GameCard from "./GameCard";
 import { useGlobalContext } from '../Context/useGlobalContext';
 import SortGamesHeader from './SortGamesHeader';
+import { useEffect } from 'react';
 
 function GameGrid() {
   const {
@@ -12,6 +13,10 @@ function GameGrid() {
     setAddGameMenuIsDisplayed,
     setClickedGameId,
   } = useGlobalContext();
+
+  useEffect(()=>{
+    console.log("Games have changed in game grid");
+  },[games])
   return ( 
     <>
     

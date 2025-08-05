@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomizedRating from "./CustomizedRating";
 import handleUpdateGame from "../database/handleUpdateGame";
 import GameMenu from "./GameMenu";
@@ -6,31 +6,29 @@ import { useGlobalContext } from "../Context/useGlobalContext";
 
 function GameCard({ game }) {
   const { clickedGameId, setClickedGameId, setGames } = useGlobalContext();
-
   const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);
-  const [rating, setRating] = useState(game.rating || 0);
 
   const handleRatingChange = async (value) => {
     console.log("rating changed:", value);
 
-    // 1️⃣ Update local rating
-    setRating(value);
-
-    // 2️⃣ Update state
+    // Update global state
     setGames((prevGames) =>
       prevGames.map((g) => (g.id === game.id ? { ...g, rating: value } : g))
     );
 
-    // 3️⃣ Update DB with updated game
+    // Update DB with updated game
     const updatedGame = { ...game, rating: value };
     await handleUpdateGame(updatedGame);
     console.log("Updated game in DB:", updatedGame);
   };
-
+  
+  useEffect(()=>{
+    console.log("GameCard re-rendered. Game: "+ JSON.stringify({name: game.title, rating: game.rating}));
+  })
+  
   return (
     <div id={game.id} className={`game_card ${isHovered ? "selected" : ""}`}>
-      {" "}
       <img
         src={posterURL}
         alt={`${title} poster`}
@@ -46,7 +44,7 @@ function GameCard({ game }) {
       <div className="game_card_buttons_bottom">
         <div className="game_card_delete_button"></div>
       </div>
-      <CustomizedRating onRating={handleRatingChange} rating={rating} />
+      <CustomizedRating onRating={handleRatingChange} rating={game.rating} />
     </div>
   );
 }
