@@ -12,17 +12,16 @@ function AddGameMenu() {
   const [selectedGame, setSelectedGame] = useState(null);
   const { setAddGameMenuIsDisplayed } = useGlobalContext();
   const [posterUrl, setPosterUrl] = useState(null);
-  const [rating, setRating] = useState(selectedGame?.rating|| 0);
+  const [rating, setRating] = useState(selectedGame?.rating || 0);
   const parseDevelopers = (developers) => {
     if (!developers || developers.length === 0) return "Unknown Developer";
     return developers.substring(2, developers.length - 2);
   };
- const handleRatingChange = async (value) => {
+  const handleRatingChange = async (value) => {
     console.log("rating changed:", value);
 
     // 1️⃣ Update local rating
     setRating(value);
-
   };
   const truncateText = (text, maxWords) => {
     if (!text) return null;
@@ -68,37 +67,18 @@ function AddGameMenu() {
             <div className="add_game_menu">
               <div className="poster_and_details_container">
                 {posterUrl ? (
-                  <div className="game_poster_container">
-                    <div
-                      className="edit_image_game_poster"
-                      onClick={handleOpenFile}
-                    >
-                      <div
-                        className="game_poster_edit_icon"
-                        onClick={handleOpenFile}
-                      >
-                        <EditIcon fontSize="small" />
-                        Edit image
-                      </div>
-                    </div>
-
-                    <img
-                      src={posterUrl}
-                      alt="Game Poster"
-                      className="game_poster"
-                    />
-                    <CustomizedRating/>
-                  </div>
-                ) : (
-                  <>
-                  <div className="flex flex-col items-center justify-center game_poster_container">
-                    <EmptyGamePoster onClick={handleOpenFile} />
-                    <CustomizedRating/>
-                  </div>
-
-
-                  </>
-                  
+                            <div className="game_poster_container">
+                                <EditImageButton onClick={handleOpenFile} />
+                                <img src={posterUrl} alt="Game Poster" className="game_poster"/>
+                                <CustomizedRating />
+                            </div>
+                            ) : (
+                            <>
+                                <div className="game_poster_container">
+                                <EmptyGamePoster onClick={handleOpenFile} />
+                                <CustomizedRating />
+                                </div>
+                            </>
                 )}
                 <div className="game_details_container">
                   <div className="add_game_menu_title">{selectedGame.name}</div>
@@ -137,13 +117,24 @@ function AddGameMenu() {
 function EmptyGamePoster({ onClick, children }) {
   return (
     <>
-    <div className="game_card_add" id="game_poster_add" onClick={onClick}>
-      <FloatingActionButtonSize />
-      <div className="game_card_title"></div>
-      
-    </div>
+      <div className="game_card_add" id="game_poster_add" onClick={onClick}>
+        <FloatingActionButtonSize />
+        <div className="game_card_title"></div>
+      </div>
     </>
   );
 }
 
+function EditImageButton({ onClick }) {
+  return (
+    <>
+      <div className="edit_image_game_poster" onClick={onClick}>
+        <div className="game_poster_edit_icon" onClick={onClick}>
+          <EditIcon fontSize="small" />
+          Edit image
+        </div>
+      </div>
+    </>
+  );
+}
 export default AddGameMenu;
