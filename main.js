@@ -85,7 +85,7 @@ ipcMain.handle('open-image-file', async () => {
 
 ipcMain.handle('get-poster', async (event, id) => {
   try {
-    const blob_image = await userDbAll('SELECT image FROM posters WHERE id = ?', [id]);
+    const blob_image = await gameCatalogDbAll('SELECT image FROM posters WHERE id = ?', [id]);
 
     if (blob_image.length === 0 || !blob_image[0].image) {
       console.warn(`No image found for ID ${id}`);

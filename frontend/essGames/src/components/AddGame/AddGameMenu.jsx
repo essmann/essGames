@@ -4,9 +4,11 @@ import { ClickAwayListener } from "@mui/material";
 import FloatingActionButtonSize from "../FloatingActionButtonSize";
 import { useEffect } from "react";
 import { useGlobalContext } from "../../Context/useGlobalContext";
+import handleGetPoster from "../../database/getPoster";
 function AddGameMenu() {
     const [selectedGame, setSelectedGame] = useState(null);
     const { setAddGameMenuIsDisplayed } = useGlobalContext();
+    const [posterUrl, setPosterUrl] = useState(null);
     // Fix the parseDevelopers function to properly format and return the developers
     const parseDevelopers = (developers) => {
         if (!developers || developers.length === 0) return "Unknown Developer";  // Add fallback for no developers
@@ -25,11 +27,26 @@ function AddGameMenu() {
         })
         return truncatedText.join(" ") + "...";
     }
-    useEffect(()=>{
-        if(selectedGame){
-            setAddGameMenuIsDisplayed(true);
-        }
-    },[selectedGame]);
+   useEffect(() => {
+  if (selectedGame) {
+    setAddGameMenuIsDisplayed(true);
+
+    const fetchPoster = async () => {
+      try {
+        const poster = await handleGetPoster(selectedGame.AppID);
+        if (poster) setPosterUrl(poster);
+      } catch (err) {
+        console.error('Failed to fetch poster:', err);
+        setPosterUrl(null);
+      }
+    };
+
+    fetchPoster();
+  } else {
+    setPosterUrl(null);
+  }
+}, [selectedGame]);
+
 
     const handleCloseMenu = () => {
         setSelectedGame(null);
@@ -43,7 +60,11 @@ function AddGameMenu() {
                     {selectedGame && selectedGame !== 'custom' && 
                         <div className="add_game_menu">
                             <div> 
-                                <EmptyGamePoster/>
+                                {posterUrl ? (
+                                    <img src={posterUrl} alt="Game Poster" className="game_poster" />
+                                ) :  <EmptyGamePoster />}
+                            </div>
+                            <div className="add_game_menu_details">
                             </div>
                             <div> 
                                 <div className="add_game_menu_title"> {selectedGame?.name}</div>
