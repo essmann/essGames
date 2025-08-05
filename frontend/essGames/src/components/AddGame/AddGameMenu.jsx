@@ -6,17 +6,24 @@ import { useGlobalContext } from "../../Context/useGlobalContext";
 import handleGetPoster from "../../database/getPoster";
 import openFileBase64 from "../../database/openFileBase64";
 import EditIcon from "@mui/icons-material/Edit";
+import CustomizedRating from "../CustomizedRating";
 
 function AddGameMenu() {
   const [selectedGame, setSelectedGame] = useState(null);
   const { setAddGameMenuIsDisplayed } = useGlobalContext();
   const [posterUrl, setPosterUrl] = useState(null);
-
+  const [rating, setRating] = useState(selectedGame?.rating|| 0);
   const parseDevelopers = (developers) => {
     if (!developers || developers.length === 0) return "Unknown Developer";
     return developers.substring(2, developers.length - 2);
   };
+ const handleRatingChange = async (value) => {
+    console.log("rating changed:", value);
 
+    // 1️⃣ Update local rating
+    setRating(value);
+
+  };
   const truncateText = (text, maxWords) => {
     if (!text) return null;
     const words = text.split(" ").slice(0, maxWords);
@@ -66,30 +73,27 @@ function AddGameMenu() {
                       className="edit_image_game_poster"
                       onClick={handleOpenFile}
                     >
-                        <div
-                      className="game_poster_edit_icon"
-                      onClick={handleOpenFile}
-                    >
-                      <EditIcon fontSize="small" />
-                      Edit image
+                      <div
+                        className="game_poster_edit_icon"
+                        onClick={handleOpenFile}
+                      >
+                        <EditIcon fontSize="small" />
+                        Edit image
+                      </div>
                     </div>
-                      
-                    </div>
-                    
+
                     <img
                       src={posterUrl}
                       alt="Game Poster"
                       className="game_poster"
                     />
-                    
+                    <CustomizedRating/>
                   </div>
                 ) : (
                   <EmptyGamePoster onClick={handleOpenFile} />
                 )}
                 <div className="game_details_container">
-                  <div className="add_game_menu_title">
-                    {selectedGame.name}
-                  </div>
+                  <div className="add_game_menu_title">{selectedGame.name}</div>
                   <div className="add_game_menu_release add_game_menu_developer">
                     <span className="release">
                       <span className="grey">Released on </span>
