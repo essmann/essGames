@@ -3,6 +3,8 @@
   --color-dark: #202020;
   --color-dark-hex: #202020; /* if you want a separate variable for hex */
   --color-hover: #2D2D2D;
+  --rating-pink: #fc6399; 
+  --backloggd-bg: #16181C;
 }
 
 html, body {
@@ -16,6 +18,7 @@ html, body {
   display: flex;
   flex-direction: row;
   background: var(--color-dark);
+  
   height: 100vh;
   width: 100vw;
     box-sizing: border-box;
@@ -30,6 +33,7 @@ html, body {
 
 .grid_view{
   flex: 6;
+  
 }
 
 .main_component{
@@ -73,6 +77,7 @@ html, body {
   flex-wrap: wrap;
   padding: 1rem;
   background: #2D2D2D;
+
   gap: 0px;
   align-content: flex-start;
   

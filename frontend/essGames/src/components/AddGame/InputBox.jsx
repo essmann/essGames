@@ -34,7 +34,9 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
       
       setSelectedGame(game);
       console.log("Selected game:"+ JSON.stringify(game));
-      closeSearch();
+      closeGameMenu();
+      
+
       
     }
   };
@@ -53,7 +55,7 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
     }
     else if (e.key === "Escape"){
 
-      closeSearch();
+      closeGameMenu();
     }
   };
 
@@ -62,7 +64,7 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
       <div className="input_manual" onClick={(e)=>{
         e.stopPropagation();
         setSelectedGame({name: "test", developers: "test2", release_date: "test_2003"});
-        closeSearch();
+        closeGameMenu();
       }}>
           <AddCircleOutlineIcon/>
       </div>
