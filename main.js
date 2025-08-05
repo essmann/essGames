@@ -6,7 +6,7 @@ let csvToJson = require('convert-csv-to-json');
 const csv = require('csv-parser');
 let win;
 
- const isDev = !app.isPackaged;
+const isDev = !app.isPackaged;
 // const isDev = true;
 const dbPath = isDev
   ? path.join(__dirname, 'sqlite', 'games.db')
@@ -65,7 +65,7 @@ const gameCatalogDb = new sqlite3.Database(gameCatalogDbPath, (err) => {
   }
 });
 async function loadSteamGames(filePath) {
-  
+
   try {
     const data = await readCsv(filePath);
     console.log("Data loaded");
@@ -84,10 +84,21 @@ ipcMain.handle('open-image-file', async () => {
 })
 
 ipcMain.handle('get-poster', async (event, id) => {
-    try {
-    const rows = await userDbAll('SELECT * FROM games');
-    console.log(`Fetched ${rows.length} rows from the games database`)
-    return rows;
+  try {
+    const blob_image = await userDbAll('SELECT image FROM posters WHERE id = ?', [id]);
+
+    if (blob_image.length === 0 || !blob_image[0].image) {
+      console.warn(`No image found for ID ${id}`);
+      return null;
+    }
+
+    // Detect image type (optional, or default to e.g., "image/jpeg")
+    const mimeType = 'image/jpeg'; // or 'image/png', depending on your actual image format
+    const base64Image = blob_image[0].image.toString('base64');
+    const dataUrl = `data:${mimeType};base64,${base64Image}`;
+
+    console.log(`Fetched and encoded image for ID ${id}`);
+    return dataUrl;
   } catch (err) {
     console.error('DB error:', err);
     throw err;
@@ -109,7 +120,7 @@ ipcMain.handle('add-game', async (event, game) => {
 
   return new Promise((resolve, reject) => {
     const query = `INSERT INTO games (id, title, posterURL, rating, review) VALUES (?, ?, ?, ?, ?)`;
-    userDb.run(query, [id, title, posterURL, rating, review], function(err) {
+    userDb.run(query, [id, title, posterURL, rating, review], function (err) {
       if (err) {
         console.error('Failed to add game:', err);
         reject(err);
@@ -125,7 +136,7 @@ ipcMain.handle('update-game', async (event, game) => {
 
   return new Promise((resolve, reject) => {
     const query = `UPDATE games SET title = ?, posterURL = ?, rating = ?, review = ? WHERE id = ?`;
-    userDb.run(query, [title, posterURL, rating, review, id], function(err) {
+    userDb.run(query, [title, posterURL, rating, review, id], function (err) {
       if (err) {
         console.error('Failed to update game:', err);
         reject(err);
@@ -145,7 +156,7 @@ ipcMain.handle('update-game', async (event, game) => {
 ipcMain.handle('delete-game', async (event, id) => {
   return new Promise((resolve, reject) => {
     const query = `DELETE FROM games WHERE id = ?`;
-    userDb.run(query, [id], function(err) {
+    userDb.run(query, [id], function (err) {
       if (err) {
         console.error('Failed to delete game:', err);
         reject(err);
@@ -182,17 +193,17 @@ const createWindow = () => {
     }
   })
 
- if(isDev){
-     win.loadURL('http://localhost:5173/')
+  if (isDev) {
+    win.loadURL('http://localhost:5173/')
 
- }
- else{
-  win.loadFile('./build/dist/index.html');
- }
+  }
+  else {
+    win.loadFile('./build/dist/index.html');
+  }
 }
 
 
-const test = async (prefix) =>{
+const test = async (prefix) => {
   try {
     // Query games starting with prefix (case-insensitive)
     const sql = `SELECT * FROM games WHERE name LIKE ? LIMIT 100`;
@@ -204,10 +215,10 @@ const test = async (prefix) =>{
     console.error('DB search error:', err);
     throw err;
   }
-} 
+}
 app.whenReady().then(createWindow);
 
-test("animal").then((games)=>{
+test("animal").then((games) => {
   console.log("Games found:", games);
 });
 
