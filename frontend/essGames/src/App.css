@@ -5,6 +5,9 @@
   --color-hover: #2D2D2D;
   --rating-pink: #fc6399; 
   --backloggd-bg: #16181C;
+  --darker-pink: #EA377A;
+  --text-1: #badefc;
+  --white: #fff;
 }
 
 html, body {
@@ -191,19 +194,7 @@ html, body {
   z-index: 2;
 }
 .add_game_menu{
-  display: flex;
-  border-radius: 12px;
-  position: absolute;
-  width: 40%;
-  height: 50%;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 1rem;
-  min-width: 450px;
-  max-width: 450px;
-  background: var(--color-dark);
-  z-index: 2;
+  
 }
 
 
@@ -551,4 +542,108 @@ background-image: linear-gradient(315deg, #2d3436 0%, #181616 74%);
   height: 200px !important;
   border-radius: 12px;
   padding: 1rem;
+}
+
+.game_poster_edit_icon{
+  position: absolute;
+  top: 1%;
+  left: 4%;
+  color: grey;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+.game_poster_edit_icon:hover{
+  color: rgb(150, 144, 144);
+}
+.edit_image_game_poster{
+ 
+  font-size: small;
+  color: grey;
+  transition: opacity 0.3s ease;
+}
+.edit_image_game_poster{
+  cursor: pointer;
+}
+.edit_image_game_poster:hover{
+  color: rgb(150, 144, 144);
+}
+
+.add_game_submit{
+  display: flex;
+  border-radius: 12px;
+  padding: 1rem;
+  background: var(--color-dark);
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  
+} 
+.add_game_submit>button{
+  background: var(--darker-pink);
+  border-radius: 12px;
+}
+
+.add_game_menu_container{
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  position: absolute;
+  width: 40%;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  min-width: 450px;
+  background: var(--color-dark);
+  z-index: 2;
+  min-height: 400px;
+}
+
+.poster_and_details_container{
+  display: flex;
+}
+
+.add_game_menu{
+  color: var(--text-1);
+}
+
+.grey{
+  color: grey;
+}
+
+.add_game_menu_title{
+  color: var(--white);
+}
+
+
+.white{
+  color: var(--white);
+}
+
+.game_details_container * {
+  
+}
+
+.game_card_add{
+  min-width: 105px;
+  max-width: 105px;
+  width: 105px;
+}
+.game_poster{
+  width: 182px;
+  height: 232px;
+}
+#game_poster_add{
+  min-width: 150px !important;
+  height: 200px;
+}
+
+#release_date_span, #developed_by_right{
+  font-weight: lighter;
+}
+body * {
 }

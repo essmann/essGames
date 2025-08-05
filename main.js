@@ -49,6 +49,26 @@ function readCsv(filePath) {
       .on('error', reject);
   });
 }
+const updateCatalogPoster = (id, base64String) => {
+  return new Promise((resolve, reject) => {
+    const base64Data = base64String.replace(/^data:image\/\w+;base64,/, '');
+    const imageBuffer = Buffer.from(base64Data, 'base64');
+
+    const query = `UPDATE games SET posterURL = ? WHERE id = ?`;
+    userDb.run(query, [imageBuffer, id], function (err) {
+      if (err) {
+        console.error('Failed to update game:', err);
+        reject(err);
+      } else if (this.changes === 0) {
+        console.log(`Game with ID: ${id} not found.`);
+        resolve({ success: false, message: "Game not found" });
+      } else {
+        console.log(`Game with ID: ${id} updated successfully.`);
+        resolve({ success: true, message: "Game updated successfully" });
+      }
+    });
+  });
+};
 
 const userDb = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -80,7 +100,7 @@ const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
 
 // IPC handler to expose openFile to renderer
 ipcMain.handle('open-image-file', async () => {
-  return await openFile()
+  return await openFile();
 })
 
 ipcMain.handle('get-poster', async (event, id) => {

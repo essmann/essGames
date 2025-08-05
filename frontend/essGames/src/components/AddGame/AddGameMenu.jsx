@@ -1,99 +1,134 @@
 import SearchGame from "./SearchGame";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ClickAwayListener } from "@mui/material";
 import FloatingActionButtonSize from "../FloatingActionButtonSize";
-import { useEffect } from "react";
 import { useGlobalContext } from "../../Context/useGlobalContext";
 import handleGetPoster from "../../database/getPoster";
+import openFileBase64 from "../../database/openFileBase64";
+import EditIcon from "@mui/icons-material/Edit";
+
 function AddGameMenu() {
-    const [selectedGame, setSelectedGame] = useState(null);
-    const { setAddGameMenuIsDisplayed } = useGlobalContext();
-    const [posterUrl, setPosterUrl] = useState(null);
-    // Fix the parseDevelopers function to properly format and return the developers
-    const parseDevelopers = (developers) => {
-        if (!developers || developers.length === 0) return "Unknown Developer";  // Add fallback for no developers
-        // Assuming developers is a string with names separated by commas, like 'Dev1, Dev2'
-        const parsedDevs = developers.substring(2, developers.length -2);
-        return parsedDevs;
-    };
-    const truncateText = (text, maxLength) => {
-        if (!text) return null;
-        let i = 0;
-        let truncatedText = [];
-        text.split(" ").map(word => {
-            if(i>= maxLength) return;
-            truncatedText.push(word);
-            i++;
-        })
-        return truncatedText.join(" ") + "...";
+  const [selectedGame, setSelectedGame] = useState(null);
+  const { setAddGameMenuIsDisplayed } = useGlobalContext();
+  const [posterUrl, setPosterUrl] = useState(null);
+
+  const parseDevelopers = (developers) => {
+    if (!developers || developers.length === 0) return "Unknown Developer";
+    return developers.substring(2, developers.length - 2);
+  };
+
+  const truncateText = (text, maxWords) => {
+    if (!text) return null;
+    const words = text.split(" ").slice(0, maxWords);
+    return words.join(" ") + "...";
+  };
+
+  useEffect(() => {
+    if (selectedGame && selectedGame !== "custom") {
+      setAddGameMenuIsDisplayed(true);
+      const fetchPoster = async () => {
+        try {
+          const poster = await handleGetPoster(selectedGame.AppID);
+          setPosterUrl(poster || null);
+        } catch (err) {
+          console.error("Failed to fetch poster:", err);
+          setPosterUrl(null);
+        }
+      };
+      fetchPoster();
+    } else {
+      setPosterUrl(null);
     }
-   useEffect(() => {
-  if (selectedGame) {
-    setAddGameMenuIsDisplayed(true);
+  }, [selectedGame]);
 
-    const fetchPoster = async () => {
-      try {
-        const poster = await handleGetPoster(selectedGame.AppID);
-        if (poster) setPosterUrl(poster);
-      } catch (err) {
-        console.error('Failed to fetch poster:', err);
-        setPosterUrl(null);
-      }
-    };
+  const handleCloseMenu = () => {
+    setSelectedGame(null);
+    setAddGameMenuIsDisplayed(false);
+  };
 
-    fetchPoster();
-  } else {
-    setPosterUrl(null);
-  }
-}, [selectedGame]);
+  const handleOpenFile = async () => {
+    const image = await openFileBase64();
+    if (image) setPosterUrl(image);
+  };
 
+  return (
+    <>
+      <SearchGame setSelectedGame={setSelectedGame} />
 
-    const handleCloseMenu = () => {
-        setSelectedGame(null);
-        setAddGameMenuIsDisplayed(false);
-    }
-    return (  
-        <>
-            <SearchGame setSelectedGame={setSelectedGame}/> 
-            <ClickAwayListener onClickAway={handleCloseMenu}>
-                <div>
-                    {selectedGame && selectedGame !== 'custom' && 
-                        <div className="add_game_menu">
-                            <div> 
-                                {posterUrl ? (
-                                    <img src={posterUrl} alt="Game Poster" className="game_poster" />
-                                ) :  <EmptyGamePoster />}
-                            </div>
-                            <div className="add_game_menu_details">
-                            </div>
-                            <div> 
-                                <div className="add_game_menu_title"> {selectedGame?.name}</div>
-                                <div className="add_game_menu_release add_game_menu_developer">
-                                    <span className="release">
-                                        <span>Released on </span> <span id="release_date_span">{selectedGame?.release_date}</span>
-                                        </span>    
-                                    <div className="developers">Developed by: <span id="developed_by_right">{parseDevelopers(selectedGame?.developers)}</span></div>
-                                 </div>
-                                 <div className="detailed_description">
-                                    {truncateText(selectedGame?.detailed_description, 35) || "No description available."}
-
-                                     </div>
-                            </div>
-                        </div>
-                    }
+      {selectedGame && selectedGame !== "custom" && (
+        <ClickAwayListener onClickAway={handleCloseMenu}>
+          <div className="add_game_menu_container">
+            <div className="add_game_menu">
+              <div className="poster_and_details_container">
+                {posterUrl ? (
+                  <div className="game_poster_container">
+                    <div
+                      className="edit_image_game_poster"
+                      onClick={handleOpenFile}
+                    >
+                        <div
+                      className="game_poster_edit_icon"
+                      onClick={handleOpenFile}
+                    >
+                      <EditIcon fontSize="small" />
+                      Edit image
+                    </div>
+                      
+                    </div>
+                    
+                    <img
+                      src={posterUrl}
+                      alt="Game Poster"
+                      className="game_poster"
+                    />
+                    
+                  </div>
+                ) : (
+                  <EmptyGamePoster onClick={handleOpenFile} />
+                )}
+                <div className="game_details_container">
+                  <div className="add_game_menu_title">
+                    {selectedGame.name}
+                  </div>
+                  <div className="add_game_menu_release add_game_menu_developer">
+                    <span className="release">
+                      <span className="grey">Released on </span>
+                      <span id="release_date_span" className="white">
+                        {selectedGame.release_date}
+                      </span>
+                    </span>
+                    <div className="developers">
+                      <span className="grey">Developed by: </span>
+                      <span id="developed_by_right" className="white">
+                        {parseDevelopers(selectedGame.developers)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="detailed_description">
+                    {truncateText(selectedGame.detailed_description, 35) ||
+                      "No description available."}
+                  </div>
                 </div>
-            </ClickAwayListener>
-        </>
-    );
+              </div>
+
+              <div className="add_game_submit">
+                <button>Add Game</button>
+              </div>
+            </div>
+          </div>
+        </ClickAwayListener>
+      )}
+    </>
+  );
 }
 
-function EmptyGamePoster(){
-    return (
-        <div className="game_card_add " id="game_poster_add">
-              <FloatingActionButtonSize />
-              <div className="game_card_title"></div>
-        </div>
-    );
+function EmptyGamePoster({ onClick }) {
+  return (
+    <div className="game_card_add" id="game_poster_add" onClick={onClick}>
+      <FloatingActionButtonSize />
+      <div className="game_card_title"></div>
+    </div>
+  );
 }
 
 export default AddGameMenu;
