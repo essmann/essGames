@@ -77,11 +77,22 @@ async function loadSteamGames(filePath) {
 const util = require('util');
 const userDbAll = util.promisify(userDb.all.bind(userDb));
 const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
+
 // IPC handler to expose openFile to renderer
 ipcMain.handle('open-image-file', async () => {
   return await openFile()
 })
 
+ipcMain.handle('get-poster', async (event, id) => {
+    try {
+    const rows = await userDbAll('SELECT * FROM games');
+    console.log(`Fetched ${rows.length} rows from the games database`)
+    return rows;
+  } catch (err) {
+    console.error('DB error:', err);
+    throw err;
+  }
+});
 ipcMain.handle('get-games', async () => {
   try {
     const rows = await userDbAll('SELECT * FROM games');
