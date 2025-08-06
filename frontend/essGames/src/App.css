@@ -924,3 +924,17 @@ body * {
 .grid_view>.game_card_container, .grid_view>.game_card_add{
   margin-top: 4rem;
 }
+
+* {
+}
+#main-content{
+overflow: auto !important;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important;  /* IE/Edge */
+}
+
+#main-content{
+  flex-grow: 1;
+  display: flex;
+  overflow: hidden !important; /* optional: prevents scroll inside */
+}
