@@ -6,30 +6,39 @@ import { useState } from "react";
 import { createContext } from "react";
 import { useGlobalContext } from "../Context/useGlobalContext";
 import { useRef } from "react";
+import AppsIcon from '@mui/icons-material/Apps';
 const selectItem = () => {
   // You might want to add some logic here
 };
 
+function ListHeader({title}){
+  return (
+    <>
+    <div className="list_header_container">
+        <div className="list_header">
+          {title}
+        </div>
+    </div>
+    </>
+  )
+}
 function Sidebar({ selectedListItemIndex, setSelectedListItemIndex }) {
   return (
     <div className="sidebar">
       <div className="searchBar">
         {/* <ListItem title="My Games" icon={VideogameAssetIcon} index={0} /> */}
-        <ListParentItem title="My Games" icon={VideogameAssetIcon} index={0}>
-            <ListItem isChild={true} title="Reviews" icon={ChatIcon} index={1} />
-            <ListItem isChild={true} title="Lists" icon={ChatIcon} index={2} />
-            <ListItem isChild={true} title="Export" icon={ChatIcon} index={3} />
+        <ListHeader title="GAMES"/>
+        <ListItem title="All Games" icon={AppsIcon} index={0} count={3}/>
 
 
 
-        </ListParentItem>
         
-        <ListParentItem title="Malene" icon={ChatIcon} index={4}>
+        {/* <ListParentItem title="Malene" icon={ChatIcon} index={4}>
           <ListItem isChild={true} title="Child2" icon={ChatIcon} index={5} />
           <ListItem isChild={true} title="Child3" icon={ChatIcon} index={6} />
           <ListItem isChild={true} title="Child4" icon={ChatIcon} index={7} />
 
-        </ListParentItem>
+        </ListParentItem> */}
       </div>
     </div>
   );
@@ -37,7 +46,9 @@ function Sidebar({ selectedListItemIndex, setSelectedListItemIndex }) {
 
 export default Sidebar;
 
-function ListItem({ title, icon, isChild, index }) {
+function ListItem({ title, icon, isChild, index, count}) {
+  const {games} = useGlobalContext();
+
   const { selectedListItemIndex, setSelectedListItemIndex } =
     useGlobalContext();
   const whenClicked = () => {
@@ -58,6 +69,7 @@ function ListItem({ title, icon, isChild, index }) {
         <Icon component={icon} />
       </div>
       <div className="list_item_title">{title}</div>
+      {count && <div className="list_item_count"> {games?.length} </div>}
     </div>
   );
 }
