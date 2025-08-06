@@ -7,12 +7,31 @@ import handleGetPoster from "../../database/getPoster";
 import openFileBase64 from "../../database/openFileBase64";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedRating from "../CustomizedRating";
-
+import { useRef } from "react";
 function AddGameMenu() {
   const [selectedGame, setSelectedGame] = useState(null);
   const { setAddGameMenuIsDisplayed } = useGlobalContext();
   const [posterUrl, setPosterUrl] = useState(null);
   const [rating, setRating] = useState(selectedGame?.rating || 0);
+  const dateRef = useRef(null);
+  const developesRef = useRef(null);
+  const [editMode, setEditMode] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDevelopers, setSelectedDevelopers] = useState("");
+  useEffect(()=>{
+    if (selectedGame == "edit"){
+      setEditMode(true);
+    }
+    else{
+      setEditMode(false);
+    }
+  },[selectedGame]);
+  
+  useEffect(()=>{
+    console.log(selectedDevelopers)
+  })
+
+
   const parseDevelopers = (developers) => {
     if (!developers || developers.length === 0) return "Unknown Developer";
     return developers.substring(2, developers.length - 2);
@@ -22,6 +41,9 @@ function AddGameMenu() {
 
     // 1️⃣ Update local rating
     setRating(value);
+
+    //if game already exists, update it in the UI within the games state.
+
   };
   const truncateText = (text, maxWords) => {
     if (!text) return null;
@@ -57,6 +79,11 @@ function AddGameMenu() {
     if (image) setPosterUrl(image);
   };
 
+  const handleAddGame = () => {
+    if(editMode){
+
+    }
+  }
   return (
     <>
       <SearchGame setSelectedGame={setSelectedGame} />
@@ -85,20 +112,34 @@ function AddGameMenu() {
                   <div className="add_game_menu_release add_game_menu_developer">
                     <span className="release">
                       <span className="grey">Released on </span>
-                      <span id="release_date_span" className="white">
-                        {selectedGame.release_date}
-                      </span>
+                      {editMode ? 
+                                <input type = "date" id="add_game_date" className="white"/>
+                                :
+                                <span id="release_date_span" className="white">
+                                  {selectedGame.release_date}
+                                </span>
+
+                            
+                      }
                     </span>
                     <div className="developers">
                       <span className="grey">Developed by: </span>
-                      <span id="developed_by_right" className="white">
-                        {parseDevelopers(selectedGame.developers)}
-                      </span>
+                      {editMode ? 
+                            <input type="text" id="select_developer" placeholder="Developer..." onChange={
+                              (e) => setSelectedDevelopers(e.target.value)
+                            }/> 
+                            :
+                            <span id="developed_by_right" className="white">
+                              {parseDevelopers(selectedGame.developers)}
+                            </span>
+                      }
                     </div>
                   </div>
                   <div className="detailed_description">
-                    {truncateText(selectedGame.detailed_description, 35) ||
-                      "No description available."}
+                    {!editMode ? truncateText(selectedGame.detailed_description, 35) ||
+                      "No description available.":
+                      <textarea  id="description_select" placeholder="This game is one of the best roguelites..."/>
+                      }
                   </div>
                 </div>
               </div>
@@ -107,6 +148,11 @@ function AddGameMenu() {
                 <button>Add Game</button>
               </div>
             </div>
+            {editMode ? 
+            <div> Generated GUID: 5531</div> : 
+            <div> Game ID: 51234</div>
+            }
+            {posterUrl && <div> PosterUrl: true</div>}
           </div>
         </ClickAwayListener>
       )}

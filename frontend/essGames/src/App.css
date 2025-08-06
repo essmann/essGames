@@ -678,3 +678,44 @@ body * {
   align-items: center;
   justify-content: center;
 }
+
+#add_game_date{
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 1px solid grey;  
+  background: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#add_game_date:hover{
+  background: rgb(70, 70, 70);
+}
+
+#select_developer{
+  border-color: grey;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 0.5px solid grey;
+  border-radius: 4px;
+  background: inherit;
+  
+}
+
+#description_select{
+  min-height: 96px;
+  min-width: 350px;
+}
+
+#description_select{
+  background: inherit;
+  border-bottom: 1px solid grey;
+}
+
+.detailed_description{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
