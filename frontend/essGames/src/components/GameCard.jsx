@@ -28,7 +28,8 @@ function GameCard({ game }) {
   })
   
   return (
-    <div id={game.id} className={`game_card ${isHovered ? "selected" : ""}`}>
+    <div>
+      <div id={game.id} className={`game_card ${isHovered ? "selected" : ""}`}>
       <img
         src={posterURL}
         alt={`${title} poster`}
@@ -41,10 +42,13 @@ function GameCard({ game }) {
         }}
       />
       <div className="game_card_title">{title}</div>
-      <div className="game_card_buttons_bottom">
-        <div className="game_card_delete_button"></div>
-      </div>
-      <CustomizedRating onRating={handleRatingChange} rating={game.rating} />
+      
+      {/* <CustomizedRating onRating={handleRatingChange} rating={game.rating} /> */}
+        <div className="game_card_footer">
+          <div className="footer_title truncate" >{title}</div>
+        </div>
+    </div>
+    <div id="test3"></div>
     </div>
   );
 }

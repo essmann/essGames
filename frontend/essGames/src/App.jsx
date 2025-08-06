@@ -48,6 +48,11 @@ function App() {
           anyMenuOpen || clickedGameId !== null ? "menuActive" : ""
         }`}
       >
+        <div id="header">
+          
+        </div>
+       <div id="main-content">
+         
         <Sidebar
           selectedListItemIndex={selectedListItemIndex}
           setSelectedListItemIndex={setSelectedListItemIndex}
@@ -66,6 +71,7 @@ function App() {
 
         <AddGameMenu />
         <GameMenu />
+       </div>
       </div>
     </StyleProvider>
   );

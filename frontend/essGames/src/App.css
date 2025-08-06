@@ -36,9 +36,10 @@ html, body {
   background: #0C0C0C !important;
 }
 
+
 .grid_view{
   flex: 6;
-  
+  background: linear-gradient(#141414, rgb(15, 15, 15)) !important;  
 }
 
 .main_component{
@@ -62,6 +63,7 @@ html, body {
   padding: 0.1rem;
   align-items: center;
   text-wrap: nowrap;
+  font-weight: 700 !important;
   
 }
 .list_item:hover{
@@ -827,6 +829,9 @@ font-weight: 300;
 .list_item.selected{
   color: white;
 }
+.list_item.selected>.list_item_count{
+  color: rgb(151, 150, 150);
+}
 
 .searchBar{
   display: flex;
@@ -835,4 +840,42 @@ font-weight: 300;
 }
 .sidebar{
   background: linear-gradient(#151618, var(--color-hover), black);
+}
+
+body * {
+}
+
+
+.container{
+  flex-direction: column;
+}
+#main-content{
+  display: flex;
+  flex-direction: row;
+}
+#test3{
+  background: rgb(22, 22, 22);
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 0;
+  box-sizing: border-box;
+  
+}
+.game_card >img{
+  border-radius: 6px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+.game_card_footer *{
+  font-weight: 600;
+}
+
+.truncate{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.footer_title{
+  max-width: 150px;
+  color: rgb(156, 153, 153);
 }
