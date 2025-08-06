@@ -762,7 +762,8 @@ body{
   gap: 0.5rem;        /* Adjust spacing between cards */
   padding: 1rem;
   justify-content: flex-start; /* Align cards to the left */
-  row-gap: 2rem;
+  row-gap: 3rem;
+  column-gap: 1rem;
 }
 .grid_view {
   overflow-x: hidden;
@@ -839,12 +840,12 @@ font-weight: 300;
   justify-content: center;
 }
 .sidebar{
-  background: linear-gradient(#151618, var(--color-hover), black);
 }
 
 body * {
 }
-
+.grid_view{
+}
 
 .container{
   flex-direction: column;
@@ -853,29 +854,73 @@ body * {
   display: flex;
   flex-direction: row;
 }
-#test3{
-  background: rgb(22, 22, 22);
-  padding: 1rem;
-  border-radius: 4px;
-  margin: 0;
-  box-sizing: border-box;
-  
-}
+
 .game_card >img{
   border-radius: 6px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
-.game_card_footer *{
+.game_card_footer{
   font-weight: 600;
+  box-sizing: border-box;
+  background: var(--backloggd-bg);
+  background: #0C0C0C !important;
+  margin-top: 0;
+  padding: 0;
+  margin: 0;
+  gap: 0;
+  outline: none;
+  
+}
+.game_card_footer * {
+}
+.game_card{
 }
 
-.truncate{
+
+.truncate *{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .footer_title{
   max-width: 150px;
-  color: rgb(156, 153, 153);
+  color: rgb(185, 182, 182);
+  
+}
+
+.grid_view{
+  /* background: #0C0C0C !important; */
+}
+.game_card_container{
+}
+.game_card_footer{
+  height: 50px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+#test4{
+  line-height: 1;
+  color: rgb(69, 69, 82);
+}
+
+.footer_star_icon * {
+  align-self: start;
+}
+
+.footer_rating{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.grid_view{
+  row-gap: 1rem;
+
+}
+.sort-bar_container{
+  position: absolute;
+}
+.grid_view>.game_card_container, .grid_view>.game_card_add{
+  margin-top: 4rem;
 }
