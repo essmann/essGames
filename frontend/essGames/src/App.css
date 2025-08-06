@@ -913,6 +913,7 @@ body * {
   display: flex;
   align-items: center;
   justify-content: left;
+  color: rgb(80, 80, 78);
 }
 .grid_view{
   row-gap: 1rem;

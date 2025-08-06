@@ -53,7 +53,7 @@ function GameCard({ game }) {
             <div id="test4">
               <div className="footer_rating">
                 <GradeIcon fontSize="small"/>
-              {game.rating * 2}
+              {game.rating  + "/10"}
               </div>
               <br />
               {/* <span className="footer_star_icon">
