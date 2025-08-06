@@ -727,3 +727,45 @@ body * {
     width: 100%;
   }
 }
+
+.game_card_add{
+  min-width: 150px;
+  min-height: 205px;
+  margin: 0;
+}
+
+.game_card{
+  width: 150px;
+  height: 205px;
+  margin: 0;
+}
+.game_card>img{
+  width: 150px;
+  height: 205px;
+}
+
+
+
+
+body{
+  overflow-x: hidden;
+}
+.grid_view {
+  display: flex;
+  flex-wrap: wrap; /* This is key to wrapping */
+  gap: 1rem;        /* Adjust spacing between cards */
+  padding: 1rem;
+  justify-content: flex-start; /* Align cards to the left */
+  row-gap: 2rem;
+}
+.grid_view {
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.game_card {
+  width: 150px;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+
