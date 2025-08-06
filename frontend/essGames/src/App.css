@@ -704,18 +704,26 @@ body * {
 }
 
 #description_select{
-  min-height: 96px;
-  min-width: 350px;
+  resize: none;
+  width: 400px;
+  height: 100px;
 }
 
 #description_select{
+  
   background: inherit;
   border-bottom: 1px solid grey;
 }
 
 .detailed_description{
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex: 1 1 auto;
   
+}
+
+@media screen and (max-width: 1430px) {
+  /* Your styles here */
+  #description_select {
+    width: 100%;
+  }
 }

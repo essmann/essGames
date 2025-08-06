@@ -18,6 +18,7 @@ function AddGameMenu() {
   const [editMode, setEditMode] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedDevelopers, setSelectedDevelopers] = useState("");
+  const [selectedDescription, setSelectedDescription] = useState("");
   useEffect(()=>{
     if (selectedGame == "edit"){
       setEditMode(true);
@@ -28,8 +29,18 @@ function AddGameMenu() {
   },[selectedGame]);
   
   useEffect(()=>{
-    console.log(selectedDevelopers)
+    console.log(selectedDevelopers);
+    console.log(selectedDate);
+    console.log(selectedDescription);
+
+
   })
+  const validateInput = () => {
+    if(!selectedDate || !selectedDevelopers || !selectedDescription || !posterUrl ){
+      console.error("Fill all inputs in order to add the game.");
+      return false;
+    }
+  }
 
 
   const parseDevelopers = (developers) => {
@@ -113,7 +124,9 @@ function AddGameMenu() {
                     <span className="release">
                       <span className="grey">Released on </span>
                       {editMode ? 
-                                <input type = "date" id="add_game_date" className="white"/>
+                                <input type = "date" id="add_game_date" className="white"
+                                onChange={(e)=>setSelectedDate(e.target.value)}
+                                />
                                 :
                                 <span id="release_date_span" className="white">
                                   {selectedGame.release_date}
@@ -138,7 +151,10 @@ function AddGameMenu() {
                   <div className="detailed_description">
                     {!editMode ? truncateText(selectedGame.detailed_description, 35) ||
                       "No description available.":
-                      <textarea  id="description_select" placeholder="This game is one of the best roguelites..."/>
+                      <textarea  
+                      id="description_select" placeholder="This game is one of the best roguelites..."
+                      onChange={(e)=>setSelectedDescription(e.target.value)}
+                      />
                       }
                   </div>
                 </div>
