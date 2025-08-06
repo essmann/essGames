@@ -32,6 +32,8 @@ html, body {
 .sidebar{
   padding: 0.25rem;
   height: 100vh;
+  width: 220px;
+  background: #0C0C0C !important;
 }
 
 .grid_view{
@@ -369,9 +371,7 @@ background-image: linear-gradient(315deg, #2d3436 0%, #181616 74%);
 }
 
 .list_item.selected{
-  /* background: #2D2D2D; */
-  color: #fff;
-  background: inherit;
+  background: #2D2D2D;
   font-weight: 500;
   cursor: default;
 }
@@ -797,17 +797,18 @@ html, body {
 
 
 .list_item_count{
-  margin-left: 4px;
-  background: #5F5F61;
-  color: var(--backloggd-bg);
-  font-weight:500;
+   justify-self: end;
+   margin-left: auto;
+   margin-right: 1rem;
+  color: gray;
+font-weight: 300;
   padding: 1px;
   border-radius: 4px;
 
 }
 
 .list_header{
-  color: #4F5052;
+  color: #747475;
   margin-top: 3rem;
   margin-bottom:0.5rem;
   font-weight: bold;
@@ -815,8 +816,18 @@ html, body {
   
 }
 .list_item{
-  
+  justify-content: start;
+  color: rgb(143, 139, 139);
+  background: inherit;
+  border-radius: 4px;
+  margin-left: 2px;
+  padding: 0;
+  font-weight: 400;
 }
+.list_item.selected{
+  color: white;
+}
+
 .searchBar{
   display: flex;
   flex-direction: column;

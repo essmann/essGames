@@ -7,6 +7,7 @@ import { createContext } from "react";
 import { useGlobalContext } from "../Context/useGlobalContext";
 import { useRef } from "react";
 import AppsIcon from '@mui/icons-material/Apps';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 const selectItem = () => {
   // You might want to add some logic here
 };
@@ -29,7 +30,7 @@ function Sidebar({ selectedListItemIndex, setSelectedListItemIndex }) {
         {/* <ListItem title="My Games" icon={VideogameAssetIcon} index={0} /> */}
         <ListHeader title="GAMES"/>
         <ListItem title="All Games" icon={AppsIcon} index={0} count={3}/>
-
+        <ListItem title= "Favorites" icon={FavoriteBorderIcon} />
 
 
         
