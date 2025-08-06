@@ -46,14 +46,23 @@ function GameCard({ game }) {
         />
         <div className="game_card_title">{title}</div>
 
-        {/* <CustomizedRating onRating={handleRatingChange} rating={game.rating} /> */}
-        <div className="game_card_footer">
+        <GameCardFooter title={title} rating={game.rating}/>
+      </div>
+    </div>
+  );
+}
+
+export default GameCard;
+
+const  GameCardFooter =  ({title, rating}) => {
+  return (
+    <div className="game_card_footer">
           <div className="footer_title truncate">
             <div>{title}</div>
             <div id="test4">
               <div className="footer_rating">
                 <GradeIcon fontSize="small"/>
-              {game.rating  + "/10"}
+              {rating  + "/10"}
               </div>
               <br />
               {/* <span className="footer_star_icon">
@@ -62,9 +71,5 @@ function GameCard({ game }) {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-export default GameCard;
+  )
+};
