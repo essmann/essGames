@@ -108,7 +108,7 @@ function AddGameMenu() {
                             <div className="game_poster_container">
                                 <EditImageButton onClick={handleOpenFile} />
                                 <img src={posterUrl} alt="Game Poster" className="game_poster"/>
-                                <CustomizedRating />
+                                <CustomizedRating size={"large"} />
                             </div>
                             ) : (
                             <>

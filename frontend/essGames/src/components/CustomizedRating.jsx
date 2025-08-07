@@ -16,7 +16,7 @@ const StyledRating = styled(Rating)({
   },
 });
 
-export default function CustomizedRating({onRating, rating}) {
+export default function CustomizedRating({onRating, rating, size}) {
   
   
   return (
@@ -25,7 +25,7 @@ export default function CustomizedRating({onRating, rating}) {
     name="customized-10" 
     value={rating} // <-- Change this line
     max={5} 
-    size="small" 
+    size={size || "small"} 
     precision={0.5} 
     sx={{
       '.MuiRating-iconFilled': {

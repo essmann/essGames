@@ -45,7 +45,7 @@ function App() {
 
       <div
         className={`container ${
-          anyMenuOpen || clickedGameId !== null ? "menuActive" : ""
+          addGameMenuIsDisplayed || clickedGameId !== null ? "menuActive" : ""
         }`}
       >
         <div id="header">
