@@ -4,12 +4,23 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import handleDeleteGame from "../database/handleDeleteGame";
 import CustomizedRating from "./CustomizedRating";
 import handleUpdateGame from "../database/handleUpdateGame";
+import { useEffect } from "react";
 function GameMenu() {
+  
+  
   const { clickedGameId, setClickedGameId, games, setGames } = useGlobalContext();
+useEffect(()=>{
+      console.log(`Clicked game ID: ${clickedGameId}`);
+    },[clickedGameId])
 
+useEffect(()=>{
+  console.log("Game menu rendered.");
+  console.log("clickedGameId " + clickedGameId);
+})
   const selectedGame = games.find((game) => game.id == clickedGameId);
   if (!selectedGame) return null;
 
+  
   const handleDelete = async () => {
     try {
       setGames(prevGames => prevGames.filter(game => game.id !== clickedGameId));
@@ -33,7 +44,7 @@ function GameMenu() {
       console.log("Updated game in DB:", updatedGame);
     };
     
-
+    
   return (
     <ClickAwayListener onClickAway={() => setClickedGameId(null)}>
       <div className="add_game_menu_container">

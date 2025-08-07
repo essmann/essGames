@@ -24,6 +24,9 @@ function App() {
     anyMenuOpen
   } = useGlobalContext();
 
+  useEffect(()=>{
+    console.log("App.jsx rendered.");
+  })
   useEffect(() => {
     handleGetGames().then((_games) => {
       setGames(_games);
@@ -70,7 +73,8 @@ function App() {
         })()}
 
         <AddGameMenu />
-        <GameMenu />
+        {clickedGameId !== null &&
+        <GameMenu />}
        </div>
       </div>
     </StyleProvider>

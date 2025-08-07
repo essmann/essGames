@@ -23,12 +23,12 @@ function GameCard({ game }) {
     console.log("Updated game in DB:", updatedGame);
   };
 
-  useEffect(() => {
-    console.log(
-      "GameCard re-rendered. Game: " +
-        JSON.stringify({ name: game.title, rating: game.rating })
-    );
-  });
+  // useEffect(() => {
+  //   console.log(
+  //     "GameCard re-rendered. Game: " +
+  //       JSON.stringify({ name: game.title, rating: game.rating })
+  //   );
+  // });
 
   return (
     <div className="game_card_container">

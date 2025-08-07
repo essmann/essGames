@@ -40,8 +40,6 @@ export default function SortGamesHeader({ onChange }) {
         useEffect(() => {
         
             
-            console.log("You changed something!");
-            console.log(sortDirection, selectedOption, games);
             sortGames(sortDirection, selectedOption);
         }, [sortDirection, selectedOption]);
   return (

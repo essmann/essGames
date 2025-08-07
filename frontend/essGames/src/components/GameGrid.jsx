@@ -14,9 +14,7 @@ function GameGrid() {
     setClickedGameId,
   } = useGlobalContext();
 
-  useEffect(()=>{
-    console.log("Games have changed in game grid");
-  },[games])
+  
   return ( 
     <>
     
@@ -25,7 +23,7 @@ function GameGrid() {
       <AddGameCard setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}/> {/* AddGameCard can directly access the context */}
       { games.map((game) => (
         <GameCard 
-          key={game.id}
+          key={game.id || game?.AppID}
           game={game}
           setGames = {setGames}
           setClickedGameId={setClickedGameId}

@@ -19,15 +19,49 @@ function AddGameMenu() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedDevelopers, setSelectedDevelopers] = useState("");
   const [selectedDescription, setSelectedDescription] = useState("");
-
+  const [test, setTest] = useState(false);
   const [userHasGame, setUserHasGame] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+
+  const [showMenu, setShowMenu] = useState(false);
 
 
+  useEffect(()=>{
+    console.log("Game add menu rendered.");
+    console.log(`selected game: ${selectedGame}`);
+  })
+  useEffect(() => {
+  if (selectedGame && selectedGame !== "custom") {
+    setShowMenu(true);
+    setAddGameMenuIsDisplayed(true);
+    const fetchPoster = async () => {
+      try {
+        const poster = await handleGetPoster(selectedGame.AppID);
+        setPosterUrl(poster || null);
+      } catch (err) {
+        console.error("Failed to fetch poster:", err);
+        setPosterUrl(null);
+      }
+    };
+    fetchPoster();
+  } else {
+    setPosterUrl(null);
+  }
+}, [selectedGame]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 200); // 100 ms delay
+
+    return () => clearTimeout(timer); // cleanup
+  }, []);
 
   //The menu should be in 3 major states
-    // 1) Manual edit mode -- where the user has selected a custom game 
-    // 2) Existing game -- where the user may choose to EDIT the game 
-    // 3) Existing game -- where the user already has this game added in his/her collection, where only edit is possible.
+  // 1) Manual edit mode -- where the user has selected a custom game
+  // 2) Existing game -- where the user may choose to EDIT the game
+  // 3) Existing game -- where the user already has this game added in his/her collection, where only edit is possible.
+
   useEffect(() => {
     setUserHasGame(games.some((g) => g.AppID === selectedGame?.AppID));
   }, [games, selectedGame]);
@@ -40,11 +74,7 @@ function AddGameMenu() {
     }
   }, [selectedGame]);
 
-  useEffect(() => {
-    console.log(selectedDevelopers);
-    console.log(selectedDate);
-    console.log(selectedDescription);
-  });
+  
   const validateInput = () => {
     if (
       !selectedDate ||
@@ -76,23 +106,26 @@ function AddGameMenu() {
     return words.join(" ") + "...";
   };
 
-  useEffect(() => {
-    if (selectedGame && selectedGame !== "custom") {
-      setAddGameMenuIsDisplayed(true);
-      const fetchPoster = async () => {
-        try {
-          const poster = await handleGetPoster(selectedGame.AppID);
-          setPosterUrl(poster || null);
-        } catch (err) {
-          console.error("Failed to fetch poster:", err);
-          setPosterUrl(null);
-        }
-      };
-      fetchPoster();
-    } else {
-      setPosterUrl(null);
-    }
-  }, [selectedGame]);
+ useEffect(() => {
+  if (selectedGame && selectedGame !== "custom") {
+    setShowMenu(true);
+    setAddGameMenuIsDisplayed(true);
+    const fetchPoster = async () => {
+      try {
+        const poster = await handleGetPoster(selectedGame.AppID);
+        setPosterUrl(poster || null);
+      } catch (err) {
+        console.error("Failed to fetch poster:", err);
+        setPosterUrl(null);
+      }
+    };
+    fetchPoster();
+  } else {
+    setPosterUrl(null);
+    setShowMenu(false); // ✅ Add this
+  }
+}, [selectedGame]);
+
 
   const handleCloseMenu = () => {
     setSelectedGame(null);
@@ -105,20 +138,42 @@ function AddGameMenu() {
   };
 
   const handleAddGame = () => {
-    if (manualMode && validateInput()) {
-    } else if (!manualMode) {
-      //update existing game
-    }
+  // Step 1: Snapshot the game immediately
+  const gameToAdd = {
+    ...selectedGame,
+    posterURL: posterUrl,
+    title: selectedGame?.name || "Untitled",
+    rating: rating || 0,
   };
+
+  // Step 2: Validate if needed
+  if (manualMode && !validateInput()) return;
+
+  // Step 3: Add to games list
+  if (manualMode || (!manualMode && !userHasGame)) {
+    setTest(false);
+    setGames((prevGames) => [...prevGames, gameToAdd]);
+  }
+
+  setSelectedGame(null);
+  setAddGameMenuIsDisplayed(false);
+  setShowMenu(false);
+  console.log(selectedGame);
+  console.log(showMenu);
+};
+
+
   return (
     <>
       <SearchGame setSelectedGame={setSelectedGame} />
 
-      {selectedGame && selectedGame !== "custom" && (
+      {showMenu && (
         <ClickAwayListener onClickAway={handleCloseMenu}>
           <div className="add_game_menu_container">
+            
             <div className="add_game_menu">
               <div className="poster_and_details_container">
+                
                 {posterUrl ? (
                   <div className="game_poster_container">
                     <EditImageButton onClick={handleOpenFile} />
@@ -127,6 +182,7 @@ function AddGameMenu() {
                       alt="Game Poster"
                       className="game_poster"
                     />
+                    
                     <CustomizedRating size={"large"} />
                   </div>
                 ) : (
@@ -138,7 +194,8 @@ function AddGameMenu() {
                   </>
                 )}
                 <div className="game_details_container">
-                  <div className="add_game_menu_title">{selectedGame.name}</div>
+                  <div className="add_game_menu_title">{selectedGame?.name}</div>
+                  
                   <GameDetailsForm
                     manualMode={manualMode}
                     selectedGame={selectedGame}
@@ -159,21 +216,19 @@ function AddGameMenu() {
               </div>
 
               <div className="add_game_submit">
-                  {!manualMode && <button>Edit game </button>}
+                {!manualMode && <button>Edit game </button>}
 
-                  {!userHasGame && <button onClick={handleAddGame}>
-                                      <span>{"Add game"}</span>
-                                  </button>
-                }
-
+                {!userHasGame && (
+                  <button onClick={handleAddGame}>
+                    <span>{"Add game"}</span>
+                  </button>
+                )}
               </div>
             </div>
-            {manualMode ? (
-              <div> Generated GUID: 5531</div>
-            ) : (
-              <div> Game ID: 51234</div>
-            )}
-            {posterUrl && <div> PosterUrl: true</div>}
+            <div className="add_game_menu_misc">
+              {manualMode && <div> Manual edit mode</div>}
+              {posterUrl && <div> PosterUrl: true</div>}
+            </div>
           </div>
         </ClickAwayListener>
       )}

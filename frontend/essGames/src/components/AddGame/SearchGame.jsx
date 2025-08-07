@@ -19,19 +19,20 @@ function SearchGame({ setSelectedGame }) {
     setInputOptions([]);
   };
 
+  useEffect(()=>{
+    console.log("SearchGame rendered.");
+  })
   useEffect(() => {
     if (
       typeof debouncedInputValue !== "string" ||
       debouncedInputValue.trim() === ""
     ) {
       setInputOptions([]);
-      console.log("Empty, will just return.");
       return;
     }
 
     const fetchGames = async (prefix) => {
       const games = await handleSearchGameCatalog(prefix);
-      console.log("games fetchgames: " + games);
       return games;
     };
 
@@ -43,7 +44,6 @@ function SearchGame({ setSelectedGame }) {
         setInputOptions([]);
         console.log("No games returned or result invalid");
       }
-      console.log("Input options set:" + games);
     });
   }, [debouncedInputValue]);
 

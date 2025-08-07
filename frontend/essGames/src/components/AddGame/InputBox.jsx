@@ -14,6 +14,9 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
     inputRef.current?.focus();
   }, []);
 
+  useEffect(()=>{
+    console.log("Input box rendered.");
+  })
   // ------------- DEBOUNCING FUNCTION -------------//
   useEffect(() => {
     const timer = setTimeout(() => inputHandler(inputValue), 300);
@@ -33,7 +36,6 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
       setInputValue(game.name);
       
       setSelectedGame(game);
-      console.log("Selected game:"+ JSON.stringify(game));
       closeGameMenu();
       
 
