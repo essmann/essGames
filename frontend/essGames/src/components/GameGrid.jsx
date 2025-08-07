@@ -23,7 +23,7 @@ function GameGrid() {
       <AddGameCard setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}/> {/* AddGameCard can directly access the context */}
       { games.map((game) => (
         <GameCard 
-          key={game.id || game?.AppID}
+          key={game.id || game.AppID}
           game={game}
           setGames = {setGames}
           setClickedGameId={setClickedGameId}

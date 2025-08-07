@@ -8,9 +8,8 @@ import openFileBase64 from "../../database/openFileBase64";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedRating from "../CustomizedRating";
 import { useRef } from "react";
-function AddGameMenu() {
-  const [selectedGame, setSelectedGame] = useState(null);
-  const { setAddGameMenuIsDisplayed, games, setGames } = useGlobalContext();
+function AddGameMenu({selectedGame, setSelectedGame}) {
+  const { setAddGameMenuIsDisplayed, addGameMenuIsDisplayed, games, setGames } = useGlobalContext();
   const [posterUrl, setPosterUrl] = useState(null);
   const [rating, setRating] = useState(selectedGame?.rating || 0);
   const dateRef = useRef(null);
@@ -165,9 +164,9 @@ function AddGameMenu() {
 
   return (
     <>
-      <SearchGame setSelectedGame={setSelectedGame} />
+      
 
-      {showMenu && (
+      {addGameMenuIsDisplayed && (
         <ClickAwayListener onClickAway={handleCloseMenu}>
           <div className="add_game_menu_container">
             

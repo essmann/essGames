@@ -11,10 +11,11 @@ import handleGetGames from "./database/handleGetGames";
 import { useGlobalContext } from "./Context/useGlobalContext";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { StyleProvider } from "./Context/StyleContext";
+import SearchGame from "./components/AddGame/SearchGame";
 
 function App() {
   const [loading, setLoading] = useState(true);
-
+  
   const {
     setGames,
     addGameMenuIsDisplayed,
@@ -23,6 +24,8 @@ function App() {
     setSelectedListItemIndex,
     anyMenuOpen
   } = useGlobalContext();
+
+  const [selectedSearchGame, setSelectedSearchGame] = useState(null);
 
   useEffect(()=>{
     console.log("App.jsx rendered.");
@@ -71,8 +74,8 @@ function App() {
               return null;
           }
         })()}
-
-        <AddGameMenu />
+        <SearchGame setSelectedGame={setSelectedSearchGame} />
+        <AddGameMenu selectedGame = {selectedSearchGame} setSelectedGame={setSelectedSearchGame}/>
         {clickedGameId !== null &&
         <GameMenu />}
        </div>

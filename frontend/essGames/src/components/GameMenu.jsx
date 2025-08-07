@@ -16,8 +16,10 @@ useEffect(()=>{
 useEffect(()=>{
   console.log("Game menu rendered.");
   console.log("clickedGameId " + clickedGameId);
+  console.log()
+  console.table(games, games.length)
 })
-  const selectedGame = games.find((game) => game.id == clickedGameId);
+  const selectedGame = games.find((game) => (game.id || game.AppID) == clickedGameId);
   if (!selectedGame) return null;
 
   

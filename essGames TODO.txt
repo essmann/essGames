@@ -1,0 +1,5 @@
+
+essGames TODO LIST
+
+- Expose a method to fetch game ID (instead of typing .id || .AppID
+
