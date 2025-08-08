@@ -16,6 +16,7 @@ function GameMenu() {
     detailed_description: selectedGame.detailed_description || "",
     developers: selectedGame.developers || "",
     release_date: selectedGame.release_date || "",
+    rating: selectedGame.rating || 0
   });
   const [originalDetails, setOriginalDetails] = useState(null);
   const [titleCleared, setTitleCleared] = useState(false);
@@ -37,6 +38,7 @@ function GameMenu() {
         detailed_description: selectedGame.detailed_description || selectedGame.detailed_description || "",
         developers: selectedGame.developers || "",
         release_date: selectedGame.release_date || "",
+        rating: selectedGame.rating || 0,
       };
       setEditDetails(initialDetails);
       setOriginalDetails(initialDetails);
@@ -68,6 +70,7 @@ function GameMenu() {
       prevGames.map((g) => (g.id === selectedGame.id ? { ...g, rating: value } : g))
     );
     const updatedGame = { ...selectedGame, rating: value };
+    setSelectedGame(updatedGame);
     await handleUpdateGame(updatedGame);
   };
 
@@ -101,18 +104,13 @@ function GameMenu() {
                 alt={selectedGame.title}
                 className="game_poster"
               />
-              <div className="edit_image_game_poster" onClick={() => setEditMode(true)}>
-                <div className="game_poster_edit_icon">
-                  <EditIcon fontSize="small" />
-                  Edit game
-                </div>
-              </div>
+              
 
               <div className="game_menu_game_details_footer">
-                            <EditButton text={"Edit Game"}/>
+                            <EditButton text={"Edit Game"} onClick={()=>setEditMode(true)}/>
                         <CustomizedRating
                            onRating={handleRatingChange}
-                rating={selectedGame?.rating || 0}
+                rating={ selectedGame.rating}
                 size={"large"}
                         />
                     </div>
@@ -168,7 +166,7 @@ function GameMenu() {
                 className="detailed_description"
                 contentEditable={editMode}
                 suppressContentEditableWarning={true}
-                onBlur={(e) => handleEditChange("description", e.target.innerText)}
+                onBlur={(e) => handleEditChange("detailed_description", e.target.innerText)}
                 style={editableStyle}
               >
                 {editDetails.detailed_description
