@@ -19,7 +19,7 @@ function GameGrid() {
     <>
     
     <div className="grid_view">
-      {games?.length > 0 && <SortGamesHeader/>}
+      <SortGamesHeader/>
       <AddGameCard setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}/> {/* AddGameCard can directly access the context */}
       { games.map((game) => (
         <GameCard 

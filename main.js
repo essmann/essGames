@@ -139,11 +139,11 @@ ipcMain.handle('get-games', async () => {
 });
 
 ipcMain.handle('add-game', async (event, game) => {
-  const { id, title, posterURL, rating, review, release_date, developers, detailed_description } = game;
+  const { id, title, posterURL, rating, review, release_date, developers, detailed_description, genres } = game;
 
   return new Promise((resolve, reject) => {
-    const query = `INSERT INTO games (id, title, posterURL, rating, review, release_date, developers, detailed_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    userDb.run(query, [id, title, posterURL, rating, review, release_date, developers, detailed_description], function (err) {
+    const query = `INSERT INTO games (id, title, posterURL, rating, review, release_date, developers, detailed_description, genres) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    userDb.run(query, [id, title, posterURL, rating, review, release_date, developers, detailed_description, genres], function (err) {
       if (err) {
         console.error('Failed to add game:', err);
         reject(err);
@@ -155,11 +155,11 @@ ipcMain.handle('add-game', async (event, game) => {
 });
 
 ipcMain.handle('update-game', async (event, game) => {
-  const { id, title, posterURL, rating, review, release_date, developers, detailed_description } = game;
+  const { id, title, posterURL, rating, review, release_date, developers, detailed_description, genres } = game;
 
   return new Promise((resolve, reject) => {
-    const query = `UPDATE games SET title = ?, posterURL = ?, rating = ?, review = ?, release_date = ?, developers = ?, detailed_description = ? WHERE id = ?`;
-    userDb.run(query, [title, posterURL, rating, review, release_date, developers, detailed_description, id], function (err) {
+    const query = `UPDATE games SET title = ?, posterURL = ?, rating = ?, review = ?, release_date = ?, developers = ?, detailed_description = ?, genres = ? WHERE id = ?`;
+    userDb.run(query, [title, posterURL, rating, review, release_date, developers, detailed_description, genres, id], function (err) {
       if (err) {
         console.error('Failed to update game:', err);
         reject(err);

@@ -7,16 +7,18 @@ import handleUpdateGame from "../database/user/handleUpdateGame";
 import { useEffect, useState, useRef } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import EditButton from "./EditButton";
+import JsonComponent from "./JsonComponent";
 function GameMenu() {
   const { clickedGameId, setClickedGameId, games, setGames } = useGlobalContext();
   const [editMode, setEditMode] = useState(false);
   const [selectedGame, setSelectedGame] = useState(games.find((game) => (game.id || game.AppID) == clickedGameId))
-  const [editDetails, setEditDetails] = useState({
+  const [formDetails, setFormDetails] = useState({
     title: selectedGame.title || "",
     detailed_description: selectedGame.detailed_description || "",
     developers: selectedGame.developers || "",
     release_date: selectedGame.release_date || "",
-    rating: selectedGame.rating || 0
+    rating: selectedGame.rating || 0,
+    genres: selectedGame.genres || ""
   });
   const [originalDetails, setOriginalDetails] = useState(null);
   const [titleCleared, setTitleCleared] = useState(false);
@@ -39,8 +41,9 @@ function GameMenu() {
         developers: selectedGame.developers || "",
         release_date: selectedGame.release_date || "",
         rating: selectedGame.rating || 0,
+        genres: selectedGame.genres || ""
       };
-      setEditDetails(initialDetails);
+      setFormDetails(initialDetails);
       setOriginalDetails(initialDetails);
     }
   }, [selectedGame]);
@@ -62,7 +65,7 @@ function GameMenu() {
   };
 
   const handleEditChange = (key, value) => {
-    setEditDetails((prev) => ({ ...prev, [key]: value }));
+    setFormDetails((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleRatingChange = async (value) => {
@@ -75,13 +78,13 @@ function GameMenu() {
   };
 
   const handleCancel = () => {
-    setEditDetails(originalDetails);
+    setFormDetails(originalDetails);
     setEditMode(false);
     setTitleCleared(false);
   };
 
   const handleSave = async () => {
-    const updatedGame = { ...selectedGame, ...editDetails };
+    const updatedGame = { ...selectedGame, ...formDetails };
     console.log(updatedGame);
     setGames((prevGames) =>
       prevGames.map((g) => (g.id === selectedGame.id ? updatedGame : g))
@@ -96,6 +99,7 @@ function GameMenu() {
   return (
     <ClickAwayListener onClickAway={() => setClickedGameId(null)}>
       <div className="add_game_menu_container">
+        <JsonComponent object={formDetails}/>
         <div className="add_game_menu">
           <div className="poster_and_details_container">
             <div className="game_poster_container">
@@ -125,14 +129,14 @@ function GameMenu() {
                 ref={titleRef}
                 onFocus={() => {
                   if (editMode && !titleCleared) {
-                    setEditDetails((prev) => ({ ...prev, title: "" }));
+                    setFormDetails((prev) => ({ ...prev, title: "" }));
                     setTitleCleared(true);
                   }
                 }}
                 onBlur={(e) => handleEditChange("title", e.target.innerText)}
                 style={editableStyle}
               >
-                {editDetails.title}
+                {formDetails.title}
               </div>
 
               <div className="add_game_menu_release add_game_menu_developer">
@@ -145,7 +149,7 @@ function GameMenu() {
                     onBlur={(e) => handleEditChange("release_date", e.target.innerText)}
                     style={editableStyle}
                   >
-                    {editDetails.release_date || "Unknown"}
+                    {formDetails.release_date || "Unknown"}
                   </span>
                 </span>
                 <div className="developers">
@@ -157,7 +161,7 @@ function GameMenu() {
                     onBlur={(e) => handleEditChange("developers", e.target.innerText)}
                     style={editableStyle}
                   >
-                    {(editDetails.developers).substring(2, editDetails.developers.length-2) || "Unknown Developer"}
+                    {(formDetails.developers).substring(2, formDetails.developers.length-2) || "Unknown Developer"}
                   </span>
                 </div>
               </div>
@@ -169,35 +173,47 @@ function GameMenu() {
                 onBlur={(e) => handleEditChange("detailed_description", e.target.innerText)}
                 style={editableStyle}
               >
-                {editDetails.detailed_description
-                  ? truncateText(editDetails.detailed_description, 50)
+                {formDetails.detailed_description
+                  ? truncateText(formDetails.detailed_description, 50)
                   : "No description available."}
+              </div>
+              <div className="genre_container">
+                  {selectedGame.genres?.map((key, game)=>{
+                    <div key={key}> {game}</div>
+                  })}
               </div>
             </div>
           </div>
 
-          <div className="add_game_submit">
-            <button className="delete_btn" onClick={handleDelete}>
-              <DeleteForeverIcon fontSize="small" />
-              Delete Game
-            </button>
+         <GameMenuFooterButtons handleSave={handleSave} handleDelete={handleDelete} handleCancel={handleCancel} editMode={editMode}/>
 
-            {editMode && (
-              <>
-                <button className="save_btn" onClick={handleSave}>
-                  ✅ Save Changes
-                </button>
-                <button className="cancel_btn" onClick={handleCancel}>
-                  ❌ Cancel
-                </button>
-              </>
-            )}
-          </div>
         </div>
-        {editMode && <div className="add_game_menu_misc">Edit mode</div>}
       </div>
     </ClickAwayListener>
   );
 }
 
+
 export default GameMenu;
+
+ const GameMenuFooterButtons = ({handleSave, handleDelete, handleCancel, editMode}) => {
+    return (
+      <div className="add_game_submit">
+            <button className="delete_btn" onClick={handleDelete}>
+              {/* <DeleteForeverIcon fontSize="small" /> */}
+              Delete Game
+            </button>
+
+            {editMode && (
+              <>
+                <button className="cancel_btn" onClick={handleCancel}>
+                  Cancel
+                </button>
+                <button className="save_btn" onClick={handleSave}>
+                  Save changes
+                </button>
+              </>
+            )}
+          </div>
+    )
+}

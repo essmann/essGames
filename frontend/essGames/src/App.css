@@ -1135,3 +1135,68 @@ textarea {
   align-items: center;
   margin-top: 0;
 }
+
+.json_component_button{
+  padding: 1px;
+  color: #ce9178;
+  margin-left: auto !important;
+}
+.json_component {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 10px;
+  border-radius: 5px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-family: monospace;
+  white-space: pre-wrap;
+  position: absolute;
+  z-index: 10001;
+  overflow: scroll;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.json_key {
+  color: #569cd6;
+}
+
+.json_string {
+  color: #ce9178;
+}
+
+.json_number {
+  color: #b5cea8;
+}
+
+.json_boolean {
+  color: #c586c0;
+}
+
+.json_null {
+  color: #c586c0;
+}
+
+
+.cancel_btn, .save_btn, .delete_btn{
+  padding: 0.3rem !important;
+  margin-left: 5px;
+  background: rgb(102, 52, 128) !important;
+  font-weight: 400 !important;
+
+
+}
+
+.cancel_btn{
+  background: rgb(49, 48, 48) !important;
+
+}
+
+.delete_btn{
+  margin-right: auto;
+  background: rgb(143, 45, 45) !important;
+}
+
+.add_game_submit{
+  background: inherit;
+}
