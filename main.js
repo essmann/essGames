@@ -70,6 +70,8 @@ const updateCatalogPoster = (id, base64String) => {
   });
 };
 
+
+
 const userDb = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
@@ -94,10 +96,15 @@ async function loadSteamGames(filePath) {
     console.error("Error loading data:", err);
   }
 }
+
 const util = require('util');
 const userDbAll = util.promisify(userDb.all.bind(userDb));
 const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
 
+// ipcMain.handle('update-catalog', async (id) =>{
+   
+  
+// } )
 ipcMain.handle('generate-uuid',  () => {
   return uuidv4();
 })

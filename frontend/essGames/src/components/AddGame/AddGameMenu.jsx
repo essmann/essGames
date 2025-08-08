@@ -285,8 +285,8 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
                 {!manualMode && !editMode && userHasGame && (
                   <button onClick={() => setEditMode(true)}>Edit Game</button>
                 )}
-                {!userHasGame && (
-                  <button onClick={handleSubmit}>
+                {!userHasGame  && !editMode && (
+                  <button className="save_btn"onClick={handleSubmit}>
                     <span>Add game</span>
                   </button>
                 )}
@@ -377,8 +377,8 @@ export default AddGameMenu;
                 <button className="cancel_btn" onClick={handleCancel}>
                   Cancel
                 </button>
-                <button className="save_btn" onClick={handleSave}>
-                  Save changes
+                <button className="save_btn" onClick={handleSubmit}>
+                  Add game
                 </button>
               </>
             )}
