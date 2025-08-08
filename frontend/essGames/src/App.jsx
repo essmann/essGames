@@ -13,47 +13,20 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import { StyleProvider } from "./Context/StyleContext";
 import SearchGame from "./components/AddGame/SearchGame";
 import Alert from '@mui/material/Alert';
-const Alerts = ({alerts, setAlerts}) => {
-  return (
-    <div className="alerts_container">
-       {alerts?.map((key)=>{
-          return <AlertWrapper alertsQueue={alerts} setAlertsQueue={setAlerts}/>
-       })}
+import Snackbar from '@mui/material/Snackbar';
+import { SnackbarContext } from "./Context/SnackbarContext";
+import { useContext } from "react";
 
-    </div>
-  )
-} 
 
-const AlertWrapper = ({alertsQueue, setAlertsQueue}) => {
-  const [timer, setTimer] = useState(1500);
 
-  const shiftAlert = () => {
-    let _alertsQueue = alertsQueue;
-    let newQueue = _alertsQueue.shift();
-    console.log("Removing an alert from the queue...");
-    setAlertsQueue(newQueue);
-  }
-  useEffect( ()=>{
-      setTimeout(()=>{
-        try{
-          shiftAlert();
-        }
-        catch(err){
-          console.log("alertsQueue error: "+ err);
-        }
-      }, timer)
-  }, [])
-  return (
-    <>
-         <Alert severity="success"> Test alert </Alert>
-
-    </>
-  )
-}
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [alertQueue, setAlertQueue] = useState([]);
+
+  
+  // const {
+  //   snackbarQueue, setSnackbarQueue
+  // } = useContext(SnackbarContext);
 
   
 
@@ -66,11 +39,15 @@ function App() {
     anyMenuOpen
   } = useGlobalContext();
 
+  const {
+    gameDeleted, setGameDeleted,
+    gameSaved, setGameSaved
+  } = useContext(SnackbarContext);
+
+
   const [selectedSearchGame, setSelectedSearchGame] = useState(null);
 
-  useEffect(()=>{
-    console.log("App.jsx rendered.");
-  })
+  
   useEffect(() => {
     handleGetUserGames().then((_games) => {
       setGames(_games);
@@ -95,13 +72,21 @@ function App() {
           addGameMenuIsDisplayed || clickedGameId !== null ? "menuActive" : ""
         }`}
       >
-        <Alerts alerts={alertQueue} setAlerts={setAlertQueue}/>
         <div id="header">
-        <button onClick={()=>{
-          setAlertQueue((prev)=>[...prev, 1]);
-        }}>AddAlert</button>
-          
+
+
         </div>
+        <div className="snackbar_container">
+
+          {gameDeleted && 
+          <Snackbar open={gameDeleted}  onClose={()=>setGameDeleted(false)}   anchorOrigin={{vertical:'top', horizontal:'center'}} autoHideDuration={2000}    message="Game Deleted."/>
+          }
+          {gameSaved &&
+          <Snackbar open={gameSaved}  onClose={()=>setGameSaved(false)}   anchorOrigin={{vertical:'top', horizontal:'center'}} autoHideDuration={2000}    message="Game saved."/>
+          
+          }
+        </div>
+       
        <div id="main-content">
          
         <Sidebar

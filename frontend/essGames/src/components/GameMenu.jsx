@@ -4,33 +4,36 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import handleDeleteGame from "../database/user/handleDeleteGame";
 import CustomizedRating from "./CustomizedRating";
 import handleUpdateGame from "../database/user/handleUpdateGame";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import EditButton from "./EditButton";
 import JsonComponent from "./JsonComponent";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
+import { Snackbar, SnackbarContent } from "@mui/material";
+import { SnackbarContext } from "../Context/SnackbarContext";
 
 function GameMenu() {
-  const { clickedGameId, setClickedGameId, games, setGames } = useGlobalContext();
+  const { clickedGameId, setClickedGameId, games, setGames } =
+    useGlobalContext();
+  const {setGameDeleted, setGameSaved} = useContext(SnackbarContext);
   const [editMode, setEditMode] = useState(false);
-  const [selectedGame, setSelectedGame] = useState(games.find((game) => (game.id || game.AppID) == clickedGameId))
+  const [selectedGame, setSelectedGame] = useState(
+    games.find((game) => (game.id || game.AppID) == clickedGameId)
+  );
   const [formDetails, setFormDetails] = useState({
     title: selectedGame.title || "",
     detailed_description: selectedGame.detailed_description || "",
     developers: selectedGame.developers || "",
     release_date: selectedGame.release_date || "",
     rating: selectedGame.rating || 0,
-    genres: selectedGame.genres || ""
+    genres: selectedGame.genres || "",
   });
+
   const [originalDetails, setOriginalDetails] = useState(null);
   const [titleCleared, setTitleCleared] = useState(false);
   const titleRef = useRef(null);
-  const [alert, setAlert] = useState(false);
-  const handleAlert = async  (delay) => {
-    setAlert(true);
-    setTimeout(()=>{setAlert(false), delay});
-  }
-
+  const [snackbar, setSnackbar] = useState(false);
+  const [test, setTest] = useState(false);
   const truncateText = (text, maxWords) => {
     if (!text) return null;
     const words = text.split(" ").slice(0, maxWords);
@@ -44,11 +47,14 @@ function GameMenu() {
     if (selectedGame) {
       const initialDetails = {
         title: selectedGame.title || "",
-        detailed_description: selectedGame.detailed_description || selectedGame.detailed_description || "",
+        detailed_description:
+          selectedGame.detailed_description ||
+          selectedGame.detailed_description ||
+          "",
         developers: selectedGame.developers || "",
         release_date: selectedGame.release_date || "",
         rating: selectedGame.rating || 0,
-        genres: selectedGame.genres || ""
+        genres: selectedGame.genres || "",
       };
       setFormDetails(initialDetails);
       setOriginalDetails(initialDetails);
@@ -63,9 +69,14 @@ function GameMenu() {
 
   const handleDelete = async () => {
     try {
-      setGames((prevGames) => prevGames.filter((game) => game.id !== clickedGameId));
+      setGames((prevGames) =>
+        prevGames.filter((game) => game.id !== clickedGameId)
+      );
       setClickedGameId(null);
       await handleDeleteGame(clickedGameId);
+      setGameDeleted(true);
+      // showDeleteSnackBar(true);
+      setTest(true);
     } catch (error) {
       console.error("Failed to delete game:", error);
     }
@@ -77,7 +88,9 @@ function GameMenu() {
 
   const handleRatingChange = async (value) => {
     setGames((prevGames) =>
-      prevGames.map((g) => (g.id === selectedGame.id ? { ...g, rating: value } : g))
+      prevGames.map((g) =>
+        g.id === selectedGame.id ? { ...g, rating: value } : g
+      )
     );
     const updatedGame = { ...selectedGame, rating: value };
     setSelectedGame(updatedGame);
@@ -96,18 +109,20 @@ function GameMenu() {
     setGames((prevGames) =>
       prevGames.map((g) => (g.id === selectedGame.id ? updatedGame : g))
     );
+    setGameSaved(true);
     await handleUpdateGame(updatedGame);
     setEditMode(false);
     setTitleCleared(false);
   };
 
-  const editableStyle = editMode ? { opacity: 0.8, borderBottom: "1px dotted gray" } : {};
+  const editableStyle = editMode
+    ? { opacity: 0.8, borderBottom: "1px dotted gray" }
+    : {};
 
   return (
     <ClickAwayListener onClickAway={() => setClickedGameId(null)}>
       <div className="add_game_menu_container">
-        
-        <JsonComponent object={formDetails}/>
+        <JsonComponent object={formDetails} />
         <div className="add_game_menu">
           <div className="poster_and_details_container">
             <div className="game_poster_container">
@@ -116,17 +131,18 @@ function GameMenu() {
                 alt={selectedGame.title}
                 className="game_poster"
               />
-              
 
               <div className="game_menu_game_details_footer">
-                            <EditButton text={"Edit Game"} onClick={()=>setEditMode(true)}/>
-                        <CustomizedRating
-                           onRating={handleRatingChange}
-                rating={ selectedGame.rating}
-                size={"large"}
-                        />
-                    </div>
-              
+                <EditButton
+                  text={"Edit Game"}
+                  onClick={() => setEditMode(true)}
+                />
+                <CustomizedRating
+                  onRating={handleRatingChange}
+                  rating={selectedGame.rating}
+                  size={"large"}
+                />
+              </div>
             </div>
 
             <div className="game_details_container">
@@ -154,7 +170,9 @@ function GameMenu() {
                     className="white"
                     contentEditable={editMode}
                     suppressContentEditableWarning={true}
-                    onBlur={(e) => handleEditChange("release_date", e.target.innerText)}
+                    onBlur={(e) =>
+                      handleEditChange("release_date", e.target.innerText)
+                    }
                     style={editableStyle}
                   >
                     {formDetails.release_date || "Unknown"}
@@ -166,10 +184,15 @@ function GameMenu() {
                     className="white"
                     contentEditable={editMode}
                     suppressContentEditableWarning={true}
-                    onBlur={(e) => handleEditChange("developers", e.target.innerText)}
+                    onBlur={(e) =>
+                      handleEditChange("developers", e.target.innerText)
+                    }
                     style={editableStyle}
                   >
-                    {(formDetails.developers).substring(2, formDetails.developers.length-2) || "Unknown Developer"}
+                    {formDetails.developers.substring(
+                      2,
+                      formDetails.developers.length - 2
+                    ) || "Unknown Developer"}
                   </span>
                 </div>
               </div>
@@ -178,46 +201,55 @@ function GameMenu() {
                 className="detailed_description"
                 contentEditable={editMode}
                 suppressContentEditableWarning={true}
-                onBlur={(e) => handleEditChange("detailed_description", e.target.innerText)}
+                onBlur={(e) =>
+                  handleEditChange("detailed_description", e.target.innerText)
+                }
                 style={editableStyle}
               >
                 {formDetails.detailed_description
                   ? truncateText(formDetails.detailed_description, 50)
                   : "No description available."}
               </div>
-              
             </div>
           </div>
 
-         <GameMenuFooterButtons handleSave={handleSave} handleDelete={handleDelete} handleCancel={handleCancel} editMode={editMode}/>
-
+          <GameMenuFooterButtons
+            handleSave={handleSave}
+            handleDelete={handleDelete}
+            handleCancel={handleCancel}
+            editMode={editMode}
+          />
         </div>
       </div>
     </ClickAwayListener>
   );
 }
 
-
 export default GameMenu;
 
- const GameMenuFooterButtons = ({handleSave, handleDelete, handleCancel, editMode}) => {
-    return (
-      <div className="add_game_submit">
-            <button className="delete_btn" onClick={handleDelete}>
-              {/* <DeleteForeverIcon fontSize="small" /> */}
-              Delete Game
-            </button>
+const GameMenuFooterButtons = ({
+  handleSave,
+  handleDelete,
+  handleCancel,
+  editMode,
+}) => {
+  return (
+    <div className="add_game_submit">
+      <button className="delete_btn" onClick={handleDelete}>
+        {/* <DeleteForeverIcon fontSize="small" /> */}
+        Delete Game
+      </button>
 
-            {editMode && (
-              <>
-                <button className="cancel_btn" onClick={handleCancel}>
-                  Cancel
-                </button>
-                <button className="save_btn" onClick={handleSave}>
-                  Save changes
-                </button>
-              </>
-            )}
-          </div>
-    )
-}
+      {editMode && (
+        <>
+          <button className="cancel_btn" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button className="save_btn" onClick={handleSave}>
+            Save changes
+          </button>
+        </>
+      )}
+    </div>
+  );
+};
