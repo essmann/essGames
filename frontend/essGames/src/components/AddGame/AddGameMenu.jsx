@@ -17,7 +17,6 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   } = useGlobalContext();
 
   const [posterUrl, setPosterUrl] = useState(null);
-  const [rating, setRating] = useState(selectedGame?.rating || 0);
   const [manualMode, setManualMode] = useState(false);
   const [userHasGame, setUserHasGame] = useState(false);
   const [showContent, setShowContent] = useState(false);
@@ -26,7 +25,31 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
     date: "",
     developers: "",
     description: "",
+    rating: 0,
+    title: "",
   });
+
+  // Prefill form details when selectedGame is set
+  useEffect(() => {
+    if (selectedGame && selectedGame !== "edit") {
+      setFormDetails({
+        date: selectedGame.release_date || "",
+        developers: selectedGame.developers || "",
+        description: selectedGame.detailed_description || "",
+        rating: selectedGame.rating || 0,
+        title: selectedGame.title || "",
+      });
+    }
+    if (selectedGame === "edit") {
+      setFormDetails({
+        date: "",
+        developers: "",
+        description: "",
+        rating: 0,
+        title: "",
+      });
+    }
+  }, [selectedGame]);
 
   useEffect(() => {
     if (selectedGame) {
@@ -62,8 +85,8 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   }, [selectedGame]);
 
   const validateInput = () => {
-    const { date, developers, description } = formDetails;
-    if (!date || !developers || !description || !posterUrl) {
+    const { date, developers, description, title } = formDetails;
+    if (!date || !developers || !description || !posterUrl || !title) {
       console.error("Fill all inputs in order to add the game.");
       return false;
     }
@@ -73,10 +96,6 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   const parseDevelopers = (developers) => {
     if (!developers || developers.length === 0) return "Unknown Developer";
     return developers.substring(2, developers.length - 2);
-  };
-
-  const handleRatingChange = (value) => {
-    setRating(value);
   };
 
   const truncateText = (text, maxWords) => {
@@ -104,9 +123,9 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
 
     const gameToAdd = {
       ...selectedGame,
-      title: selectedGame?.title || "Untitled",
+      title: formDetails.title || selectedGame?.title || "Untitled",
       posterURL: posterUrl,
-      rating: rating || 0,
+      rating: formDetails.rating || 0,
       release_date: manualMode ? formDetails.date : selectedGame.release_date,
       developers: manualMode ? formDetails.developers : selectedGame.developers,
       detailed_description: manualMode
@@ -138,27 +157,32 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
                         alt="Game Poster"
                         className="game_poster"
                       />
-                      <CustomizedRating
-                        size="large"
-                        value={rating}
-                        onChange={(_, v) => handleRatingChange(v)}
-                      />
                     </>
                   ) : (
-                    <>
-                      <EmptyGamePoster onClick={handleOpenFile} />
-                      <CustomizedRating
-                        size="large"
-                        value={rating}
-                        onChange={(_, v) => handleRatingChange(v)}
-                      />
-                    </>
+                    <EmptyGamePoster onClick={handleOpenFile} />
                   )}
+
+                  <CustomizedRating
+                    size="large"
+                    value={formDetails.rating}
+                    onChange={(_, v) => handleFormChange("rating", v)}
+                  />
                 </div>
 
                 <div className="game_details_container">
                   <div className="add_game_menu_title">
-                    {selectedGame?.title}
+                    {manualMode ? (
+                      <input
+                        type="text"
+                        value={formDetails.title}
+                        placeholder="Game title"
+                        onChange={(e) =>
+                          handleFormChange("title", e.target.value)
+                        }
+                      />
+                    ) : (
+                      formDetails.title
+                    )}
                   </div>
 
                   <GameDetailsForm
