@@ -1101,3 +1101,23 @@ textarea {
 .edit_image_game_poster{
   background: inherit;
 }
+
+.edit_button{
+  padding: 0.25rem;
+  width: 100%;
+  border-radius: 0px;
+  color: white;
+  background: rgb(197, 23, 32);
+  border-radius: 4px;
+  font-weight: 400;
+}
+.edit_delete{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+.edit_delete>span {
+  position: relative;
+  top: 10%;
+}

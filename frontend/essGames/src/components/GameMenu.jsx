@@ -5,10 +5,18 @@ import handleDeleteGame from "../database/user/handleDeleteGame";
 import CustomizedRating from "./CustomizedRating";
 import handleUpdateGame from "../database/user/handleUpdateGame";
 import { useEffect } from "react";
+import { useState } from "react";
 function GameMenu() {
   
   
   const { clickedGameId, setClickedGameId, games, setGames } = useGlobalContext();
+  const [editMode, setEditMode] = useState(false);
+  const [editDetails, setEditDetails] = useState({
+    title: "",
+    description: "",
+    poster: "",
+    rating: 0,
+  })
 useEffect(()=>{
       console.log(`Clicked game ID: ${clickedGameId}`);
     },[clickedGameId])
@@ -33,6 +41,11 @@ useEffect(()=>{
       console.error("Failed to delete game:", error);
     }
   };
+
+  const handleEdit = (key, value) => {
+    setEditMode(true);
+    setEditDetails((prevDetails) => ({...prevDetails, [key]: value}), );
+  }
   const handleRatingChange = async (value) => {
       console.log("rating changed:", value);
   
@@ -59,11 +72,15 @@ useEffect(()=>{
                 alt={selectedGame.title}
                 className="game_poster"
               />
-              <CustomizedRating  onRating={handleRatingChange} rating={selectedGame?.rating || 0} />
+              <div className="flex edit_delete">
+                <button className="edit_button">Edit game</button> 
+                <span><DeleteForeverIcon fontSize="medium" style={{"color": "grey"}}/></span> 
+              </div>
+              <CustomizedRating  onRating={handleRatingChange} rating={selectedGame?.rating || 0} size={"medium"} />
             </div>
 
             <div className="game_details_container">
-              <div className="add_game_menu_title">{selectedGame.title}</div>
+              <div className="add_game_menu_title" contentEditable={editMode}>{selectedGame.title}</div>
               <div className="detailed_description">
                 {selectedGame.description || "No description available."}
               </div>
@@ -77,6 +94,7 @@ useEffect(()=>{
             </button>
           </div>
         </div>
+        {editMode && "Edit mode"}
       </div>
     </ClickAwayListener>
   );
