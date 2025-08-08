@@ -157,7 +157,7 @@ function GameMenu() {
                     onBlur={(e) => handleEditChange("developers", e.target.innerText)}
                     style={editableStyle}
                   >
-                    {editDetails.developers || "Unknown Developer"}
+                    {(editDetails.developers).substring(2, editDetails.developers.length-2) || "Unknown Developer"}
                   </span>
                 </div>
               </div>
