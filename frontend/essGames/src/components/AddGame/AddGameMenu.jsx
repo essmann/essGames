@@ -45,6 +45,7 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
     fetchPoster();
   } else {
     setPosterUrl(null);
+    setShowMenu(false);
   }
 }, [selectedGame]);
 
@@ -105,25 +106,7 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
     return words.join(" ") + "...";
   };
 
- useEffect(() => {
-  if (selectedGame && selectedGame !== "custom") {
-    setShowMenu(true);
-    setAddGameMenuIsDisplayed(true);
-    const fetchPoster = async () => {
-      try {
-        const poster = await handleGetPoster(selectedGame.AppID);
-        setPosterUrl(poster || null);
-      } catch (err) {
-        console.error("Failed to fetch poster:", err);
-        setPosterUrl(null);
-      }
-    };
-    fetchPoster();
-  } else {
-    setPosterUrl(null);
-    setShowMenu(false); // ✅ Add this
-  }
-}, [selectedGame]);
+ 
 
 
   const handleCloseMenu = () => {
