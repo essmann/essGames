@@ -31,7 +31,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   const [formDetails, setFormDetails] = useState({
     date: "",
     developers: "",
-    description: "",
+    detailed_description: "",
     rating: 0,
     title: "",
     genres: "",
@@ -49,7 +49,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       const initialDetails = {
         date: selectedGame.release_date || "",
         developers: selectedGame.developers || "",
-        description: selectedGame.detailed_description || "",
+        detailed_description: selectedGame.detailed_description || "",
         rating: selectedGame.rating || 0,
         title: selectedGame.title || "",
         genres: selectedGame.genres || ""
@@ -61,7 +61,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       setFormDetails({
         date: "",
         developers: "",
-        description: "",
+        detailed_description: "",
         rating: 0,
         title: "",
       });
@@ -109,9 +109,10 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   }, [manualMode, editMode]);
 
   const validateInput = () => {
-    const { date, developers, description, title } = formDetails;
-    if (!date || !developers || !description || !posterUrl || !title) {
-      console.error("Fill all inputs in order to add the game.");
+    const { date, developers, detailed_description, title } = formDetails;
+    if (!date || !developers || !detailed_description || !posterUrl || !title) {
+      console.error("Fill all inputs in order to add the game. " );
+      console.error(`State for inputs: ${date} ${developers}${description} ${title}`)
       return false;
     }
     return true;
@@ -179,7 +180,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       release_date: manualMode ? formDetails.date : selectedGame.release_date,
       developers: manualMode ? formDetails.developers : selectedGame.developers,
       detailed_description: manualMode
-        ? formDetails.description
+        ? formDetails.detailed_description
         : selectedGame.detailed_description,
       id: _id,
     };
@@ -193,7 +194,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
         ...selectedGame,
         ...formDetails,
         release_date: formDetails.date,
-        detailed_description: formDetails.description,
+        detailed_description: formDetails.detailed_description,
         posterURL: posterUrl,
       };
       setGames((prevGames) =>
@@ -319,8 +320,11 @@ function EmptyGamePoster({ onClick }) {
 const GameDetailsForm = ({ manualMode, selectedGame, formDetails, onChange, parse, editableStyle }) => {
   return (
     <div className="add_game_menu_release add_game_menu_developer">
-      <span className="release">
+      <span className={`release ${manualMode && "manual"}`}>
         <span className="grey">Released on </span>
+        {manualMode ? <div className="flex date_container">
+          <input type="date" className="flex date_input" id="add_game_date" onChange={(e)=>onChange("date", e.currentTarget.value )}/>
+        </div> : 
         <span
           className="white"
           contentEditable={manualMode}
@@ -329,10 +333,11 @@ const GameDetailsForm = ({ manualMode, selectedGame, formDetails, onChange, pars
           style={editableStyle}
         >
           {formDetails.date}
-        </span>
+        </span>}
       </span>
-      <div className="developers">
+      <div className={`developers ${manualMode && "manual"}`}>
         <span className="grey">Developed by: </span>
+        {manualMode ? <input className="" id="select_developer" onChange={(e)=>onChange("developers", e.target.value)}/> : 
         <span
           className="white"
           contentEditable={manualMode}
@@ -341,7 +346,7 @@ const GameDetailsForm = ({ manualMode, selectedGame, formDetails, onChange, pars
           style={editableStyle}
         >
           {manualMode ? formDetails.developers : parse(selectedGame.developers)}
-        </span>
+        </span>}
       </div>
     </div>
   );
@@ -349,18 +354,18 @@ const GameDetailsForm = ({ manualMode, selectedGame, formDetails, onChange, pars
 
 const GameDescription = ({ manualMode, selectedGame, formDetails, onChange, truncate, editableStyle }) => {
   return (
-    <div className="detailed_description">
-      <span
+    <div className={`detailed_description ${manualMode && "manual"}`}>
+      {manualMode ? <textarea onChange={(e)=>onChange("detailed_description", e.target.value)}/> : <span
         contentEditable={manualMode}
         suppressContentEditableWarning={true}
-        onBlur={(e) => onChange("description", e.target.innerText)}
+        onBlur={(e) => onChange("detailed_description", e.target.innerText)}
         style={editableStyle}
       >
         {manualMode
           ? truncate(formDetails.description, 35)
           : truncate(selectedGame.detailed_description, 35) ||
             "No description available."}
-      </span>
+      </span>}
     </div>
   );
 };

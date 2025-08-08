@@ -692,6 +692,7 @@ body * {
   background: inherit;
   border-radius: 4px;
   cursor: pointer;
+  width: 100px;
 }
 #add_game_date:hover{
   background: rgb(70, 70, 70);
@@ -706,6 +707,10 @@ body * {
   border-radius: 4px;
   background: inherit;
   
+}
+#game_poster_add{
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
 }
 
 #description_select{
@@ -1050,7 +1055,7 @@ textarea {
   border: 1px solid #333;
   border-radius: 6px;
   padding: 8px 12px;
-  width: 100%;
+  width: 100% !important;
   font-size: 1rem;
 }
 
@@ -1107,7 +1112,7 @@ textarea {
   width: 100%;
   border-radius: 0px;
   color: white;
-  background: rgb(102, 52, 128);
+  background: var(--color-hover);
   border-radius: 4px;
   font-weight: 400;
 }
@@ -1140,6 +1145,8 @@ textarea {
   padding: 1px;
   color: #ce9178;
   margin-left: auto !important;
+  position: relative; 
+  left: 90%;
 }
 .json_component {
   background-color: #1e1e1e;
@@ -1181,7 +1188,7 @@ textarea {
 .cancel_btn, .save_btn, .delete_btn{
   padding: 0.3rem !important;
   margin-left: 5px;
-  background: rgb(102, 52, 128) !important;
+  background: rgb(4, 54, 16) !important;
   font-weight: 400 !important;
 
 
@@ -1199,4 +1206,25 @@ textarea {
 
 .add_game_submit{
   background: inherit;
+}
+
+.date_container{
+  flex-direction: column;
+}
+
+.release.manual{
+  display: flex;
+  align-items: center;
+}
+
+.release.manual *{
+  border: none !important;
+}
+
+.developers.manual{
+
+}
+
+.detailed_description.manual{
+  
 }
