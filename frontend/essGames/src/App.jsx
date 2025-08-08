@@ -6,7 +6,7 @@ import GameGrid from "./components/GameGrid";
 import GameMenu from "./components/GameMenu";
 import AddGameMenu from "./components/AddGame/AddGameMenu";
 
-import handleGetGames from "./database/handleGetGames";
+import handleGetUserGames from "./database/user/handleGetUserGames";
 
 import { useGlobalContext } from "./Context/useGlobalContext";
 import { Backdrop, CircularProgress } from "@mui/material";
@@ -31,7 +31,7 @@ function App() {
     console.log("App.jsx rendered.");
   })
   useEffect(() => {
-    handleGetGames().then((_games) => {
+    handleGetUserGames().then((_games) => {
       setGames(_games);
       console.log(_games);
       setLoading(false);

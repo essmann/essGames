@@ -1,9 +1,9 @@
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useGlobalContext } from "../Context/useGlobalContext";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import handleDeleteGame from "../database/handleDeleteGame";
+import handleDeleteGame from "../database/user/handleDeleteGame";
 import CustomizedRating from "./CustomizedRating";
-import handleUpdateGame from "../database/handleUpdateGame";
+import handleUpdateGame from "../database/user/handleUpdateGame";
 import { useEffect } from "react";
 function GameMenu() {
   

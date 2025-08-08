@@ -90,7 +90,7 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
             onClick={(e) => {
               e.stopPropagation();
               setSelectedIndex(index);
-              console.log("Clicked game: " + game.name);
+              console.log("Clicked game: " + game.title);
               confirmSelection();
               inputRef.current.focus();
             }}
@@ -101,7 +101,7 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
               userSelect: "none",
             }}
           >
-            {game.name}
+            {game.title}
           </div>
         ))}
       </div>

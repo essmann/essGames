@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import { ClickAwayListener } from "@mui/material";
 import FloatingActionButtonSize from "../FloatingActionButtonSize";
 import { useGlobalContext } from "../../Context/useGlobalContext";
-import handleGetPoster from "../../database/getPoster";
+import handleGetPoster from "../../database/catalog/getPoster";
 import openFileBase64 from "../../database/openFileBase64";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedRating from "../CustomizedRating";
-import handleAddGame from "../../database/handleAddGame";
+import handleAddUserGame from "../../database/user/handleAddUserGame";
+import generateUUID from "../../database/generateUUID";
 
 function AddGameMenu({ selectedGame, setSelectedGame }) {
   const {
@@ -29,6 +30,10 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
     rating: 0,
     title: "",
   });
+
+  useEffect(()=>{
+    console.log(`Form details updated: ${JSON.stringify(formDetails)}`);
+  },[formDetails])
 
   // Prefill form details when selectedGame is set
   useEffect(() => {
@@ -57,7 +62,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       setAddGameMenuIsDisplayed(true);
       const fetchPoster = async () => {
         try {
-          const poster = await handleGetPoster(selectedGame.AppID);
+          const poster = await handleGetPoster(selectedGame.id);
           setPosterUrl(poster || null);
         } catch (err) {
           console.error("Failed to fetch poster:", err);
@@ -78,7 +83,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   }, []);
 
   useEffect(() => {
-    setUserHasGame(games.some((g) => g.AppID === selectedGame?.AppID));
+    setUserHasGame(games.some((g) => g.id === selectedGame?.id));
   }, [games, selectedGame]);
 
   useEffect(() => {
@@ -116,12 +121,14 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   };
 
   const handleFormChange = (field, value) => {
+    console.log(`setting ${field} to ${value}`);
     setFormDetails((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async () => {
     if (manualMode && !validateInput()) return;
 
+    let _id = await generateUUID(); //random 128-bit ID
     const gameToAdd = {
       ...selectedGame,
       title: formDetails.title || selectedGame?.title || "Untitled",
@@ -132,12 +139,12 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       detailed_description: manualMode
         ? formDetails.description
         : selectedGame.detailed_description,
-      
+      id: _id,
     };
 
     if (manualMode || (!manualMode && !userHasGame)) {
       setGames((prevGames) => [...prevGames, gameToAdd]);
-      await handleAddGame(gameToAdd);
+      await handleAddUserGame(gameToAdd);
     }
     else if(userHasGame){
 
@@ -171,7 +178,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
                   <CustomizedRating
                     size="large"
                     value={formDetails.rating}
-                    onChange={(_, v) => handleFormChange("rating", v)}
+                    onRating={(v) => handleFormChange("rating", v)}
                   />
                 </div>
 
@@ -221,7 +228,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
             <div className="add_game_menu_misc">
               {manualMode && <div>Manual edit mode</div>}
               {posterUrl && <div>PosterUrl: true</div>}
-              {selectedGame.AppID}
+              {selectedGame.id}
             </div>
           </div>
         </ClickAwayListener>

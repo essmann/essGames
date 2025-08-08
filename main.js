@@ -197,9 +197,8 @@ ipcMain.handle('delete-game', async (event, id) => {
 ipcMain.handle('search-all-games', async (event, prefix) => {
   try {
     // Query games starting with prefix (case-insensitive)
-    const sql = `SELECT * FROM games WHERE name LIKE ? LIMIT 100`;
+    const sql = `SELECT * FROM games WHERE title LIKE ? LIMIT 100`;
     const rows = await gameCatalogDbAll(sql, [`${prefix}%`]);
-    debugger;
     console.log(`Found ${rows.length} games starting with '${prefix}'`);
     return rows;
   } catch (err) {
@@ -229,7 +228,7 @@ const createWindow = () => {
 const test = async (prefix) => {
   try {
     // Query games starting with prefix (case-insensitive)
-    const sql = `SELECT * FROM games WHERE name LIKE ? LIMIT 100`;
+    const sql = `SELECT * FROM games WHERE title LIKE ? LIMIT 100`;
     const rows = await gameCatalogDbAll(sql, [`${prefix}%`]);
     debugger;
     console.log(`Found ${rows.length} games starting with '${prefix}'`);

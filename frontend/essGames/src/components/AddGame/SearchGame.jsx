@@ -1,7 +1,7 @@
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useState, useEffect } from "react";
 import { useGlobalContext } from "../../Context/useGlobalContext";
-import { handleSearchGameCatalog } from "../../database/handleGetSteamGames";
+import { handleSearchGameCatalog } from "../../database/catalog/handleGetSteamGames";
 import InputBox from "./InputBox";
 
 function SearchGame({ setSelectedGame }) {
@@ -33,6 +33,7 @@ function SearchGame({ setSelectedGame }) {
 
     const fetchGames = async (prefix) => {
       const games = await handleSearchGameCatalog(prefix);
+      console.log("found games" + JSON.stringify(games));
       return games;
     };
 

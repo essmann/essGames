@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import CustomizedRating from "./CustomizedRating";
-import handleUpdateGame from "../database/handleUpdateGame";
+import handleUpdateGame from "../database/user/handleUpdateGame";
 import GameMenu from "./GameMenu";
 import { useGlobalContext } from "../Context/useGlobalContext";
 import GradeIcon from '@mui/icons-material/Grade';
+import emptyPoster from "../assets/poster_not_found.jpg";
 function GameCard({ game }) {
   const { clickedGameId, setClickedGameId, setGames } = useGlobalContext();
   const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);
-
+  
   const handleRatingChange = async (value) => {
     console.log("rating changed:", value);
 
@@ -34,7 +35,7 @@ function GameCard({ game }) {
     <div className="game_card_container">
       <div id={game.id} className={`game_card ${isHovered ? "selected" : ""}`}>
         <img
-          src={posterURL}
+          src={posterURL ||emptyPoster }
           alt={`${title} poster`}
           className="game_card_poster"
           onMouseEnter={() => setIsHovered(true)}

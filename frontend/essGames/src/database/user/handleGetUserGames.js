@@ -1,4 +1,4 @@
-export const handleGetGames = async () => {
+export const handleGetUserGames = async () => {
     try {
       const games = await window.api.getGames(); // Or window.electronAPI.invoke('get-games')
       return games;
@@ -7,4 +7,4 @@ export const handleGetGames = async () => {
     }
   };
 
-  export default handleGetGames;
+  export default handleGetUserGames;

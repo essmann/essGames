@@ -1,4 +1,4 @@
-export const handleAddGame = async (game) => {
+export const handleAddUserGame = async (game) => {
     try {
       const gameAdded = await window.api.addGame(game);
       return gameAdded;
@@ -7,4 +7,4 @@ export const handleAddGame = async (game) => {
     }
   };
 
-  export default handleAddGame;
+  export default handleAddUserGame;
