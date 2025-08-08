@@ -12,17 +12,13 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
   const { setAddGameMenuIsDisplayed, addGameMenuIsDisplayed, games, setGames } = useGlobalContext();
   const [posterUrl, setPosterUrl] = useState(null);
   const [rating, setRating] = useState(selectedGame?.rating || 0);
-  const dateRef = useRef(null);
-  const developesRef = useRef(null);
   const [manualMode, setManualMode] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedDevelopers, setSelectedDevelopers] = useState("");
   const [selectedDescription, setSelectedDescription] = useState("");
-  const [test, setTest] = useState(false);
   const [userHasGame, setUserHasGame] = useState(false);
   const [showContent, setShowContent] = useState(false);
 
-  const [showMenu, setShowMenu] = useState(false);
 
 
   useEffect(()=>{
@@ -30,8 +26,7 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
     console.log(`selected game: ${selectedGame}`);
   })
   useEffect(() => {
-  if (selectedGame && selectedGame !== "custom") {
-    setShowMenu(true);
+  if (selectedGame) {
     setAddGameMenuIsDisplayed(true);
     const fetchPoster = async () => {
       try {
@@ -45,7 +40,6 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
     fetchPoster();
   } else {
     setPosterUrl(null);
-    setShowMenu(false);
   }
 }, [selectedGame]);
 
@@ -124,7 +118,7 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
   const gameToAdd = {
     ...selectedGame,
     posterURL: posterUrl,
-    title: selectedGame?.name || "Untitled",
+    title: selectedGame?.title || "Untitled",
     rating: rating || 0,
   };
 
@@ -133,13 +127,11 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
 
   // Step 3: Add to games list
   if (manualMode || (!manualMode && !userHasGame)) {
-    setTest(false);
     setGames((prevGames) => [...prevGames, gameToAdd]);
   }
 
   setSelectedGame(null);
   setAddGameMenuIsDisplayed(false);
-  setShowMenu(false);
   console.log(selectedGame);
   console.log(showMenu);
 };
@@ -176,7 +168,7 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
                   </>
                 )}
                 <div className="game_details_container">
-                  <div className="add_game_menu_title">{selectedGame?.name}</div>
+                  <div className="add_game_menu_title">{selectedGame?.title}</div>
                   
                   <GameDetailsForm
                     manualMode={manualMode}
