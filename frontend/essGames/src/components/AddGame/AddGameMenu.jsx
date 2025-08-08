@@ -9,7 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CustomizedRating from "../CustomizedRating";
 import handleAddUserGame from "../../database/user/handleAddUserGame";
 import generateUUID from "../../database/generateUUID";
-
+import EditButton from "../EditButton";
 function AddGameMenu({ selectedGame, setSelectedGame }) {
   const {
     setAddGameMenuIsDisplayed,
@@ -174,12 +174,14 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
                   ) : (
                     <EmptyGamePoster onClick={handleOpenFile} />
                   )}
-
-                  <CustomizedRating
-                    size="large"
-                    value={formDetails.rating}
-                    onRating={(v) => handleFormChange("rating", v)}
-                  />
+                    <div className="game_menu_game_details_footer">
+                            <EditButton text={"Edit Game"}/>
+                        <CustomizedRating
+                          size="large"
+                          value={formDetails.rating}
+                          onRating={(v) => handleFormChange("rating", v)}
+                        />
+                    </div>
                 </div>
 
                 <div className="game_details_container">

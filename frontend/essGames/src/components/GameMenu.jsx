@@ -6,7 +6,7 @@ import CustomizedRating from "./CustomizedRating";
 import handleUpdateGame from "../database/user/handleUpdateGame";
 import { useEffect, useState, useRef } from "react";
 import EditIcon from "@mui/icons-material/Edit";
-
+import EditButton from "./EditButton";
 function GameMenu() {
   const { clickedGameId, setClickedGameId, games, setGames } = useGlobalContext();
   const [editMode, setEditMode] = useState(false);
@@ -107,11 +107,16 @@ function GameMenu() {
                   Edit game
                 </div>
               </div>
-              <CustomizedRating
-                onRating={handleRatingChange}
+
+              <div className="game_menu_game_details_footer">
+                            <EditButton text={"Edit Game"}/>
+                        <CustomizedRating
+                           onRating={handleRatingChange}
                 rating={selectedGame?.rating || 0}
                 size={"large"}
-              />
+                        />
+                    </div>
+              
             </div>
 
             <div className="game_details_container">
