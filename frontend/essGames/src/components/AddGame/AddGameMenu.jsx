@@ -7,75 +7,63 @@ import handleGetPoster from "../../database/getPoster";
 import openFileBase64 from "../../database/openFileBase64";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedRating from "../CustomizedRating";
-import { useRef } from "react";
-function AddGameMenu({selectedGame, setSelectedGame}) {
-  const { setAddGameMenuIsDisplayed, addGameMenuIsDisplayed, games, setGames } = useGlobalContext();
+
+function AddGameMenu({ selectedGame, setSelectedGame }) {
+  const {
+    setAddGameMenuIsDisplayed,
+    addGameMenuIsDisplayed,
+    games,
+    setGames,
+  } = useGlobalContext();
+
   const [posterUrl, setPosterUrl] = useState(null);
   const [rating, setRating] = useState(selectedGame?.rating || 0);
   const [manualMode, setManualMode] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedDevelopers, setSelectedDevelopers] = useState("");
-  const [selectedDescription, setSelectedDescription] = useState("");
   const [userHasGame, setUserHasGame] = useState(false);
   const [showContent, setShowContent] = useState(false);
 
+  const [formDetails, setFormDetails] = useState({
+    date: "",
+    developers: "",
+    description: "",
+  });
 
-
-  useEffect(()=>{
-    console.log("Game add menu rendered.");
-    console.log(`selected game: ${selectedGame}`);
-  })
   useEffect(() => {
-  if (selectedGame) {
-    setAddGameMenuIsDisplayed(true);
-    const fetchPoster = async () => {
-      try {
-        const poster = await handleGetPoster(selectedGame.AppID);
-        setPosterUrl(poster || null);
-      } catch (err) {
-        console.error("Failed to fetch poster:", err);
-        setPosterUrl(null);
-      }
-    };
-    fetchPoster();
-  } else {
-    setPosterUrl(null);
-  }
-}, [selectedGame]);
+    if (selectedGame) {
+      setAddGameMenuIsDisplayed(true);
+      const fetchPoster = async () => {
+        try {
+          const poster = await handleGetPoster(selectedGame.AppID);
+          setPosterUrl(poster || null);
+        } catch (err) {
+          console.error("Failed to fetch poster:", err);
+          setPosterUrl(null);
+        }
+      };
+      fetchPoster();
+    } else {
+      setPosterUrl(null);
+    }
+  }, [selectedGame]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowContent(true);
-    }, 200); // 100 ms delay
-
-    return () => clearTimeout(timer); // cleanup
+    }, 200);
+    return () => clearTimeout(timer);
   }, []);
-
-  //The menu should be in 3 major states
-  // 1) Manual edit mode -- where the user has selected a custom game
-  // 2) Existing game -- where the user may choose to EDIT the game
-  // 3) Existing game -- where the user already has this game added in his/her collection, where only edit is possible.
 
   useEffect(() => {
     setUserHasGame(games.some((g) => g.AppID === selectedGame?.AppID));
   }, [games, selectedGame]);
 
   useEffect(() => {
-    if (selectedGame == "edit") {
-      setManualMode(true);
-    } else {
-      setManualMode(false);
-    }
+    setManualMode(selectedGame === "edit");
   }, [selectedGame]);
 
-  
   const validateInput = () => {
-    if (
-      !selectedDate ||
-      !selectedDevelopers ||
-      !selectedDescription ||
-      !posterUrl
-    ) {
+    const { date, developers, description } = formDetails;
+    if (!date || !developers || !description || !posterUrl) {
       console.error("Fill all inputs in order to add the game.");
       return false;
     }
@@ -86,22 +74,16 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
     if (!developers || developers.length === 0) return "Unknown Developer";
     return developers.substring(2, developers.length - 2);
   };
-  const handleRatingChange = async (value) => {
-    console.log("rating changed:", value);
 
-    // 1️⃣ Update local rating
+  const handleRatingChange = (value) => {
     setRating(value);
-
-    //if game already exists, update it in the UI within the games state.
   };
+
   const truncateText = (text, maxWords) => {
     if (!text) return null;
     const words = text.split(" ").slice(0, maxWords);
     return words.join(" ") + "...";
   };
-
- 
-
 
   const handleCloseMenu = () => {
     setSelectedGame(null);
@@ -113,95 +95,102 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
     if (image) setPosterUrl(image);
   };
 
-  const handleAddGame = () => {
-  // Step 1: Snapshot the game immediately
-  const gameToAdd = {
-    ...selectedGame,
-    posterURL: posterUrl,
-    title: selectedGame?.title || "Untitled",
-    rating: rating || 0,
+  const handleFormChange = (field, value) => {
+    setFormDetails((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Step 2: Validate if needed
-  if (manualMode && !validateInput()) return;
+  const handleAddGame = () => {
+    if (manualMode && !validateInput()) return;
 
-  // Step 3: Add to games list
-  if (manualMode || (!manualMode && !userHasGame)) {
-    setGames((prevGames) => [...prevGames, gameToAdd]);
-  }
+    const gameToAdd = {
+      ...selectedGame,
+      title: selectedGame?.title || "Untitled",
+      posterURL: posterUrl,
+      rating: rating || 0,
+      release_date: manualMode ? formDetails.date : selectedGame.release_date,
+      developers: manualMode ? formDetails.developers : selectedGame.developers,
+      detailed_description: manualMode
+        ? formDetails.description
+        : selectedGame.detailed_description,
+    };
 
-  setSelectedGame(null);
-  setAddGameMenuIsDisplayed(false);
-  console.log(selectedGame);
-  console.log(showMenu);
-};
+    if (manualMode || (!manualMode && !userHasGame)) {
+      setGames((prevGames) => [...prevGames, gameToAdd]);
+    }
 
+    setSelectedGame(null);
+    setAddGameMenuIsDisplayed(false);
+  };
 
   return (
     <>
-      
-
       {addGameMenuIsDisplayed && (
         <ClickAwayListener onClickAway={handleCloseMenu}>
           <div className="add_game_menu_container">
-            
             <div className="add_game_menu">
               <div className="poster_and_details_container">
-                
-                {posterUrl ? (
-                  <div className="game_poster_container">
-                    <EditImageButton onClick={handleOpenFile} />
-                    <img
-                      src={posterUrl}
-                      alt="Game Poster"
-                      className="game_poster"
-                    />
-                    
-                    <CustomizedRating size={"large"} />
-                  </div>
-                ) : (
-                  <>
-                    <div className="game_poster_container">
+                <div className="game_poster_container">
+                  {posterUrl ? (
+                    <>
+                      <EditImageButton onClick={handleOpenFile} />
+                      <img
+                        src={posterUrl}
+                        alt="Game Poster"
+                        className="game_poster"
+                      />
+                      <CustomizedRating
+                        size="large"
+                        value={rating}
+                        onChange={(_, v) => handleRatingChange(v)}
+                      />
+                    </>
+                  ) : (
+                    <>
                       <EmptyGamePoster onClick={handleOpenFile} />
-                      <CustomizedRating />
-                    </div>
-                  </>
-                )}
+                      <CustomizedRating
+                        size="large"
+                        value={rating}
+                        onChange={(_, v) => handleRatingChange(v)}
+                      />
+                    </>
+                  )}
+                </div>
+
                 <div className="game_details_container">
-                  <div className="add_game_menu_title">{selectedGame?.title}</div>
-                  
+                  <div className="add_game_menu_title">
+                    {selectedGame?.title}
+                  </div>
+
                   <GameDetailsForm
                     manualMode={manualMode}
                     selectedGame={selectedGame}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                    selectedDevelopers={selectedDevelopers}
-                    setSelectedDevelopers={setSelectedDevelopers}
+                    formDetails={formDetails}
+                    onChange={handleFormChange}
                     parse={parseDevelopers}
                   />
+
                   <GameDescription
-                    selectedDescription={selectedDescription}
-                    selectedGame={selectedGame}
-                    setSelectedDescription={setSelectedDescription}
                     manualMode={manualMode}
+                    selectedGame={selectedGame}
+                    formDetails={formDetails}
+                    onChange={handleFormChange}
                     truncate={truncateText}
                   />
                 </div>
               </div>
 
               <div className="add_game_submit">
-                {!manualMode && <button>Edit game </button>}
-
+                {!manualMode && <button>Edit game</button>}
                 {!userHasGame && (
                   <button onClick={handleAddGame}>
-                    <span>{"Add game"}</span>
+                    <span>Add game</span>
                   </button>
                 )}
               </div>
             </div>
             <div className="add_game_menu_misc">
-              {manualMode && <div> Manual edit mode</div>}
-              {posterUrl && <div> PosterUrl: true</div>}
+              {manualMode && <div>Manual edit mode</div>}
+              {posterUrl && <div>PosterUrl: true</div>}
             </div>
           </div>
         </ClickAwayListener>
@@ -210,39 +199,27 @@ function AddGameMenu({selectedGame, setSelectedGame}) {
   );
 }
 
-function EmptyGamePoster({ onClick, children }) {
+function EmptyGamePoster({ onClick }) {
   return (
-    <>
-      <div className="game_card_add" id="game_poster_add" onClick={onClick}>
-        <FloatingActionButtonSize />
-        <div className="game_card_title"></div>
-      </div>
-    </>
+    <div className="game_card_add" id="game_poster_add" onClick={onClick}>
+      <FloatingActionButtonSize />
+      <div className="game_card_title"></div>
+    </div>
   );
 }
 
 function EditImageButton({ onClick }) {
   return (
-    <>
-      <div className="edit_image_game_poster" onClick={onClick}>
-        <div className="game_poster_edit_icon" onClick={onClick}>
-          <EditIcon fontSize="small" />
-          Edit image
-        </div>
+    <div className="edit_image_game_poster" onClick={onClick}>
+      <div className="game_poster_edit_icon" onClick={onClick}>
+        <EditIcon fontSize="small" />
+        Edit image
       </div>
-    </>
+    </div>
   );
 }
 
-const GameDetailsForm = ({
-  selectedGame,
-  manualMode,
-  selectedDate,
-  setSelectedDate,
-  selectedDevelopers,
-  setSelectedDevelopers,
-  parse,
-}) => {
+const GameDetailsForm = ({ manualMode, selectedGame, formDetails, onChange, parse }) => {
   return (
     <div className="add_game_menu_release add_game_menu_developer">
       <span className="release">
@@ -252,7 +229,8 @@ const GameDetailsForm = ({
             type="date"
             id="add_game_date"
             className="white"
-            onChange={(e) => setSelectedDate(e.target.value)}
+            value={formDetails.date}
+            onChange={(e) => onChange("date", e.target.value)}
           />
         ) : (
           <span id="release_date_span" className="white">
@@ -267,7 +245,8 @@ const GameDetailsForm = ({
             type="text"
             id="select_developer"
             placeholder="Developer..."
-            onChange={(e) => setSelectedDevelopers(e.target.value)}
+            value={formDetails.developers}
+            onChange={(e) => onChange("developers", e.target.value)}
           />
         ) : (
           <span id="developed_by_right" className="white">
@@ -279,26 +258,22 @@ const GameDetailsForm = ({
   );
 };
 
-const GameDescription = ({
-  selectedGame,
-  selectedDescription,
-  setSelectedDescription,
-  manualMode,
-  truncate,
-}) => {
+const GameDescription = ({ manualMode, selectedGame, formDetails, onChange, truncate }) => {
   return (
     <div className="detailed_description">
-      {!manualMode ? (
-        truncate(selectedGame.detailed_description, 35) ||
-        "No description available."
-      ) : (
+      {manualMode ? (
         <textarea
           id="description_select"
           placeholder="This game is one of the best roguelites..."
-          onChange={(e) => setSelectedDescription(e.target.value)}
+          value={formDetails.description}
+          onChange={(e) => onChange("description", e.target.value)}
         />
+      ) : (
+        truncate(selectedGame.detailed_description, 35) ||
+        "No description available."
       )}
     </div>
   );
 };
+
 export default AddGameMenu;
