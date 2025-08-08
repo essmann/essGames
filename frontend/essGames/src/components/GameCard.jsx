@@ -32,7 +32,7 @@ function GameCard({ game }) {
 
   return (
     <div className="game_card_container">
-      <div id={game.id || game.AppID} className={`game_card ${isHovered ? "selected" : ""}`}>
+      <div id={game.id} className={`game_card ${isHovered ? "selected" : ""}`}>
         <img
           src={posterURL}
           alt={`${title} poster`}

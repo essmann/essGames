@@ -3,3 +3,6 @@ essGames TODO LIST
 
 - Expose a method to fetch game ID (instead of typing .id || .AppID
 
+Normalize all games, the object keys should be the same for all games.
+
+	AppID -> id 

@@ -27,6 +27,7 @@ useEffect(()=>{
     try {
       setGames(prevGames => prevGames.filter(game => game.id !== clickedGameId));
       setClickedGameId(null);
+      console.log("Deleting game" + selectedGame.id);
       await handleDeleteGame(clickedGameId);
     } catch (error) {
       console.error("Failed to delete game:", error);

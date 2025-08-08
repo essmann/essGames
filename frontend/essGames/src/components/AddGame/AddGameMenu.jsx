@@ -7,6 +7,7 @@ import handleGetPoster from "../../database/getPoster";
 import openFileBase64 from "../../database/openFileBase64";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedRating from "../CustomizedRating";
+import handleAddGame from "../../database/handleAddGame";
 
 function AddGameMenu({ selectedGame, setSelectedGame }) {
   const {
@@ -118,7 +119,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
     setFormDetails((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleAddGame = () => {
+  const handleSubmit = async () => {
     if (manualMode && !validateInput()) return;
 
     const gameToAdd = {
@@ -131,10 +132,15 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       detailed_description: manualMode
         ? formDetails.description
         : selectedGame.detailed_description,
+      
     };
 
     if (manualMode || (!manualMode && !userHasGame)) {
       setGames((prevGames) => [...prevGames, gameToAdd]);
+      await handleAddGame(gameToAdd);
+    }
+    else if(userHasGame){
+
     }
 
     setSelectedGame(null);
@@ -206,7 +212,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
               <div className="add_game_submit">
                 {!manualMode && <button>Edit game</button>}
                 {!userHasGame && (
-                  <button onClick={handleAddGame}>
+                  <button onClick={handleSubmit}>
                     <span>Add game</span>
                   </button>
                 )}
@@ -215,6 +221,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
             <div className="add_game_menu_misc">
               {manualMode && <div>Manual edit mode</div>}
               {posterUrl && <div>PosterUrl: true</div>}
+              {selectedGame.AppID}
             </div>
           </div>
         </ClickAwayListener>

@@ -4,8 +4,8 @@ const path = require('path')
 const sqlite3 = require('sqlite3').verbose();
 let csvToJson = require('convert-csv-to-json');
 const csv = require('csv-parser');
+const { v4: uuidv4 } = require("uuid");
 let win;
-
 const isDev = !app.isPackaged;
 // const isDev = true;
 const dbPath = isDev
@@ -98,6 +98,9 @@ const util = require('util');
 const userDbAll = util.promisify(userDb.all.bind(userDb));
 const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
 
+ipcMain.handle('generate-uuid',  () => {
+  return uuidv4();
+})
 // IPC handler to expose openFile to renderer
 ipcMain.handle('open-image-file', async () => {
   return await openFile();
