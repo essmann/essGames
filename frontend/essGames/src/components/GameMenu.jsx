@@ -177,11 +177,7 @@ function GameMenu() {
                   ? truncateText(formDetails.detailed_description, 50)
                   : "No description available."}
               </div>
-              <div className="genre_container">
-                  {selectedGame.genres?.map((key, game)=>{
-                    <div key={key}> {game}</div>
-                  })}
-              </div>
+              
             </div>
           </div>
 
