@@ -12,10 +12,51 @@ import { useGlobalContext } from "./Context/useGlobalContext";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { StyleProvider } from "./Context/StyleContext";
 import SearchGame from "./components/AddGame/SearchGame";
+import Alert from '@mui/material/Alert';
+const Alerts = ({alerts, setAlerts}) => {
+  return (
+    <div className="alerts_container">
+       {alerts?.map((key)=>{
+          return <AlertWrapper alertsQueue={alerts} setAlertsQueue={setAlerts}/>
+       })}
+
+    </div>
+  )
+} 
+
+const AlertWrapper = ({alertsQueue, setAlertsQueue}) => {
+  const [timer, setTimer] = useState(1500);
+
+  const shiftAlert = () => {
+    let _alertsQueue = alertsQueue;
+    let newQueue = _alertsQueue.shift();
+    console.log("Removing an alert from the queue...");
+    setAlertsQueue(newQueue);
+  }
+  useEffect( ()=>{
+      setTimeout(()=>{
+        try{
+          shiftAlert();
+        }
+        catch(err){
+          console.log("alertsQueue error: "+ err);
+        }
+      }, timer)
+  }, [])
+  return (
+    <>
+         <Alert severity="success"> Test alert </Alert>
+
+    </>
+  )
+}
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [alertQueue, setAlertQueue] = useState([]);
+
   
+
   const {
     setGames,
     addGameMenuIsDisplayed,
@@ -48,13 +89,17 @@ function App() {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-
+        
       <div
         className={`container ${
           addGameMenuIsDisplayed || clickedGameId !== null ? "menuActive" : ""
         }`}
       >
+        <Alerts alerts={alertQueue} setAlerts={setAlertQueue}/>
         <div id="header">
+        <button onClick={()=>{
+          setAlertQueue((prev)=>[...prev, 1]);
+        }}>AddAlert</button>
           
         </div>
        <div id="main-content">

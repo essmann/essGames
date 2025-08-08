@@ -29,7 +29,7 @@ export default function CustomizedRating({onRating, rating, size}) {
     precision={0.5} 
     sx={{
       '.MuiRating-iconFilled': {
-        color: '#fc6399'
+        color: '#bec3c5ff'
       },
       '.MuiRating-iconEmpty': {
         color: 'gray', // Color for empty icons

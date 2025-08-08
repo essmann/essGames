@@ -8,6 +8,8 @@ import { useEffect, useState, useRef } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import EditButton from "./EditButton";
 import JsonComponent from "./JsonComponent";
+import Alert from '@mui/material/Alert';
+
 function GameMenu() {
   const { clickedGameId, setClickedGameId, games, setGames } = useGlobalContext();
   const [editMode, setEditMode] = useState(false);
@@ -23,6 +25,11 @@ function GameMenu() {
   const [originalDetails, setOriginalDetails] = useState(null);
   const [titleCleared, setTitleCleared] = useState(false);
   const titleRef = useRef(null);
+  const [alert, setAlert] = useState(false);
+  const handleAlert = async  (delay) => {
+    setAlert(true);
+    setTimeout(()=>{setAlert(false), delay});
+  }
 
   const truncateText = (text, maxWords) => {
     if (!text) return null;
@@ -99,6 +106,7 @@ function GameMenu() {
   return (
     <ClickAwayListener onClickAway={() => setClickedGameId(null)}>
       <div className="add_game_menu_container">
+        
         <JsonComponent object={formDetails}/>
         <div className="add_game_menu">
           <div className="poster_and_details_container">
@@ -177,11 +185,7 @@ function GameMenu() {
                   ? truncateText(formDetails.detailed_description, 50)
                   : "No description available."}
               </div>
-              <div className="genre_container">
-                  {selectedGame.genres?.map((key, game)=>{
-                    <div key={key}> {game}</div>
-                  })}
-              </div>
+              
             </div>
           </div>
 
