@@ -1,4 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
+const util = require("util");
 
 function createConnections(dbPath, gameCatalogDbPath) {
   const userDb = new sqlite3.Database(dbPath, (err) => {
@@ -17,7 +18,10 @@ function createConnections(dbPath, gameCatalogDbPath) {
     }
   });
 
-  return { userDb, gameCatalogDb };
+  const userDbAll = util.promisify(userDb.all.bind(userDb));
+  const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
+
+  return { userDb, gameCatalogDb, userDbAll, gameCatalogDbAll };
 }
 
 module.exports = createConnections;

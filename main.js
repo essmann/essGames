@@ -6,7 +6,7 @@ let csvToJson = require('convert-csv-to-json');
 const csv = require('csv-parser');
 const { v4: uuidv4 } = require("uuid");
 const createConnections = require('./sqlite/connections/dbConnections.js');
-
+const util = require('util');
 
 let win;
 const isDev = !app.isPackaged;
@@ -19,7 +19,7 @@ const gameCatalogDbPath = isDev
   ? path.join(__dirname, 'sqlite', 'allGames.db')
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'allGames.db');
 
-const { userDb, gameCatalogDb } = createConnections(dbPath, gameCatalogDbPath);
+const { userDb, gameCatalogDb, userDbAll, gameCatalogDbAll } = createConnections(dbPath, gameCatalogDbPath);
 const openFile = async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog(win, {
     title: 'Open Image',
@@ -80,9 +80,9 @@ async function loadSteamGames(filePath) {
   }
 }
 
-const util = require('util');
-const userDbAll = util.promisify(userDb.all.bind(userDb));
-const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
+
+// const userDbAll = util.promisify(userDb.all.bind(userDb));
+// const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
 
 // ipcMain.handle('update-catalog', async (id) =>{
    
