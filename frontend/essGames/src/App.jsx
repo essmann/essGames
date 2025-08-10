@@ -50,6 +50,7 @@ function App() {
   
   useEffect(() => {
     handleGetUserGames().then((_games) => {
+      _games = _games.map((game)=>({...game, is_favorite: game.is_favorite === 1}))
       setGames(_games);
       console.log(_games);
       setLoading(false);

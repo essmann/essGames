@@ -5,9 +5,10 @@ import GameMenu from "./GameMenu";
 import { useGlobalContext } from "../Context/useGlobalContext";
 import GradeIcon from '@mui/icons-material/Grade';
 import emptyPoster from "../assets/poster_not_found.jpg";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 function GameCard({ game }) {
   const { clickedGameId, setClickedGameId, setGames } = useGlobalContext();
-  const { posterURL, title } = game;
+  const { posterURL, title, is_favorite } = game;
   const [isHovered, setIsHovered] = useState(false);
   
   const handleRatingChange = async (value) => {
@@ -46,8 +47,9 @@ function GameCard({ game }) {
           }}
         />
         <div className="game_card_title">{title}</div>
+        <div className="game_card_favorite_overlay" onMouseOver={(e)=>e.stopPropagation()}><FavoriteIcon fontSize="medium"/></div>
 
-        <GameCardFooter title={title} rating={game.rating}/>
+        <GameCardFooter title={title} rating={game.rating} is_favorite={is_favorite}/>
       </div>
     </div>
   );
@@ -55,7 +57,7 @@ function GameCard({ game }) {
 
 export default GameCard;
 
-const  GameCardFooter =  ({title, rating}) => {
+const  GameCardFooter =  ({title, rating, is_favorite}) => {
   return (
     <div className="game_card_footer">
           <div className="footer_title truncate">
@@ -64,12 +66,17 @@ const  GameCardFooter =  ({title, rating}) => {
               <div className="footer_rating">
                 <GradeIcon fontSize="small"/>
               {rating  + "/10"}
+              <div className="footer_favorite">
+                {is_favorite && <FavoriteIcon fontSize="small"/>}
+              </div>
               </div>
               <br />
               {/* <span className="footer_star_icon">
                 <span><GradeIcon fontSize="small" /></span>
               </span> */}
+            
             </div>
+            
           </div>
         </div>
   )

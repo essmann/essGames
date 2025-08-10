@@ -26,7 +26,8 @@ const gameCatalogDbPath = isDev
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'allGames.db');
 
 const { userDb, gameCatalogDb, userDbAll, gameCatalogDbAll } = createConnections(dbPath, gameCatalogDbPath);
-var USER_GAMES_ROWS = null;
+var USER_GAMES_COLUMN_NAMES = null;
+var USER_GAMES_COLUMN_QUESTION_MARKS = null;
 const openFile = async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog(win, {
     title: 'Open Image',
@@ -70,11 +71,11 @@ ipcMain.handle('get-user-games', async ()=>{
 })
 
 ipcMain.handle('add-game', async (event, game) => {
-  return await addUserGame(game, userDb);
+  return await addUserGame(game, userDb, USER_GAMES_COLUMN_NAMES);
 })
 
 ipcMain.handle('update-game', async (event, game)=>{
-    return await updateUserGame(game, userDb);
+    return await updateUserGame(game, userDb, USER_GAMES_COLUMN_NAMES);
 })
 
 ipcMain.handle('delete-game', async (event, id) => {
@@ -106,6 +107,8 @@ const createWindow = () => {
 
 app.whenReady().then(createWindow).then(async ()=>{
     const {joinedColumns, questionMarks} = await getUserGamesColumns(userDb);
+    USER_GAMES_COLUMN_NAMES = joinedColumns;
+    USER_GAMES_COLUMN_QUESTION_MARKS = questionMarks;
     console.log(joinedColumns);
     console.log(questionMarks);
 });
