@@ -5,6 +5,9 @@ const sqlite3 = require('sqlite3').verbose();
 let csvToJson = require('convert-csv-to-json');
 const csv = require('csv-parser');
 const { v4: uuidv4 } = require("uuid");
+const createConnections = require('./sqlite/connections/dbConnections.js');
+
+
 let win;
 const isDev = !app.isPackaged;
 // const isDev = true;
@@ -16,7 +19,7 @@ const gameCatalogDbPath = isDev
   ? path.join(__dirname, 'sqlite', 'allGames.db')
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'allGames.db');
 
-
+const { userDb, gameCatalogDb } = createConnections(dbPath, gameCatalogDbPath);
 const openFile = async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog(win, {
     title: 'Open Image',
@@ -49,43 +52,23 @@ function readCsv(filePath) {
       .on('error', reject);
   });
 }
-const updateCatalogPoster = (id, base64String) => {
-  return new Promise((resolve, reject) => {
-    const base64Data = base64String.replace(/^data:image\/\w+;base64,/, '');
-    const imageBuffer = Buffer.from(base64Data, 'base64');
-
-    const query = `UPDATE games SET posterURL = ? WHERE id = ?`;
-    userDb.run(query, [imageBuffer, id], function (err) {
-      if (err) {
-        console.error('Failed to update game:', err);
-        reject(err);
-      } else if (this.changes === 0) {
-        console.log(`Game with ID: ${id} not found.`);
-        resolve({ success: false, message: "Game not found" });
-      } else {
-        console.log(`Game with ID: ${id} updated successfully.`);
-        resolve({ success: true, message: "Game updated successfully" });
-      }
-    });
-  });
-};
 
 
 
-const userDb = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error('Error opening database:', err.message);
-  } else {
-    console.log('Connected to SQLite database.');
-  }
-});
-const gameCatalogDb = new sqlite3.Database(gameCatalogDbPath, (err) => {
-  if (err) {
-    console.error('Error opening database:', err.message);
-  } else {
-    console.log('Connected to SQLite catalog database.');
-  }
-});
+// const userDb = new sqlite3.Database(dbPath, (err) => {
+//   if (err) {
+//     console.error('Error opening database:', err.message);
+//   } else {
+//     console.log('Connected to SQLite database.');
+//   }
+// });
+// const gameCatalogDb = new sqlite3.Database(gameCatalogDbPath, (err) => {
+//   if (err) {
+//     console.error('Error opening database:', err.message);
+//   } else {
+//     console.log('Connected to SQLite catalog database.');
+//   }
+// });
 async function loadSteamGames(filePath) {
 
   try {
@@ -134,7 +117,7 @@ ipcMain.handle('get-poster', async (event, id) => {
     throw err;
   }
 });
-ipcMain.handle('get-games', async () => {
+ipcMain.handle('get-user-games', async () => {
   try {
     const rows = await userDbAll('SELECT * FROM games');
     console.log(`Fetched ${rows.length} rows from the games database. Rows : ${JSON.stringify(rows)}`)
