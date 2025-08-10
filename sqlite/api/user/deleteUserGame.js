@@ -9,7 +9,7 @@ function deleteUserGame(id, userDb) {
         if (this.changes === 0) {
           resolve({ success: false, message: "Game not found" });
         } else {
-          resolve({ success: true, message: "Game deleted successfully" });
+          resolve({ success: true, message: `Game ${id} deleted successfully`});
         }
       }
     });

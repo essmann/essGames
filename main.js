@@ -25,6 +25,7 @@ const gameCatalogDbPath = isDev
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'allGames.db');
 
 const { userDb, gameCatalogDb, userDbAll, gameCatalogDbAll } = createConnections(dbPath, gameCatalogDbPath);
+var USER_GAMES_ROWS = null;
 const openFile = async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog(win, {
     title: 'Open Image',
@@ -47,52 +48,11 @@ const openFile = async () => {
 
   return dataUrl
 }
-function readCsv(filePath) {
-  return new Promise((resolve, reject) => {
-    const results = [];
-    fs.createReadStream(filePath)
-      .pipe(csv())
-      .on('data', (data) => results.push(data))
-      .on('end', () => resolve(results))
-      .on('error', reject);
-  });
-}
 
 
 
-// const userDb = new sqlite3.Database(dbPath, (err) => {
-//   if (err) {
-//     console.error('Error opening database:', err.message);
-//   } else {
-//     console.log('Connected to SQLite database.');
-//   }
-// });
-// const gameCatalogDb = new sqlite3.Database(gameCatalogDbPath, (err) => {
-//   if (err) {
-//     console.error('Error opening database:', err.message);
-//   } else {
-//     console.log('Connected to SQLite catalog database.');
-//   }
-// });
-async function loadSteamGames(filePath) {
-
-  try {
-    const data = await readCsv(filePath);
-    console.log("Data loaded");
-    return data;
-  } catch (err) {
-    console.error("Error loading data:", err);
-  }
-}
 
 
-// const userDbAll = util.promisify(userDb.all.bind(userDb));
-// const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
-
-// ipcMain.handle('update-catalog', async (id) =>{
-   
-  
-// } )
 ipcMain.handle('generate-uuid',  () => {
   return uuidv4();
 })
@@ -142,24 +102,22 @@ const createWindow = () => {
 }
 
 
-const test = async (prefix) => {
-  try {
-    // Query games starting with prefix (case-insensitive)
-    const sql = `SELECT * FROM games WHERE title LIKE ? LIMIT 100`;
-    const rows = await gameCatalogDbAll(sql, [`${prefix}%`]);
-    debugger;
-    console.log(`Found ${rows.length} games starting with '${prefix}'`);
-    return rows;
-  } catch (err) {
-    console.error('DB search error:', err);
-    throw err;
-  }
-}
-app.whenReady().then(createWindow);
 
-test("animal").then((games) => {
-  console.log("Games found:", games);
+app.whenReady().then(createWindow).then(()=>{
+    const query = `PRAGMA table_info(games);`;
+
+    userDb.all(query, (err, rows) => {
+      if (err) {
+        console.error('Error running query:', err);
+        userDb.close();
+        return;
+      }
+      const columns = rows.map(row => row.name);
+      console.log('Columns in games table:', columns);
+    });
+
 });
+
 
 
 app.on('window-all-closed', () => {
