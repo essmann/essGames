@@ -10,6 +10,7 @@ const util = require('util');
 const {getUserGames} = require("./sqlite/api/user/getUserGames.js");
 const addUserGame = require("./sqlite/api/user/addUserGame.js");
 const updateUserGame = require("./sqlite/api/user/updateUserGame.js");
+const deleteUserGame = require("./sqlite/api/user/deleteUserGame.js");
 let win;
 const isDev = !app.isPackaged;
 // const isDev = true;
@@ -132,21 +133,7 @@ ipcMain.handle('update-game', async (event, game)=>{
 })
 
 ipcMain.handle('delete-game', async (event, id) => {
-  return new Promise((resolve, reject) => {
-    const query = `DELETE FROM games WHERE id = ?`;
-    userDb.run(query, [id], function (err) {
-      if (err) {
-        console.error('Failed to delete game:', err);
-        reject(err);
-      } else {
-        if (this.changes === 0) {
-          resolve({ success: false, message: "Game not found" });
-        } else {
-          resolve({ success: true, message: "Game deleted successfully" });
-        }
-      }
-    });
-  });
+  return await deleteUserGame(id, userDb);
 });
 
 ipcMain.handle('search-all-games', async (event, prefix) => {
