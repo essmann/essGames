@@ -15,7 +15,7 @@ import { SnackbarContext } from "../Context/SnackbarContext";
 function GameMenu() {
   const { clickedGameId, setClickedGameId, games, setGames } =
     useGlobalContext();
-  const {setGameDeleted, setGameSaved} = useContext(SnackbarContext);
+  const {setGameDeleted, setGameSaved, setGameUpdated} = useContext(SnackbarContext);
   const [editMode, setEditMode] = useState(false);
   const [selectedGame, setSelectedGame] = useState(
     games.find((game) => (game.id || game.AppID) == clickedGameId)
@@ -34,7 +34,6 @@ function GameMenu() {
   const [titleCleared, setTitleCleared] = useState(false);
   const titleRef = useRef(null);
   const [snackbar, setSnackbar] = useState(false);
-  const [test, setTest] = useState(false);
   const truncateText = (text, maxWords) => {
     if (!text) return null;
     const words = text.split(" ").slice(0, maxWords);
@@ -79,7 +78,6 @@ function GameMenu() {
       await handleDeleteGame(clickedGameId);
       setGameDeleted(true);
       // showDeleteSnackBar(true);
-      setTest(true);
     } catch (error) {
       console.error("Failed to delete game:", error);
     }

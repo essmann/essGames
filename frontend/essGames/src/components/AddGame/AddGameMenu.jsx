@@ -12,6 +12,8 @@ import generateUUID from "../../database/generateUUID";
 import EditButton from "../EditButton";
 import handleUpdateGame from "../../database/user/handleUpdateGame";
 import JsonComponent from "../JsonComponent";
+import { SnackbarContext } from "../../Context/SnackbarContext";
+import { useContext } from "react";
 function AddGameMenu({ selectedGame, setSelectedGame }) {
   const {
     setAddGameMenuIsDisplayed,
@@ -19,7 +21,8 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
     games,
     setGames,
   } = useGlobalContext();
-
+   const {setGameAdded} = useContext(SnackbarContext); 
+  
   const [posterUrl, setPosterUrl] = useState(null);
   const [manualMode, setManualMode] = useState(false);
   const [userHasGame, setUserHasGame] = useState(false);
@@ -201,9 +204,11 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       setGames((prevGames) =>
         prevGames.map((g) => (g.id === selectedGame.id ? updatedGame : g))
       );
+      
       await handleUpdateGame(updatedGame);
     }
 
+    setGameAdded(true);
     setSelectedGame(null);
     setAddGameMenuIsDisplayed(false);
     setEditMode(false);

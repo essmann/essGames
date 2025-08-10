@@ -6,7 +6,8 @@ export const SnackbarProvider = ({ children }) => {
   const [snackbarQueue, setSnackbarQueue] = useState([]);
   const [gameDeleted, setGameDeleted] = useState(false);
   const [gameSaved, setGameSaved] = useState(false);
-
+  const [gameUpdated, setGameUpdated] = useState(false);
+ const [gameAdded, setGameAdded] = useState(false);
 
   function addSnackbar(snackbar){
     
@@ -21,7 +22,9 @@ export const SnackbarProvider = ({ children }) => {
       gameDeleted,
       setGameDeleted,
       gameSaved,
-      setGameSaved
+      setGameSaved,
+      gameAdded,
+      setGameAdded
     }}>
       {children}
     </SnackbarContext.Provider>

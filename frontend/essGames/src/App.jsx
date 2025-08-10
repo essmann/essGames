@@ -41,7 +41,7 @@ function App() {
 
   const {
     gameDeleted, setGameDeleted,
-    gameSaved, setGameSaved
+    gameSaved, setGameSaved, setGameAdded, gameAdded
   } = useContext(SnackbarContext);
 
 
@@ -85,6 +85,9 @@ function App() {
           <Snackbar open={gameSaved}  onClose={()=>setGameSaved(false)}   anchorOrigin={{vertical:'top', horizontal:'center'}} autoHideDuration={2000}    message="Game saved."/>
           
           }
+          {gameAdded &&
+          <Snackbar open={gameAdded}  onClose={()=>setGameAdded(false)}   anchorOrigin={{vertical:'top', horizontal:'center'}} autoHideDuration={2000}    message="Game added."/>
+            }
         </div>
        
        <div id="main-content">
