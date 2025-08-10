@@ -11,6 +11,7 @@ const {getUserGames} = require("./sqlite/api/user/getUserGames.js");
 const addUserGame = require("./sqlite/api/user/addUserGame.js");
 const updateUserGame = require("./sqlite/api/user/updateUserGame.js");
 const deleteUserGame = require("./sqlite/api/user/deleteUserGame.js");
+const searchCatalogGames = require("./sqlite/api/catalog/searchCatalogGames.js");
 let win;
 const isDev = !app.isPackaged;
 // const isDev = true;
@@ -136,17 +137,8 @@ ipcMain.handle('delete-game', async (event, id) => {
   return await deleteUserGame(id, userDb);
 });
 
-ipcMain.handle('search-all-games', async (event, prefix) => {
-  try {
-    // Query games starting with prefix (case-insensitive)
-    const sql = `SELECT * FROM games WHERE title LIKE ? LIMIT 100`;
-    const rows = await gameCatalogDbAll(sql, [`${prefix}%`]);
-    console.log(`Found ${rows.length} games starting with '${prefix}'`);
-    return rows;
-  } catch (err) {
-    console.error('DB search error:', err);
-    throw err;
-  }
+ipcMain.handle('search-games-catalog', async (event, prefix) =>{
+  return await searchCatalogGames(prefix, gameCatalogDbAll);
 });
 const createWindow = () => {
   win = new BrowserWindow({
