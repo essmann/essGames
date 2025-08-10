@@ -13,6 +13,7 @@ const updateUserGame = require("./sqlite/api/user/updateUserGame.js");
 const deleteUserGame = require("./sqlite/api/user/deleteUserGame.js");
 const searchCatalogGames = require("./sqlite/api/catalog/searchCatalogGames.js");
 const getCatalogPoster = require("./sqlite/api/catalog/getCatalogPoster.js");
+const getUserGamesColumns = require("./sqlite/utility/getUserGamesColumns.js");
 let win;
 const isDev = !app.isPackaged;
 // const isDev = true;
@@ -103,19 +104,10 @@ const createWindow = () => {
 
 
 
-app.whenReady().then(createWindow).then(()=>{
-    const query = `PRAGMA table_info(games);`;
-
-    userDb.all(query, (err, rows) => {
-      if (err) {
-        console.error('Error running query:', err);
-        userDb.close();
-        return;
-      }
-      const columns = rows.map(row => row.name);
-      console.log('Columns in games table:', columns);
-    });
-
+app.whenReady().then(createWindow).then(async ()=>{
+    const {joinedColumns, questionMarks} = await getUserGamesColumns(userDb);
+    console.log(joinedColumns);
+    console.log(questionMarks);
 });
 
 
