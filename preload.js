@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('api', {
   updateGame: (game) => ipcRenderer.invoke('update-game', game),
   deleteGame: (id) => ipcRenderer.invoke('delete-game', id),
   searchGameCatalog: (prefix)=> ipcRenderer.invoke('search-games-catalog', prefix),
-  getPoster: (id) => ipcRenderer.invoke('get-poster', id),
+  getPoster: (id) => ipcRenderer.invoke('get-catalog-poster', id),
   generateUUID: () => ipcRenderer.invoke('generate-uuid'),
   
 })
