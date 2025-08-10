@@ -45,6 +45,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
 
   // Prefill form details when selectedGame is set
   useEffect(() => {
+    console.log(selectedGame);
     if (selectedGame && selectedGame !== "edit") {
       const initialDetails = {
         date: selectedGame.release_date || "",

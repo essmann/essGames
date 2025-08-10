@@ -9,6 +9,7 @@ const createConnections = require('./sqlite/connections/dbConnections.js');
 const util = require('util');
 const {getUserGames} = require("./sqlite/api/user/getUserGames.js");
 const addUserGame = require("./sqlite/api/user/addUserGame.js");
+const updateUserGame = require("./sqlite/api/user/updateUserGame.js");
 let win;
 const isDev = !app.isPackaged;
 // const isDev = true;
@@ -122,31 +123,13 @@ ipcMain.handle('get-user-games', async ()=>{
   return await getUserGames(userDbAll);
 })
 
-ipcMain.handle('add-game', async (game) => {
+ipcMain.handle('add-game', async (event, game) => {
   return await addUserGame(game, userDb);
 })
 
-ipcMain.handle('update-game', async (event, game) => {
-  const { id, title, posterURL, rating, review, release_date, developers, detailed_description, genres } = game;
-
-  return new Promise((resolve, reject) => {
-    const query = `UPDATE games SET title = ?, posterURL = ?, rating = ?, review = ?, release_date = ?, developers = ?, detailed_description = ?, genres = ? WHERE id = ?`;
-    userDb.run(query, [title, posterURL, rating, review, release_date, developers, detailed_description, genres, id], function (err) {
-      if (err) {
-        console.error('Failed to update game:', err);
-        reject(err);
-      } else {
-        if (this.changes === 0) {
-          resolve({ success: false, message: "Game not found" });
-          console.log(`Game with ID: ${id} not found.`)
-        } else {
-          resolve({ success: true, message: "Game updated successfully" });
-          console.log(`Game with title: ${title} updated successfully.`);
-        }
-      }
-    });
-  });
-});
+ipcMain.handle('update-game', async (event, game)=>{
+    return await updateUserGame(game, userDb);
+})
 
 ipcMain.handle('delete-game', async (event, id) => {
   return new Promise((resolve, reject) => {

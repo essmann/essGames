@@ -27,6 +27,7 @@ function GameMenu() {
     release_date: selectedGame.release_date || "",
     rating: selectedGame.rating || 0,
     genres: selectedGame.genres || "",
+    id: selectedGame.id
   });
 
   const [originalDetails, setOriginalDetails] = useState(null);
@@ -44,6 +45,7 @@ function GameMenu() {
   if (!selectedGame) return null;
 
   useEffect(() => {
+    console.log(selectedGame);
     if (selectedGame) {
       const initialDetails = {
         title: selectedGame.title || "",
@@ -55,6 +57,7 @@ function GameMenu() {
         release_date: selectedGame.release_date || "",
         rating: selectedGame.rating || 0,
         genres: selectedGame.genres || "",
+        id: selectedGame.id || ""
       };
       setFormDetails(initialDetails);
       setOriginalDetails(initialDetails);
@@ -94,6 +97,7 @@ function GameMenu() {
     );
     const updatedGame = { ...selectedGame, rating: value };
     setSelectedGame(updatedGame);
+    console.log("updated game" + JSON.stringify(updatedGame));
     await handleUpdateGame(updatedGame);
   };
 
