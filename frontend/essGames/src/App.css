@@ -1228,3 +1228,10 @@ textarea {
 .detailed_description.manual{
   
 }
+.absolute{
+  position: absolute;
+  top: 20%;
+  left: 70%;
+  width: 400px;
+
+}

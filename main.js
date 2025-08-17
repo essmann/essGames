@@ -17,11 +17,11 @@ let win;
 const isDev = !app.isPackaged;
 // const isDev = true;
 const dbPath = isDev
-  ? path.join(__dirname, 'sqlite', 'games.db')
+  ? path.join(__dirname, 'sqlite', 'userGames.db')
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'games.db');
 
 const gameCatalogDbPath = isDev
-  ? path.join(__dirname, 'sqlite', 'allGames.db')
+  ? path.join(__dirname, 'sqlite', 'catalogGames.db')
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'allGames.db');
 
 const { userDb, gameCatalogDb, userDbAll, gameCatalogDbAll } = createConnections(dbPath, gameCatalogDbPath);

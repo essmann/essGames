@@ -1,27 +1,22 @@
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useState, useEffect } from "react";
 import { useGlobalContext } from "../../Context/useGlobalContext";
-import { handleSearchGameCatalog } from "../../database/catalog/handleGetSteamGames";
+import { handleSearchGameCatalog } from "../../database/catalog/handleSearchGameCatalog";
 import InputBox from "./InputBox";
+import JsonComponent from "../JsonComponent";
 
 function SearchGame({ setSelectedGame }) {
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
   const [inputOptions, setInputOptions] = useState([]);
 
-  const {
-    searchDisplayed,
-    setSearchDisplayed,
-    setAddGameMenuIsDisplayed,
-  } = useGlobalContext();
+  const { searchDisplayed, setSearchDisplayed, setAddGameMenuIsDisplayed } =
+    useGlobalContext();
 
   const closeGameMenu = () => {
     setSearchDisplayed(false);
     setInputOptions([]);
   };
 
-  useEffect(()=>{
-    console.log("SearchGame rendered.");
-  })
   useEffect(() => {
     if (
       typeof debouncedInputValue !== "string" ||
@@ -53,6 +48,9 @@ function SearchGame({ setSelectedGame }) {
   return (
     <ClickAwayListener onClickAway={() => closeGameMenu()}>
       <div className="add_game_input_container">
+        <div className="absolute">
+          <JsonComponent object={inputOptions}/>
+        </div>
         <InputBox
           inputHandler={setDebouncedInputValue}
           options={inputOptions}
