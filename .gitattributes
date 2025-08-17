@@ -1,4 +1,2 @@
-allGames.db filter=lfs diff=lfs merge=lfs -text
-sqlite/allGames.db filter=lfs diff=lfs merge=lfs -text
 sqlite/catalogGames.db filter=lfs diff=lfs merge=lfs -text
 sqlite/userGames.db filter=lfs diff=lfs merge=lfs -text
