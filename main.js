@@ -13,7 +13,6 @@ const updateUserGame = require("./sqlite/api/user/updateUserGame.js");
 const deleteUserGame = require("./sqlite/api/user/deleteUserGame.js");
 const searchCatalogGames = require("./sqlite/api/catalog/searchCatalogGames.js");
 const getCatalogPoster = require("./sqlite/api/catalog/getCatalogPoster.js");
-const getUserGamesColumns = require("./sqlite/utility/getUserGamesColumns.js");
 let win;
 const isDev = !app.isPackaged;
 // const isDev = true;
@@ -26,8 +25,6 @@ const gameCatalogDbPath = isDev
   : path.join(process.resourcesPath, 'app.asar.unpacked', 'sqlite', 'allGames.db');
 
 const { userDb, gameCatalogDb, userDbAll, gameCatalogDbAll } = createConnections(dbPath, gameCatalogDbPath);
-var USER_GAMES_COLUMN_NAMES = null;
-var USER_GAMES_COLUMN_QUESTION_MARKS = null;
 const openFile = async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog(win, {
     title: 'Open Image',
@@ -50,11 +47,52 @@ const openFile = async () => {
 
   return dataUrl
 }
+function readCsv(filePath) {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', reject);
+  });
+}
 
 
 
+// const userDb = new sqlite3.Database(dbPath, (err) => {
+//   if (err) {
+//     console.error('Error opening database:', err.message);
+//   } else {
+//     console.log('Connected to SQLite database.');
+//   }
+// });
+// const gameCatalogDb = new sqlite3.Database(gameCatalogDbPath, (err) => {
+//   if (err) {
+//     console.error('Error opening database:', err.message);
+//   } else {
+//     console.log('Connected to SQLite catalog database.');
+//   }
+// });
+async function loadSteamGames(filePath) {
+
+  try {
+    const data = await readCsv(filePath);
+    console.log("Data loaded");
+    return data;
+  } catch (err) {
+    console.error("Error loading data:", err);
+  }
+}
 
 
+// const userDbAll = util.promisify(userDb.all.bind(userDb));
+// const gameCatalogDbAll = util.promisify(gameCatalogDb.all.bind(gameCatalogDb));
+
+// ipcMain.handle('update-catalog', async (id) =>{
+   
+  
+// } )
 ipcMain.handle('generate-uuid',  () => {
   return uuidv4();
 })
@@ -71,11 +109,11 @@ ipcMain.handle('get-user-games', async ()=>{
 })
 
 ipcMain.handle('add-game', async (event, game) => {
-  return await addUserGame(game, userDb, USER_GAMES_COLUMN_NAMES);
+  return await addUserGame(game, userDb);
 })
 
 ipcMain.handle('update-game', async (event, game)=>{
-    return await updateUserGame(game, userDb, USER_GAMES_COLUMN_NAMES);
+    return await updateUserGame(game, userDb);
 })
 
 ipcMain.handle('delete-game', async (event, id) => {
@@ -104,15 +142,24 @@ const createWindow = () => {
 }
 
 
+const test = async (prefix) => {
+  try {
+    // Query games starting with prefix (case-insensitive)
+    const sql = `SELECT * FROM games WHERE title LIKE ? LIMIT 100`;
+    const rows = await gameCatalogDbAll(sql, [`${prefix}%`]);
+    debugger;
+    console.log(`Found ${rows.length} games starting with '${prefix}'`);
+    return rows;
+  } catch (err) {
+    console.error('DB search error:', err);
+    throw err;
+  }
+}
+app.whenReady().then(createWindow);
 
-app.whenReady().then(createWindow).then(async ()=>{
-    const {joinedColumns, questionMarks} = await getUserGamesColumns(userDb);
-    USER_GAMES_COLUMN_NAMES = joinedColumns;
-    USER_GAMES_COLUMN_QUESTION_MARKS = questionMarks;
-    console.log(joinedColumns);
-    console.log(questionMarks);
+test("animal").then((games) => {
+  console.log("Games found:", games);
 });
-
 
 
 app.on('window-all-closed', () => {

@@ -1228,38 +1228,3 @@ textarea {
 .detailed_description.manual{
   
 }
-.footer_favorite{
-  display: flex;
-  margin-left: 40%;
-}
-
-.game_card.selected>.game_card_favorite_overlay{
-  visibility: visible;
-}
-.game_card_favorite_overlay{
-  position: absolute;
-  pointer-events: none;
-  visibility: hidden;
-  top: 5%;
-  right: 5%;
-  color: inherit;
-}
-.game_menu_game_details_second_footer {
-  display: flex;
-  flex-direction: column;
- background: inherit;
- color: rgb(92, 90, 90);
- border-top: 1px solid grey;
- width: 150px;
- align-items: start;
- justify-content: center;
-}
-
-.game_menu_game_details_second_footer *{
-}
-.favorite_button *{
-  cursor:pointer;
-}
-.favorite_button *:hover{
-  color: grey;
-}

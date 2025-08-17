@@ -11,14 +11,11 @@ import JsonComponent from "./JsonComponent";
 import Alert from "@mui/material/Alert";
 import { Snackbar, SnackbarContent } from "@mui/material";
 import { SnackbarContext } from "../Context/SnackbarContext";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 function GameMenu() {
   const { clickedGameId, setClickedGameId, games, setGames } =
     useGlobalContext();
-  const { setGameDeleted, setGameSaved, setGameUpdated } =
-    useContext(SnackbarContext);
+  const {setGameDeleted, setGameSaved, setGameUpdated} = useContext(SnackbarContext);
   const [editMode, setEditMode] = useState(false);
   const [selectedGame, setSelectedGame] = useState(
     games.find((game) => (game.id || game.AppID) == clickedGameId)
@@ -30,8 +27,7 @@ function GameMenu() {
     release_date: selectedGame.release_date || "",
     rating: selectedGame.rating || 0,
     genres: selectedGame.genres || "",
-    id: selectedGame.id,
-    is_favorite: selectedGame.is_favorite || 0,
+    id: selectedGame.id
   });
 
   const [originalDetails, setOriginalDetails] = useState(null);
@@ -60,8 +56,7 @@ function GameMenu() {
         release_date: selectedGame.release_date || "",
         rating: selectedGame.rating || 0,
         genres: selectedGame.genres || "",
-        id: selectedGame.id || "",
-        is_favorite: selectedGame.is_favorite || 0,
+        id: selectedGame.id || ""
       };
       setFormDetails(initialDetails);
       setOriginalDetails(initialDetails);
@@ -122,9 +117,6 @@ function GameMenu() {
     setTitleCleared(false);
   };
 
-  const handleFavorite = async () => {
-  }
-
   const editableStyle = editMode
     ? { opacity: 0.8, borderBottom: "1px dotted gray" }
     : {};
@@ -152,9 +144,6 @@ function GameMenu() {
                   rating={selectedGame.rating}
                   size={"large"}
                 />
-              </div>
-              <div className="game_menu_game_details_second_footer flex">
-                <FavoriteButton onClick={handleFavorite} active={formDetails.is_favorite}/>
               </div>
             </div>
 
@@ -266,12 +255,3 @@ const GameMenuFooterButtons = ({
     </div>
   );
 };
-
-function FavoriteButton({ onClick, active }) {
-
-  return (
-    <span className={`favorite_button ${active && "active"}`} onClick={onClick}>
-      {active ? <FavoriteIcon fontSize="medium"/> : <FavoriteBorderIcon fontSize="medium"/>}
-   </span>
-  )
-}
