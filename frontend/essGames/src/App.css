@@ -1235,3 +1235,54 @@ textarea {
   width: 400px;
 
 }
+
+.absolute_menu_container{
+
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  background: var(--color-dark);
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  border-radius: 12px;
+  padding: 1rem;
+
+
+  
+}
+.game_menu_container{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+.game_menu_container * img{
+  border-radius: 12px;
+  max-height: 266px;
+}
+
+.game_menu_sidebar{
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+  font-size: large;
+
+}
+#game_menu_title{
+  font-size: x-large;
+  font-weight: bold;
+}
+.game_menu_label{
+  font-weight: bold;
+}
+.game_menu_sidebar_item{
+  margin-top: 0.5rem;
+}
+
+
+
+.game_menu_description_overflow_container{
+  max-height: 200px;
+  overflow-y: scroll;
+  margin-top: 1rem !important;
+}

@@ -3,7 +3,7 @@ import "./App.css";
 
 import Sidebar from "./components/Sidebar";
 import GameGrid from "./components/GameGrid";
-import GameMenu from "./components/GameMenu";
+import GameMenu from "./components/Menus/GameMenu/GameMenu";
 import AddGameMenu from "./components/AddGame/AddGameMenu";
 
 import handleGetUserGames from "./database/user/handleGetUserGames";
@@ -29,7 +29,7 @@ function App() {
   const {
     setGames,
     addGameMenuIsDisplayed,
-    clickedGameId,
+    clickedGridGame,
     selectedListItemIndex,
     setSelectedListItemIndex,
     searchDisplayed,
@@ -67,7 +67,7 @@ function App() {
 
       <div
         className={`container ${
-          addGameMenuIsDisplayed || clickedGameId !== null ? "menuActive" : ""
+          addGameMenuIsDisplayed || clickedGridGame !== null ? "menuActive" : ""
         }`}
       >
         <div id="header"></div>
