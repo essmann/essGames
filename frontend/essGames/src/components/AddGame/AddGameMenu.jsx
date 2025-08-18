@@ -15,14 +15,10 @@ import JsonComponent from "../JsonComponent";
 import { SnackbarContext } from "../../Context/SnackbarContext";
 import { useContext } from "react";
 function AddGameMenu({ selectedGame, setSelectedGame }) {
-  const {
-    setAddGameMenuIsDisplayed,
-    addGameMenuIsDisplayed,
-    games,
-    setGames,
-  } = useGlobalContext();
-   const {setGameAdded} = useContext(SnackbarContext); 
-  
+  const { setAddGameMenuIsDisplayed, addGameMenuIsDisplayed, games, setGames } =
+    useGlobalContext();
+  const { setGameAdded } = useContext(SnackbarContext);
+
   const [posterUrl, setPosterUrl] = useState(null);
   const [manualMode, setManualMode] = useState(false);
   const [userHasGame, setUserHasGame] = useState(false);
@@ -56,7 +52,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
         detailed_description: selectedGame.detailed_description || "",
         rating: selectedGame.rating || 0,
         title: selectedGame.title || "",
-        genres: selectedGame.genres || ""
+        genres: selectedGame.genres || "",
       };
       setFormDetails(initialDetails);
       setOriginalDetails(initialDetails);
@@ -115,8 +111,10 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   const validateInput = () => {
     const { date, developers, detailed_description, title } = formDetails;
     if (!date || !developers || !detailed_description || !posterUrl || !title) {
-      console.error("Fill all inputs in order to add the game. " );
-      console.error(`State for inputs: ${date} ${developers}${description} ${title}`)
+      console.error("Fill all inputs in order to add the game. ");
+      console.error(
+        `State for inputs: ${date} ${developers}${description} ${title}`
+      );
       return false;
     }
     return true;
@@ -170,8 +168,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
 
   const handleSave = async () => {
     if (!editMode) return;
-    
-  }
+  };
   const handleSubmit = async () => {
     if (manualMode && !validateInput()) return;
 
@@ -204,7 +201,7 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       setGames((prevGames) =>
         prevGames.map((g) => (g.id === selectedGame.id ? updatedGame : g))
       );
-      
+
       await handleUpdateGame(updatedGame);
     }
 
@@ -214,7 +211,10 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
     setEditMode(false);
   };
 
-  const editableStyle = manualMode || editMode ? { opacity: 0.8, borderBottom: "1px dotted gray" } : {};
+  const editableStyle =
+    manualMode || editMode
+      ? { opacity: 0.8, borderBottom: "1px dotted gray" }
+      : {};
 
   var testMode = true;
   return (
@@ -222,10 +222,8 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
       {addGameMenuIsDisplayed && (
         <ClickAwayListener onClickAway={handleCloseMenu}>
           <div className="add_game_menu_container">
-            
-            
             <div className="add_game_menu">
-              <JsonComponent object={formDetails}/>
+              <JsonComponent object={formDetails} />
               <div className="poster_and_details_container">
                 <div className="game_poster_container">
                   {posterUrl ? (
@@ -240,7 +238,10 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
                     <EmptyGamePoster onClick={handleOpenFile} />
                   )}
                   <div className="game_menu_game_details_footer">
-                    <EditButton text={"Edit Game"} onClick={() => setEditMode(true)} />
+                    <EditButton
+                      text={"Edit Game"}
+                      onClick={() => setEditMode(true)}
+                    />
                     <CustomizedRating
                       size="large"
                       value={formDetails.rating}
@@ -261,7 +262,9 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
                         setTitleCleared(true);
                       }
                     }}
-                    onBlur={(e) => handleFormChange("title", e.target.innerText)}
+                    onBlur={(e) =>
+                      handleFormChange("title", e.target.innerText)
+                    }
                     style={editableStyle}
                   >
                     {formDetails.title}
@@ -284,7 +287,6 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
                     truncate={truncateText}
                     editableStyle={editableStyle}
                   />
-                  
                 </div>
               </div>
 
@@ -292,13 +294,17 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
                 {!manualMode && !editMode && userHasGame && (
                   <button onClick={() => setEditMode(true)}>Edit Game</button>
                 )}
-                {!userHasGame  && !editMode && (
-                  <button className="save_btn"onClick={handleSubmit}>
+                {!userHasGame && !editMode && (
+                  <button className="save_btn" onClick={handleSubmit}>
                     <span>Add game</span>
                   </button>
                 )}
                 {(manualMode || editMode) && (
-                  <GameMenuFooterButtons handleSubmit={handleSubmit} handleCancel={handleCancel} editMode={editMode}/>
+                  <GameMenuFooterButtons
+                    handleSubmit={handleSubmit}
+                    handleCancel={handleCancel}
+                    editMode={editMode}
+                  />
                 )}
               </div>
             </div>
@@ -323,76 +329,111 @@ function EmptyGamePoster({ onClick }) {
   );
 }
 
-const GameDetailsForm = ({ manualMode, selectedGame, formDetails, onChange, parse, editableStyle }) => {
+const GameDetailsForm = ({
+  manualMode,
+  selectedGame,
+  formDetails,
+  onChange,
+  parse,
+  editableStyle,
+}) => {
   return (
     <div className="add_game_menu_release add_game_menu_developer">
       <span className={`release ${manualMode && "manual"}`}>
         <span className="grey">Released on </span>
-        {manualMode ? <div className="flex date_container">
-          <input type="date" className="flex date_input" id="add_game_date" onChange={(e)=>onChange("date", e.currentTarget.value )}/>
-        </div> : 
-        <span
-          className="white"
-          contentEditable={manualMode}
-          suppressContentEditableWarning={true}
-          onBlur={(e) => onChange("date", e.target.innerText)}
-          style={editableStyle}
-        >
-          {formDetails.date}
-        </span>}
+        {manualMode ? (
+          <div className="flex date_container">
+            <input
+              type="date"
+              className="flex date_input"
+              id="add_game_date"
+              onChange={(e) => onChange("date", e.currentTarget.value)}
+            />
+          </div>
+        ) : (
+          <span
+            className="white"
+            contentEditable={manualMode}
+            suppressContentEditableWarning={true}
+            onBlur={(e) => onChange("date", e.target.innerText)}
+            style={editableStyle}
+          >
+            {formDetails.date}
+          </span>
+        )}
       </span>
       <div className={`developers ${manualMode && "manual"}`}>
         <span className="grey">Developed by: </span>
-        {manualMode ? <input className="" id="select_developer" onChange={(e)=>onChange("developers", e.target.value)}/> : 
-        <span
-          className="white"
-          contentEditable={manualMode}
-          suppressContentEditableWarning={true}
-          onBlur={(e) => onChange("developers", e.target.innerText)}
-          style={editableStyle}
-        >
-          {manualMode ? formDetails.developers : parse(selectedGame.developers)}
-        </span>}
+        {manualMode ? (
+          <input
+            className=""
+            id="select_developer"
+            onChange={(e) => onChange("developers", e.target.value)}
+          />
+        ) : (
+          <span
+            className="white"
+            contentEditable={manualMode}
+            suppressContentEditableWarning={true}
+            onBlur={(e) => onChange("developers", e.target.innerText)}
+            style={editableStyle}
+          >
+            {manualMode
+              ? formDetails.developers
+              : parse(selectedGame.developers)}
+          </span>
+        )}
       </div>
     </div>
   );
 };
 
-const GameDescription = ({ manualMode, selectedGame, formDetails, onChange, truncate, editableStyle }) => {
+const GameDescription = ({
+  manualMode,
+  selectedGame,
+  formDetails,
+  onChange,
+  truncate,
+  editableStyle,
+}) => {
   return (
     <div className={`detailed_description ${manualMode && "manual"}`}>
-      {manualMode ? <textarea onChange={(e)=>onChange("detailed_description", e.target.value)}/> : <span
-        contentEditable={manualMode}
-        suppressContentEditableWarning={true}
-        onBlur={(e) => onChange("detailed_description", e.target.innerText)}
-        style={editableStyle}
-      >
-        {manualMode
-          ? truncate(formDetails.description, 35)
-          : truncate(selectedGame.detailed_description, 35) ||
-            "No description available."}
-      </span>}
+      {manualMode ? (
+        <textarea
+          onChange={(e) => onChange("detailed_description", e.target.value)}
+        />
+      ) : (
+        <span
+          contentEditable={manualMode}
+          suppressContentEditableWarning={true}
+          onBlur={(e) => onChange("detailed_description", e.target.innerText)}
+          style={editableStyle}
+        >
+          {manualMode
+            ? truncate(formDetails.description, 35)
+            : truncate(selectedGame.detailed_description, 35) ||
+              "No description available."}
+        </span>
+      )}
     </div>
   );
 };
 
 export default AddGameMenu;
 
- const GameMenuFooterButtons = ({handleSubmit, handleCancel, editMode}) => {
-    return (
-      <div className="add_game_submit">
-            
-
-            {editMode && (
-              <>
-                <button className="cancel_btn" onClick={handleCancel}>
-                  Cancel
-                </button>
-                <button className="save_btn" onClick={handleSubmit}>
-                  Add game
-                </button>
-              </>
-            )}
-          </div>
-    )
-}
+const GameMenuFooterButtons = ({ handleSubmit, handleCancel, editMode }) => {
+  return (
+    <div className="add_game_submit">
+      {editMode && (
+        <>
+          <button className="cancel_btn" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button className="save_btn" onClick={handleSubmit}>
+            Add game
+          </button>
+        </>
+      )}
+    </div>
+  );
+};

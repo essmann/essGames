@@ -30,7 +30,7 @@ function Sidebar({ selectedListItemIndex, setSelectedListItemIndex }) {
         {/* <ListItem title="My Games" icon={VideogameAssetIcon} index={0} /> */}
         <ListHeader title="GAMES"/>
         <ListItem title="All Games" icon={AppsIcon} index={0} count={3}/>
-        <ListItem title= "Favorites" icon={FavoriteBorderIcon} />
+        <ListItem title= "Favorites" icon={FavoriteBorderIcon} index={1}/>
 
 
         
