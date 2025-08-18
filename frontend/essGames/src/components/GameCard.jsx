@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGlobalContext } from "../Context/useGlobalContext";
 import GradeIcon from "@mui/icons-material/Grade";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import emptyPoster from "../assets/poster_not_found.jpg";
+import handleToggleFavorite from "../gameAPI/handleToggleFavorite";
+
 function GameCard({ game }) {
-  const { clickedGridGame, setClickedGridGame } = useGlobalContext();
+  const { setClickedGridGame } = useGlobalContext();
   const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = () => {
     setClickedGridGame(game);
-    console.log(`You clicked the game: ${game.title}`);
-  }
+    console.log(`You clicked the game: ${title}`);
+  };
+
   return (
     <div className="game_card_container">
-      <div id={game.id} className={`game_card ${isHovered ? "selected" : ""}`}>
+      <div className={`game_card ${isHovered ? "selected" : ""}`}>
         <img
           src={posterURL || emptyPoster}
           alt={`${title} poster`}
@@ -23,8 +28,7 @@ function GameCard({ game }) {
           onClick={handleClick}
         />
         <div className="game_card_title">{title}</div>
-
-        <GameCardFooter title={title} rating={game.rating} />
+        <GameCardFooter game={game} />
       </div>
     </div>
   );
@@ -32,17 +36,28 @@ function GameCard({ game }) {
 
 export default GameCard;
 
-const GameCardFooter = ({ title, rating }) => {
+const GameCardFooter = ({ game }) => {
+  const { setGames } = useGlobalContext();
+  const [isFavorite, setIsFavorite] = useState(game?.is_favorite);
+
+  const handleFavoriteClick = () => {
+    handleToggleFavorite(setIsFavorite, setGames, game);
+  };
+
   return (
     <div className="game_card_footer">
       <div className="footer_title truncate">
-        <div>{title}</div>
-        <div id="test4">
-          <div className="footer_rating">
-            <GradeIcon fontSize="small" />
-            {rating + "/10"}
+        <div>{game.title}</div>
+        <div className="footer_rating">
+          <GradeIcon fontSize="small" />
+          {game.rating + "/10"}
+          <div className="footer_favorite" onClick={handleFavoriteClick}>
+            {isFavorite ? (
+              <FavoriteIcon fontSize="small" />
+            ) : (
+              <FavoriteBorderIcon fontSize="small" />
+            )}
           </div>
-          <br />
         </div>
       </div>
     </div>

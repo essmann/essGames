@@ -1,21 +1,13 @@
 export const parseArrayString = (text) => {
   if (!text) return "";
 
-  // Try parsing as JSON first (convert single quotes to double quotes)
-  try {
-    const parsed = JSON.parse(text.replace(/'/g, '"'));
-    if (Array.isArray(parsed)) {
-      return parsed.map(s => s.trim()).join(', ');
-    }
-  } catch {
-    // fallback: remove brackets and quotes manually
-    return text.replace(/[\[\]'"]/g, '').split(',').map(s => s.trim()).join(', ');
-  }
+  // Remove all backslashes, brackets, and quotes
+  let cleaned = text.replace(/[\\[\]'"]/g, '').trim();
 
-  // If not array, return as-is
-  return text.trim();
+  // If there are commas, split and rejoin cleanly
+  return cleaned.split(',').map(s => s.trim()).filter(Boolean).join(', ');
 };
 
-// Aliases for clarity
+// Aliases
 export const parseDevelopers = parseArrayString;
 export const parseGenres = parseArrayString;
