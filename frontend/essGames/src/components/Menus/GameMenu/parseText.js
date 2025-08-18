@@ -1,20 +1,21 @@
- export const parseDevelopers = (text) => {
-    if (!text || text.length === 0) return text;
-    if(!text.startsWith("[")){return text;};
-    return text.substring(2, text.length - 2);
-  };
+export const parseArrayString = (text) => {
+  if (!text) return "";
 
-export  const parseGenres = (text) => {
-    if (!text || text.length === 0) return text;
-    if(!text.startsWith("[")){return text;};
-
-    text = text.substring(1, text.length -1);
-    text = text.split(",");
-    text = text.map((genre)=>{
-      genre = genre.replace("'", "");
-      genre = genre.substring(0,genre.length -1);
-      return genre;
-    });
-    text = text.join(" ");
-    return text;
+  // Try parsing as JSON first (convert single quotes to double quotes)
+  try {
+    const parsed = JSON.parse(text.replace(/'/g, '"'));
+    if (Array.isArray(parsed)) {
+      return parsed.map(s => s.trim()).join(', ');
+    }
+  } catch {
+    // fallback: remove brackets and quotes manually
+    return text.replace(/[\[\]'"]/g, '').split(',').map(s => s.trim()).join(', ');
   }
+
+  // If not array, return as-is
+  return text.trim();
+};
+
+// Aliases for clarity
+export const parseDevelopers = parseArrayString;
+export const parseGenres = parseArrayString;
