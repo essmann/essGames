@@ -1313,3 +1313,10 @@ textarea {
   margin-left: auto;
   margin-right: 1rem;
 }
+
+.footer_favorite{
+  cursor: pointer;
+}
+.footer_favorite :hover{
+  color: grey;
+}
