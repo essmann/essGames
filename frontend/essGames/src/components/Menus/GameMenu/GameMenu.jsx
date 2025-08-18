@@ -17,7 +17,7 @@ function GameMenu() {
       <ClickAwayListener onClickAway={handleCloseMenu}>
         <div className="game_menu_container">
           <div className="flex">
-            <GamePoster url={clickedGridGame?.posterURL} />
+            <GamePoster game={clickedGridGame} />
             <GameSidebar game={clickedGridGame} />
           </div>
           <GameFooter game={clickedGridGame} />
@@ -25,6 +25,8 @@ function GameMenu() {
       </ClickAwayListener>
     </MenuContainer>
   );
+
+  
 }
 
 export default GameMenu;

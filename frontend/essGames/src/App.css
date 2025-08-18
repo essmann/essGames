@@ -1257,7 +1257,7 @@ textarea {
     height: 100%;
   }
 .game_menu_container * img{
-  border-radius: 12px;
+  border-radius: 12px 12px 0px 0px;
   max-height: 266px;
 }
 
@@ -1285,4 +1285,21 @@ textarea {
   max-height: 200px;
   overflow-y: scroll;
   margin-top: 1rem !important;
+}
+
+.game_menu_image_container{
+  flex-direction: column;
+}
+.flex-col{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.game_menu_image_footer{
+  background: #0C0C0C !important;
+  border-radius: 2px;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  
 }
