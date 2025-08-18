@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-import Sidebar from "./components/ButtonUsage";
+import Sidebar from "./components/Sidebar";
 import GameGrid from "./components/GameGrid";
 import GameMenu from "./components/GameMenu";
 import AddGameMenu from "./components/AddGame/AddGameMenu";
@@ -18,6 +18,7 @@ import { SnackbarContext } from "./Context/SnackbarContext";
 import { useContext } from "react";
 import FavoriteGrid from "./components/FavoriteGrid";
 import MainContent from "./components/MainContent";
+import MenuManager from "./components/MenuManager";
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -107,14 +108,8 @@ function App() {
           />
 
           <MainContent selectedListItemIndex={selectedListItemIndex} />
-          {searchDisplayed && (
-            <SearchGame setSelectedGame={setSelectedSearchGame} />
-          )}
-          <AddGameMenu
-            selectedGame={selectedSearchGame}
-            setSelectedGame={setSelectedSearchGame}
-          />
-          {clickedGameId !== null && <GameMenu />}
+
+          <MenuManager /> 
         </div>
       </div>
     </StyleProvider>

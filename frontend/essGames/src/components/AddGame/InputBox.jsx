@@ -2,11 +2,16 @@
 import { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }) {
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+function InputBox({
+  options = [],
+  inputHandler,
+  closeGameMenu,
+  setSelectedGame,
+}) {
   const inputRef = useRef(null);
   const suggestionRefs = useRef([]);
-  
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
 
@@ -14,9 +19,9 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
     inputRef.current?.focus();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("Input box rendered.");
-  })
+  });
   // ------------- DEBOUNCING FUNCTION -------------//
   useEffect(() => {
     const timer = setTimeout(() => inputHandler(inputValue), 300);
@@ -34,12 +39,9 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
     if (options[selectedIndex]) {
       let game = options[selectedIndex];
       setInputValue(game.name);
-      
+
       setSelectedGame(game);
       closeGameMenu();
-      
-
-      
     }
   };
 
@@ -53,22 +55,22 @@ function InputBox({ options = [], inputHandler, closeGameMenu, setSelectedGame }
     } else if (e.key === "Enter") {
       e.preventDefault();
       confirmSelection();
-      
-    }
-    else if (e.key === "Escape"){
-
+    } else if (e.key === "Escape") {
       closeGameMenu();
     }
   };
 
   return (
     <div className="input_box">
-      <div className="input_manual" onClick={(e)=>{
-        e.stopPropagation();
-        setSelectedGame("edit");
-        closeGameMenu();
-      }}>
-          <AddCircleOutlineIcon/>
+      <div
+        className="input_manual"
+        onClick={(e) => {
+          e.stopPropagation();
+          setSelectedGame("edit");
+          closeGameMenu();
+        }}
+      >
+        <AddCircleOutlineIcon />
       </div>
       <input
         type="text"

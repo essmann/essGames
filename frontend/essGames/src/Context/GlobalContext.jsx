@@ -4,7 +4,7 @@ export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [games, setGames] = useState([]);
-  const [clickedGameId, setClickedGameId] = useState(null);
+  const [clickedGridGame, setClickedGridGame] = useState(null);
   const [selectedListItemIndex, setSelectedListItemIndex] = useState(0);
   const [addGameMenuIsDisplayed, setAddGameMenuIsDisplayed] = useState(false);
   const [menuIsDisplayed, setMenuIsDisplayed] = useState(false);
@@ -26,8 +26,8 @@ export const GlobalProvider = ({ children }) => {
     <GlobalContext.Provider value={{
       games,
       setGames,
-      clickedGameId,
-      setClickedGameId,
+      clickedGridGame,
+      setClickedGridGame,
       selectedListItemIndex,
       setSelectedListItemIndex,
       addGameMenuIsDisplayed,

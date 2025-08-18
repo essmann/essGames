@@ -3,10 +3,14 @@ import { useGlobalContext } from "../Context/useGlobalContext";
 import GradeIcon from "@mui/icons-material/Grade";
 import emptyPoster from "../assets/poster_not_found.jpg";
 function GameCard({ game }) {
-  const { clickedGameId, setClickedGameId } = useGlobalContext();
+  const { clickedGridGame, setClickedGridGame } = useGlobalContext();
   const { posterURL, title } = game;
   const [isHovered, setIsHovered] = useState(false);
 
+  const handleClick = () => {
+    setClickedGridGame(game);
+    console.log(`You clicked the game: ${game.title}`);
+  }
   return (
     <div className="game_card_container">
       <div id={game.id} className={`game_card ${isHovered ? "selected" : ""}`}>
@@ -16,10 +20,7 @@ function GameCard({ game }) {
           className="game_card_poster"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={() => {
-            setClickedGameId(game.id || game.AppID);
-            console.log(clickedGameId);
-          }}
+          onClick={handleClick}
         />
         <div className="game_card_title">{title}</div>
 

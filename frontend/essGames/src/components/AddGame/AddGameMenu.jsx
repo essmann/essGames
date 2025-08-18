@@ -66,7 +66,6 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowContent(true);
     }, 200);
     return () => clearTimeout(timer);
   }, []);
