@@ -22,21 +22,12 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   const [posterUrl, setPosterUrl] = useState(null);
   const [manualMode, setManualMode] = useState(false);
   const [userHasGame, setUserHasGame] = useState(false);
-  const [showContent, setShowContent] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [titleCleared, setTitleCleared] = useState(false);
   const titleRef = useRef(null);
 
-  const [formDetails, setFormDetails] = useState({
-    date: "",
-    developers: "",
-    detailed_description: "",
-    rating: 0,
-    title: "",
-    genres: "",
-  });
-
-  const [originalDetails, setOriginalDetails] = useState(null);
+  const [formDetails, setFormDetails] = useState(selectedGame);
+  const [originalDetails, setOriginalDetails] = useState(selectedGame);
 
   useEffect(() => {
     console.log(`Form details updated: ${JSON.stringify(formDetails)}`);
@@ -45,26 +36,12 @@ function AddGameMenu({ selectedGame, setSelectedGame }) {
   // Prefill form details when selectedGame is set
   useEffect(() => {
     console.log(selectedGame);
-    if (selectedGame && selectedGame !== "edit") {
-      const initialDetails = {
-        date: selectedGame.release_date || "",
-        developers: selectedGame.developers || "",
-        detailed_description: selectedGame.detailed_description || "",
-        rating: selectedGame.rating || 0,
-        title: selectedGame.title || "",
-        genres: selectedGame.genres || "",
-      };
-      setFormDetails(initialDetails);
-      setOriginalDetails(initialDetails);
+    if (selectedGame !== "edit") {
+      setFormDetails(selectedGame);
+      setOriginalDetails(selectedGame);
     }
     if (selectedGame === "edit") {
-      setFormDetails({
-        date: "",
-        developers: "",
-        detailed_description: "",
-        rating: 0,
-        title: "",
-      });
+      setFormDetails({});
       setOriginalDetails(null);
     }
   }, [selectedGame]);

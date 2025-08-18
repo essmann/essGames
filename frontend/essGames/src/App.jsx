@@ -17,7 +17,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { SnackbarContext } from "./Context/SnackbarContext";
 import { useContext } from "react";
 import FavoriteGrid from "./components/FavoriteGrid";
-
+import MainContent from "./components/MainContent";
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +31,7 @@ function App() {
     clickedGameId,
     selectedListItemIndex,
     setSelectedListItemIndex,
-    anyMenuOpen,
+    searchDisplayed,
   } = useGlobalContext();
 
   const {
@@ -106,17 +106,10 @@ function App() {
             setSelectedListItemIndex={setSelectedListItemIndex}
           />
 
-          {(() => {
-            switch (selectedListItemIndex) {
-              case 0:
-                return <GameGrid />;
-              case 1:
-                return <FavoriteGrid/>
-              default:
-                return null;
-            }
-          })()}
-          <SearchGame setSelectedGame={setSelectedSearchGame} />
+          <MainContent selectedListItemIndex={selectedListItemIndex} />
+          {searchDisplayed && (
+            <SearchGame setSelectedGame={setSelectedSearchGame} />
+          )}
           <AddGameMenu
             selectedGame={selectedSearchGame}
             setSelectedGame={setSelectedSearchGame}
