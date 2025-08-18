@@ -5,6 +5,7 @@ import MenuContainer from "../../MenuContainer";
 import GamePoster from "./GamePoster";
 import GameSidebar from "./GameSideBar";
 import GameFooter from "./GameFooter";
+import JsonComponent from "../../JsonComponent";
 function GameMenu() {
   const { clickedGridGame, setClickedGridGame } = useGlobalContext();
   const [editMode, setEditMode] = useState(false);
@@ -15,7 +16,9 @@ function GameMenu() {
   return (
     <MenuContainer>
       <ClickAwayListener onClickAway={handleCloseMenu}>
+        
         <div className="game_menu_container">
+        <JsonComponent object={clickedGridGame}/>
           <div className="flex">
             <GamePoster game={clickedGridGame} />
             <GameSidebar game={clickedGridGame} />
