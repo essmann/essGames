@@ -1,16 +1,31 @@
 export const parseArrayString = (text) => {
   if (!text) return "";
 
-  // Remove ALL backslashes, brackets, and quotes globally
-  let cleaned = text.replace(/[\[\]'"]/g, "").replace(/\\/g, "").trim();
+  try {
+    // Remove outer quotes first
+    let cleaned = text;
+    while (/^["'].*["']$/.test(cleaned)) {
+      cleaned = cleaned.slice(1, -1);
+    }
 
-  // If there are commas, split and rejoin cleanly
-  return cleaned
-    .split(",")
-    .map(s => s.trim())
-    .filter(Boolean)
-    .join(", ");
+    // Replace escaped quotes and backslashes
+    cleaned = cleaned.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+
+    // Try to eval or JSON.parse the inner array safely
+    const arrMatch = cleaned.match(/\[.*\]/);
+    if (arrMatch) {
+      const arr = JSON.parse(arrMatch[0].replace(/'/g, '"')); // convert single quotes to double
+      return arr.join(", ");
+    }
+
+    return cleaned;
+  } catch (e) {
+    console.error("Failed to parse:", text, e);
+    return "";
+  }
 };
+
+
 
 
 // Aliases

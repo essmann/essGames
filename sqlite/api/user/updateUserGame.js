@@ -1,6 +1,17 @@
 async function updateUserGame(game, userDb) {
   const { id, title, posterURL, rating, review, release_date, developers, detailed_description, genres, is_favorite } = game;
 
+  // Function to remove backslashes from a string
+  const removeBackslashes = (str) => {
+    if (typeof str === 'string') {
+      return str.replace(/\\/g, ''); // Use a regular expression to remove all backslashes
+    }
+    return str;
+  };
+
+  const cleanDevelopers = removeBackslashes(developers);
+  const cleanGenres = removeBackslashes(genres);
+
   return new Promise((resolve, reject) => {
     const query = `
       UPDATE games 
@@ -16,9 +27,9 @@ async function updateUserGame(game, userDb) {
         rating,
         review,
         release_date,
-        JSON.stringify(developers),
+        cleanDevelopers,
         detailed_description,
-        JSON.stringify(genres),
+        cleanGenres,
         is_favorite,
         id
       ],

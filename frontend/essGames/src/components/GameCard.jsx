@@ -41,10 +41,9 @@ const GameCardFooter = ({ game }) => {
   const [isFavorite, setIsFavorite] = useState(game?.is_favorite);
 
   useEffect(() => {
-    if (isFavorite != game?.is_favorite) {
-      setIsFavorite(game?.is_favorite);
-    } // this means that they're not synced, so we force sync them
-  });
+  setIsFavorite(game?.is_favorite);
+}, [game?.is_favorite]);
+
   const handleFavoriteClick = () => {
     handleToggleFavorite(setIsFavorite, setGames, game);
   };

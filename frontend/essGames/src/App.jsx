@@ -49,6 +49,13 @@ function App() {
 
   useEffect(() => {
     handleGetUserGames().then((_games) => {
+      // _games = _games.map((game)=>{
+      //   if(game.genres){
+      //     game.genres = JSON.parse(game.genres);
+      //     return game;
+      //   }
+      //   return game;
+      // })
       setGames(_games);
       console.log(_games);
       setLoading(false);
