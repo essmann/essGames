@@ -6,34 +6,30 @@ import { useState } from "react";
 import { createContext } from "react";
 import { useGlobalContext } from "../Context/useGlobalContext";
 import { useRef } from "react";
-import AppsIcon from '@mui/icons-material/Apps';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import AppsIcon from "@mui/icons-material/Apps";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 const selectItem = () => {
   // You might want to add some logic here
 };
 
-function ListHeader({title}){
+function ListHeader({ title }) {
   return (
     <>
-    <div className="list_header_container">
-        <div className="list_header">
-          {title}
-        </div>
-    </div>
+      <div className="list_header_container">
+        <div className="list_header">{title}</div>
+      </div>
     </>
-  )
+  );
 }
 function Sidebar({ selectedListItemIndex, setSelectedListItemIndex }) {
   return (
     <div className="sidebar">
       <div className="searchBar">
         {/* <ListItem title="My Games" icon={VideogameAssetIcon} index={0} /> */}
-        <ListHeader title="GAMES"/>
-        <ListItem title="All Games" icon={AppsIcon} index={0} count={3}/>
-        <ListItem title= "Favorites" icon={FavoriteBorderIcon} index={1}/>
+        <ListHeader title="GAMES" />
+        <ListItem title="All Games" icon={AppsIcon} index={0} count={true} />
+        <ListItem title="Favorites" icon={FavoriteBorderIcon} index={1} favorites={true}/>
 
-
-        
         {/* <ListParentItem title="Malene" icon={ChatIcon} index={4}>
           <ListItem isChild={true} title="Child2" icon={ChatIcon} index={5} />
           <ListItem isChild={true} title="Child3" icon={ChatIcon} index={6} />
@@ -47,8 +43,8 @@ function Sidebar({ selectedListItemIndex, setSelectedListItemIndex }) {
 
 export default Sidebar;
 
-function ListItem({ title, icon, isChild, index, count}) {
-  const {games} = useGlobalContext();
+function ListItem({ title, icon, isChild, index, count, favorites }) {
+  const { games } = useGlobalContext();
 
   const { selectedListItemIndex, setSelectedListItemIndex } =
     useGlobalContext();
@@ -58,6 +54,10 @@ function ListItem({ title, icon, isChild, index, count}) {
     }
     setSelectedListItemIndex(index);
   };
+  const getFavoritesLength = (games) => {
+    let newGames = games.filter((game)=>game.is_favorite).length;
+    return newGames;
+  }
   var selected = selectedListItemIndex == index;
   return (
     <div
@@ -70,7 +70,9 @@ function ListItem({ title, icon, isChild, index, count}) {
         <Icon component={icon} />
       </div>
       <div className="list_item_title">{title}</div>
-      {count && <div className="list_item_count"> {games?.length} </div>}
+      {count &&  <div className="list_item_count"> {games?.length} </div>}
+      {favorites &&  <div className="list_item_count"> {getFavoritesLength(games)} </div>}
+
     </div>
   );
 }
@@ -83,7 +85,8 @@ function ListParentItem({
   index,
   children,
 }) {
-  const { selectedListItemIndex, setSelectedListItemIndex } = useGlobalContext();
+  const { selectedListItemIndex, setSelectedListItemIndex } =
+    useGlobalContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const selected = selectedListItemIndex === index;
 

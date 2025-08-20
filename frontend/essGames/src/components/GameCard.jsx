@@ -40,18 +40,13 @@ const GameCardFooter = ({ game }) => {
   const { setGames } = useGlobalContext();
   const [isFavorite, setIsFavorite] = useState(game?.is_favorite);
 
-  useEffect(()=>{
-    console.log("GameCardFooter re-rendering in grid");
-    console.log("is_favorite property on game " + game?.is_favorite);
-    console.log("favorite state variable : " + isFavorite);
-    if(isFavorite != game?.is_favorite){
+  useEffect(() => {
+    if (isFavorite != game?.is_favorite) {
       setIsFavorite(game?.is_favorite);
     } // this means that they're not synced, so we force sync them
-
-  })
+  });
   const handleFavoriteClick = () => {
     handleToggleFavorite(setIsFavorite, setGames, game);
-    
   };
 
   return (
