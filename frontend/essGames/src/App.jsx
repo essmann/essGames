@@ -28,6 +28,7 @@ function App() {
 
   const {
     setGames,
+    games,
     addGameMenuIsDisplayed,
     clickedGridGame,
     selectedListItemIndex,
@@ -54,6 +55,9 @@ function App() {
     });
   }, [setGames]);
 
+  useEffect(()=>{
+    console.log("Games state has been changed");
+  },[games])
   return (
     <StyleProvider>
       {loading && (

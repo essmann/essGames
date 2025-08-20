@@ -5,6 +5,7 @@ import GameCard from "./GameCard";
 import { useGlobalContext } from '../Context/useGlobalContext';
 import SortGamesHeader from './SortGamesHeader';
 import { useEffect } from 'react';
+import JsonComponent from './JsonComponent';
 
 function GameGrid() {
   const {
@@ -14,10 +15,13 @@ function GameGrid() {
     setClickedGameId,
   } = useGlobalContext();
 
-  
+  useEffect(()=>{
+   console.log("GameGrid re-rendered"); 
+  })
   return ( 
     <>
     
+      <div className='absolute'><JsonComponent object={games}/></div>
     <div className="grid_view">
       <SortGamesHeader/>
       <AddGameCard setAddGameMenuIsDisplayed={setAddGameMenuIsDisplayed}/> {/* AddGameCard can directly access the context */}

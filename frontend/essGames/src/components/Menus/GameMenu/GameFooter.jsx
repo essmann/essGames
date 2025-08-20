@@ -3,7 +3,7 @@ export const GameFooter = ({ game, maxText }) => {
   return (
     <div className="game_menu_footer">
       <div className="game_menu_footer_description">
-        <GameDescription game={game}/>
+        <GameDescription game={game} />
       </div>
     </div>
   );

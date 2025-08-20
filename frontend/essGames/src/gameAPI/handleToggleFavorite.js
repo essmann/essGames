@@ -4,6 +4,7 @@ const handleToggleFavorite = async (setIsFavorite, setGames, game) => {
 
   setIsFavorite(prev => {
     newFavorite = !prev;
+    console.log("I just set favorite");
     return newFavorite;
   });
 

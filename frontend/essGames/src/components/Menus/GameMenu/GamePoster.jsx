@@ -34,7 +34,7 @@ const GamePosterFooter = ({ game }) => {
         {game?.rating + "/10"}
         <div
           className="footer_favorite"
-          onClick={() =>
+          onClick={async () =>
             handleToggleFavorite(setIsFavorite, setGames, game)
           }
         >

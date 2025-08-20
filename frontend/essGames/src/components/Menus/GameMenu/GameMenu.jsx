@@ -16,11 +16,10 @@ function GameMenu() {
   return (
     <MenuContainer>
       <ClickAwayListener onClickAway={handleCloseMenu}>
-        
         <div className="game_menu_container">
-        <JsonComponent object={clickedGridGame}/>
+          <JsonComponent object={clickedGridGame} />
           <div className="flex">
-            <GamePoster game={clickedGridGame} />
+            <GamePoster game={clickedGridGame} /> 
             <GameSidebar game={clickedGridGame} />
           </div>
           <GameFooter game={clickedGridGame} />
@@ -28,8 +27,6 @@ function GameMenu() {
       </ClickAwayListener>
     </MenuContainer>
   );
-
-  
 }
 
 export default GameMenu;

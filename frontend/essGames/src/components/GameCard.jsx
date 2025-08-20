@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGlobalContext } from "../Context/useGlobalContext";
 import GradeIcon from "@mui/icons-material/Grade";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -40,8 +40,18 @@ const GameCardFooter = ({ game }) => {
   const { setGames } = useGlobalContext();
   const [isFavorite, setIsFavorite] = useState(game?.is_favorite);
 
+  useEffect(()=>{
+    console.log("GameCardFooter re-rendering in grid");
+    console.log("is_favorite property on game " + game?.is_favorite);
+    console.log("favorite state variable : " + isFavorite);
+    if(isFavorite != game?.is_favorite){
+      setIsFavorite(game?.is_favorite);
+    } // this means that they're not synced, so we force sync them
+
+  })
   const handleFavoriteClick = () => {
     handleToggleFavorite(setIsFavorite, setGames, game);
+    
   };
 
   return (
