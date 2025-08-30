@@ -4,14 +4,12 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import GameGrid from "./components/GameGrid";
 import GameMenu from "./components/Menus/GameMenu/GameMenu";
-import AddGameMenu from "./components/AddGame/AddGameMenu";
 
 import handleGetUserGames from "./database/user/handleGetUserGames";
 
 import { useGlobalContext } from "./Context/useGlobalContext";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { StyleProvider } from "./Context/StyleContext";
-import SearchGame from "./components/AddGame/SearchGame";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { SnackbarContext } from "./Context/SnackbarContext";
@@ -19,7 +17,7 @@ import { useContext } from "react";
 import FavoriteGrid from "./components/FavoriteGrid";
 import MainContent from "./components/MainContent";
 import MenuManager from "./components/MenuManager";
-import InputContainer from "./components/SearchBox/InputContainer";
+import SearchBox from "./components/SearchBox/SearchBox.jsx";
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -63,9 +61,9 @@ function App() {
     });
   }, [setGames]);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("Games state has been changed");
-  },[games])
+  }, [games]);
   return (
     <StyleProvider>
       {loading && (
@@ -121,8 +119,7 @@ function App() {
 
           <MainContent selectedListItemIndex={selectedListItemIndex} />
 
-            <InputContainer/>
-          <MenuManager /> 
+          <MenuManager />
         </div>
       </div>
     </StyleProvider>

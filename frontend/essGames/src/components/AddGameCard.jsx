@@ -1,5 +1,5 @@
-import FloatingActionButtonSize from "../FloatingActionButtonSize";
-import { useGlobalContext } from "../../Context/useGlobalContext";
+import FloatingActionButtonSize from "./FloatingActionButtonSize";
+import { useGlobalContext } from "../Context/useGlobalContext";
 
 function AddGameCard() {
   const { setSearchDisplayed } = useGlobalContext();

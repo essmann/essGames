@@ -1,16 +1,40 @@
+import Suggestion from "./Suggestion";
 import { useState } from "react";
 import { useEffect } from "react";
-import Suggestion from "./Suggestion";
-function SuggestionContainer({ array }) {
-  const [suggestions, setSuggestions] = useState([]);
+import handleNavigationKey from "./handleNavigation";
+function SuggestionContainer({ array, onSelect }) {
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
   useEffect(() => {
-    setSuggestions(array);
+    setSelectedIndex(0);
   }, [array]);
-  
+
+  useEffect(() => {
+    console.log(selectedIndex);
+    return handleNavigationKey(
+      array,
+      selectedIndex,
+      setSelectedIndex,
+      onSelect
+    );
+  }, [array, selectedIndex, onSelect]);
+
   return (
     <div className="suggestion_container">
-      {suggestions.map((suggestion) => {
-        <Suggestion />;
+      {array.map((suggestion, index) => {
+        return (
+          <Suggestion
+            key={suggestion.id}
+            index={index}
+            text={suggestion?.title}
+            id={suggestion.id}
+            isSelected={index === selectedIndex}
+            onClick={() => {
+              setSelectedIndex(index);
+              onSelect?.(suggestion);
+            }}
+          />
+        );
       })}
     </div>
   );

@@ -1,10 +1,9 @@
 import GameMenu from "./Menus/GameMenu/GameMenu";
-import AddGameMenu from "./AddGame/AddGameMenu";
 import { useState } from "react";
 import { useEffect } from "react";
 
 import { useGlobalContext } from "../Context/useGlobalContext";
-import SearchGame from "./AddGame/SearchGame";
+import SearchBox from "./SearchBox/SearchBox";
 function MenuManager() {
   const [selectedSearchGame, setSelectedSearchGame] = useState(null);
 
@@ -13,15 +12,11 @@ function MenuManager() {
     setClickedGridGame,
     clickedGridGame,
     searchDisplayed,
+    setSearchDisplayed
   } = useGlobalContext();
-  useEffect(() => {
-    console.log("Changed");
-  }, [clickedGridGame]);
+  
   return (
     <>
-      {searchDisplayed && (
-        <SearchGame setSelectedGame={setSelectedSearchGame} />
-      )}
       {addGameMenuIsDisplayed && (
         <AddGameMenu
           selectedGame={selectedSearchGame}
@@ -29,6 +24,7 @@ function MenuManager() {
         />
       )}
       {clickedGridGame !== null && <GameMenu />}
+      {searchDisplayed && <SearchBox  onClose={()=>setSearchDisplayed(false)}/>}
     </>
   );
 }

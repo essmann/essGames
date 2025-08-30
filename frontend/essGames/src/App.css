@@ -1340,3 +1340,14 @@ textarea {
 #search_box > input{
   font-size:large;
 }
+
+
+.suggestion_container{
+  position: relative;
+  overflow-y: scroll;
+  max-height: 300px;
+}
+
+.suggestion.selected{
+  background: var(--color-hover);
+}
