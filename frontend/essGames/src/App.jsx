@@ -19,6 +19,7 @@ import { useContext } from "react";
 import FavoriteGrid from "./components/FavoriteGrid";
 import MainContent from "./components/MainContent";
 import MenuManager from "./components/MenuManager";
+import InputContainer from "./components/SearchBox/InputContainer";
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -120,6 +121,7 @@ function App() {
 
           <MainContent selectedListItemIndex={selectedListItemIndex} />
 
+            <InputContainer/>
           <MenuManager /> 
         </div>
       </div>

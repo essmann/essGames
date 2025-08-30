@@ -22,10 +22,12 @@ function MenuManager() {
       {searchDisplayed && (
         <SearchGame setSelectedGame={setSelectedSearchGame} />
       )}
-      <AddGameMenu
-        selectedGame={selectedSearchGame}
-        setSelectedGame={setSelectedSearchGame}
-      />
+      {addGameMenuIsDisplayed && (
+        <AddGameMenu
+          selectedGame={selectedSearchGame}
+          setSelectedGame={setSelectedSearchGame}
+        />
+      )}
       {clickedGridGame !== null && <GameMenu />}
     </>
   );

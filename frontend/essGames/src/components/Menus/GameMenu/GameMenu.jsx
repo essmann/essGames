@@ -6,7 +6,7 @@ import GamePoster from "./GamePoster";
 import GameSidebar from "./GameSideBar";
 import GameFooter from "./GameFooter";
 import JsonComponent from "../../JsonComponent";
-function GameMenu() {
+function GameMenu({isOpen}) {
   const { clickedGridGame, setClickedGridGame } = useGlobalContext();
   const [editMode, setEditMode] = useState(false);
   const handleCloseMenu = () => {

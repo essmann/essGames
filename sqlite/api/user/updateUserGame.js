@@ -33,7 +33,7 @@ async function updateUserGame(game, userDb) {
         is_favorite,
         id
       ],
-      function(err) {
+      function (err) {
         if (err) {
           console.error('Failed to update game:', err);
           reject(err);
